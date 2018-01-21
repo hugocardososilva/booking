@@ -1,0 +1,493 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" xmlns:cc="http://java.sun.com/jsf/composite"
+	xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:composite="http://java.sun.com/jsf/composite">
+
+<!-- INTERFACE -->
+<composite:interface>
+</composite:interface>
+
+<!-- IMPLEMENTATION -->
+<composite:implementation>
+
+	<p:panelGrid id="panelBL_numero" columns="3" layout="grid" columnClasses="ui-grid-col-1,ui-grid-col-5,ui-grid-col-3" styleClass="ui-panelgrid-blank">
+		<p:panelGrid id="panelBL_NroTI" columns="1" layout="grid" columnClasses="ui-grid-col-12">
+			<p:outputLabel id="labelTI" value="#{bundle.cadastroNrpATI}" />
+		</p:panelGrid>
+		<p:panelGrid id="panelBL_NroATI" columns="1" layout="grid" columnClasses="ui-grid-col-12">
+			<p:inputText id="inpNrpATI" value="#{cadastroDtcDtaBean.entidade.numeroATI}" style="width:30%;font-weight: bold;font-size:20px;color: black;"
+				disabled="true" />
+		</p:panelGrid>
+
+		<p:outputLabel value="" />
+
+	</p:panelGrid>
+
+	<p:panelGrid id="panelBL_01" columns="4" layout="grid" columnClasses="ui-grid-col-1,ui-grid-col-5,ui-grid-col-1,ui-grid-col-5"
+		styleClass="ui-panelgrid-blank">
+
+
+		<p:panelGrid id="panelBL_comissa2" columns="1" layout="grid" columnClasses="ui-grid-col-12">
+			<p:outputLabel for="inpBL" id="labelBL" value="#{bundle.cadastroBL}" />
+		</p:panelGrid>
+		<p:panelGrid id="panelBL_comissa3" columns="1" layout="grid" columnClasses="ui-grid-col-12">
+			<p:inputText id="inpBL" value="#{cadastroDtcDtaBean.entidade.descricaoBL}" style="width:100%" required="#{cadastroDtcDtaBean.camposObrigatorios}"
+				disabled="#{cadastroDtcDtaBean.entidade.enviarParaMapa}" />
+		</p:panelGrid>
+
+		<p:outputLabel for="tipoModal" value="#{bundle.cadastroBLDocumentoEntrada}" />
+		<p:selectOneMenu id="tipoModal" value="#{cadastroDtcDtaBean.entidade.tipoModalEnum}" style="width:28%" styleClass="estendido alinhadoEsquerda"
+			required="#{cadastroDtcDtaBean.camposObrigatorios}" disabled="#{cadastroDtcDtaBean.entidade.enviarParaMapa}">
+			<f:selectItem itemLabel="Selecione ..." itemValue="#{null}" />
+			<f:selectItems value="#{cadastroDtcDtaBean.todasTipoModalEnum}" var="tipo" itemValue="#{tipo}" itemLabel="#{tipo.descricao}" />
+
+			<p:ajax event="change" listener="#{cadastroDtcDtaBean.validarNavioViagemAtracacao()}"
+				update="inp_navioViagem inp_Viagem button_calendar tipoContainer" />
+		</p:selectOneMenu>
+
+		<p:panelGrid id="panelBL_mercadoria" for="inpmercadoria1" columns="1" layout="grid" columnClasses="ui-grid-col-12">
+			<p:outputLabel for="inpmercadoria1" id="labelmercadoria" value="#{bundle.cadastroBLMercadoria}" />
+		</p:panelGrid>
+		<p:panelGrid id="panelBL_mercadoria1" columns="1" layout="grid" columnClasses="ui-grid-col-12">
+			<p:inputText id="inpmercadoria1" value="#{cadastroDtcDtaBean.entidade.descricaoMercadoria}" style="width:100%"
+				required="#{cadastroDtcDtaBean.camposObrigatorios}" disabled="#{cadastroDtcDtaBean.entidade.enviarParaMapa}" />
+		</p:panelGrid>
+
+		<p:outputLabel for="acEspecie" value="#{bundle.cadastroBLEmbalagem}" />
+		<p:autoComplete id="acEspecie" value="#{cadastroDtcDtaBean.especieSelecionado}" var="item" itemLabel="#{item.descricao}"
+			converter="cadastroEspecieConverter" completeMethod="#{cadastroDtcDtaBean.listaCadastroEspecie}" emptyMessage="Nenhum registro encontrado"
+			itemValue="#{item}" minQueryLength="2" required="#{cadastroDtcDtaBean.camposObrigatorios}" placeholder="Informe 3 digitos pesquisar..."
+			disabled="#{cadastroDtcDtaBean.entidade.enviarParaMapa}">
+			<p:column>
+				<h:outputText value="#{item.abreviacao}" />
+			</p:column>
+			<p:column>
+				<h:outputText value="#{item.descricao}" />
+			</p:column>
+		</p:autoComplete>
+
+		<p:panelGrid id="panelBL_navioViagem" columns="1" layout="grid" columnClasses="ui-grid-col-12">
+			<p:outputLabel id="label_navioViagem" for="inp_navioViagem" value="#{bundle.cadastroBLNavio}" />
+		</p:panelGrid>
+		<p:panelGrid id="panelBL_navioViagem1" columns="1" layout="grid" columnClasses="ui-grid-col-12">
+			<p:autoComplete id="inp_navioViagem" value="#{cadastroDtcDtaBean.programacaoNavioSelecionado}" var="item" itemLabel="#{item.navio}"
+				converter="programacaoNavioConverter" completeMethod="#{cadastroDtcDtaBean.listaProgramacaoNavio}" emptyMessage="Nenhum registro encontrado"
+				itemValue="#{item}" minQueryLength="2" required="#{cadastroDtcDtaBean.camposObrigatorios}" placeholder="Informe 3 digitos pesquisar..."
+				disabled="#{cadastroDtcDtaBean.bloquearNavio}">
+				<p:column>
+					<h:outputText value="#{item.navio}" />
+				</p:column>
+				<p:column>
+					<h:outputText value="#{item.navioViagem}" />
+				</p:column>
+				<p:column>
+					<h:outputText value="#{item.dataETA}">
+						<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
+					</h:outputText>
+				</p:column>
+
+				<p:ajax event="itemSelect" listener="#{cadastroDtcDtaBean.setarInformacaoNavio()}" update="inp_Viagem button_calendar" />
+			</p:autoComplete>
+		</p:panelGrid>
+
+		<p:outputLabel id="label_Viagem" value="#{bundle.cadastroBLViagem}" />
+		<p:inputText id="inp_Viagem" value="#{cadastroDtcDtaBean.entidade.programacaoNavio.navioViagem}" style="width:46%" disabled="true" />
+
+		<p:panelGrid id="panelBL_comissa" columns="1" layout="grid" columnClasses="ui-grid-col-12">
+			<p:outputLabel for="comissario" value="#{bundle.cadastroBLComissario}" />
+		</p:panelGrid>
+
+		<p:panelGrid id="panelBL_comissa1" columns="3" layout="grid" columnClasses="ui-grid-col-6,ui-grid-col-1,ui-grid-col-1">
+			<p:autoComplete id="comissario" value="#{cadastroDtcDtaBean.comissarioSelecionado}" var="item" itemLabel="#{item.nome}"
+				converter="cadastroComissarioConverter" completeMethod="#{cadastroDtcDtaBean.listaComissario}" emptyMessage="Nenhum registro encontrado"
+				itemValue="#{item}" minQueryLength="3" style="width:100%" required="#{cadastroDtcDtaBean.camposObrigatorios}"
+				placeholder="Informe 3 digitos pesquisar..." disabled="#{cadastroDtcDtaBean.entidade.enviarParaMapa}">
+				<p:column>
+					<h:outputText value="#{item.nome}" />
+				</p:column>
+				<p:column>
+					<h:outputText value="#{item.cpf}" />
+				</p:column>
+			</p:autoComplete>
+
+			<p:commandButton id="idIncluirCom" icon="fa fa-plus" oncomplete="PF('dlgBLIncluir').show();" process="@this"
+				action="#{cadastroDtcDtaBean.instanciarImportadorComissaria(2)}" update=":incluir:idDlgBLIncluir"
+				disabled="#{cadastroDtcDtaBean.userMB.usuarioMaster}">
+				<p:tooltip for="idIncluirCom" value="#{bundle.incluir}" showEffect="clip" hideEffect="explode" />
+			</p:commandButton>
+
+			<p:commandButton id="idCargaComissaria" icon="#{bundle.iconAtualizar}" action="#{cadastroDtcDtaBean.carregarDadosComissarias()}"
+				update="comissario" disabled="#{cadastroDtcDtaBean.userMB.usuarioMaster}">
+				<p:tooltip for="idCargaComissaria" value="#{bundle.atualizar}" showEffect="clip" hideEffect="explode" />
+				<p:resetInput target=":frmCadastrarEntidade:formCadEntidadeBL:panelBL_comissa1" />
+			</p:commandButton>
+		</p:panelGrid>
+
+		<p:outputLabel id="label_atracacao" value="#{bundle.cadastroBLDatracacao}" />
+		<p:calendar id="button_calendar" value="#{cadastroDtcDtaBean.entidade.programacaoNavio.dataETA}" pattern="dd/MM/yyyy HH:mm:ss" mask="true"
+			disabled="true" />
+
+	</p:panelGrid>
+
+	<p:panelGrid id="panelBL_01_1" columns="4" layout="grid" columnClasses="ui-grid-col-1,ui-grid-col-5,ui-grid-col-1,ui-grid-col-5"
+		styleClass="ui-panelgrid-blank">
+
+		<p:panelGrid id="panelBL_importador" columns="1" layout="grid" columnClasses="ui-grid-col-12">
+			<p:outputLabel for="acImportador" value="#{bundle.importador}" />
+		</p:panelGrid>
+
+		<p:panelGrid id="panelBL_imp_incluir" columns="2" layout="grid" columnClasses="ui-grid-col-6,ui-grid-col-6">
+			<p:autoComplete id="acImportador" value="#{cadastroDtcDtaBean.importadorSelecionado}" var="item" itemLabel="#{item.razaoSocial}"
+				converter="cadastroImportadorConverter" completeMethod="#{cadastroDtcDtaBean.listaImportador}" emptyMessage="Nenhum registro encontrado"
+				itemValue="#{item}" minQueryLength="3" style="width:100%" required="#{cadastroDtcDtaBean.camposObrigatorios}"
+				placeholder="Informe 3 digitos pesquisar..." disabled="#{cadastroDtcDtaBean.entidade.enviarParaMapa}">
+				<p:column>
+					<h:outputText value="#{item.razaoSocial}" />
+				</p:column>
+				<p:column>
+					<h:outputText value="#{item.cnpj}" />
+				</p:column>
+			</p:autoComplete>
+
+			<p:commandButton id="idIncluirImp" icon="fa fa-plus" oncomplete="PF('dlgBLIncluir').show();" process="@this"
+				action="#{cadastroDtcDtaBean.instanciarImportadorComissaria(1)}" update=":incluir:idDlgBLIncluir"
+				disabled="#{cadastroDtcDtaBean.userMB.usuarioMaster}">
+				<p:tooltip for="idIncluirImp" value="#{bundle.incluir}" showEffect="clip" hideEffect="explode" />
+			</p:commandButton>
+		</p:panelGrid>
+
+		<p:outputLabel for="quantidade" value="#{bundle.cadastroBLQuantidade}" />
+		<pe:inputNumber id="quantidade" value="#{cadastroDtcDtaBean.entidade.quantidade}" required="#{cadastroDtcDtaBean.camposObrigatorios}"
+			decimalSeparator="," thousandSeparator="." disabled="#{cadastroDtcDtaBean.entidade.enviarParaMapa}" />
+
+		<p:panelGrid id="panelBL_ncm_out" columns="1" layout="grid" columnClasses="ui-grid-col-12">
+			<p:outputLabel for="acNcm" value="#{bundle.cadastroBLNCM}" />
+		</p:panelGrid>
+		<p:panelGrid id="panelBL_ncm" columns="3" layout="grid" columnClasses="ui-grid-col-6,ui-grid-col-1,ui-grid-col-1">
+			<p:autoComplete id="acNcm" value="#{cadastroDtcDtaBean.ncmSelecionado}" var="item" itemLabel="#{item.ncmCodigo}" converter="cadastroNcmConverter"
+				maxResults="20" completeMethod="#{cadastroDtcDtaBean.listaCadastroNCM}" emptyMessage="Nenhum registro encontrado" itemValue="#{item}"
+				minQueryLength="3" style="width:100%" required="#{cadastroDtcDtaBean.camposObrigatorios}" placeholder="Informe 8 digitos pesquisar..."
+				disabled="#{cadastroDtcDtaBean.entidade.enviarParaMapa}" scrollHeight="250">
+				<p:column>
+					<h:outputText value="#{item.ncmCodigo}" />
+				</p:column>
+				<p:column>
+					<h:outputText value="#{item.descricaoNcm}" />
+				</p:column>
+				<p:column>
+					<h:outputText value="#{item.produtoAnuenciaSimNao}" />
+				</p:column>
+			</p:autoComplete>
+
+			<p:commandButton id="idIncluirNCM" icon="fa fa-plus" process="@this acNcm" action="#{cadastroDtcDtaBean.incluirNCM()}">
+				<p:tooltip for="idIncluirNCM" value="#{bundle.incluirNCM}" showEffect="clip" hideEffect="explode" />
+			</p:commandButton>
+
+			<p:commandButton id="localizarNCM" icon="#{bundle.iconLupaLocalizar}" oncomplete="PF('dlgNcmLista').show();"
+				update=":listaNCM:frmNcmlista:tbListaDados"  action="#{cadastroDtcDtaBean.carregarNCM()}" immediate="true" >
+				<p:tooltip for="localizarNCM" value="Visualizar NCM" showEffect="clip" hideEffect="explode" />
+				<p:resetInput target=":frmCadastrarEntidade :frmListarPrincipal  :frmCadastrarEntidade:panelCadastrarEntidade" />
+			</p:commandButton>
+		</p:panelGrid>
+
+		<p:outputLabel for="cifMercadoria" value="#{bundle.cadastroBLCifMercadoria}" />
+		<pe:inputNumber id="cifMercadoria" value="#{cadastroDtcDtaBean.entidade.cifMercadoria}" required="#{cadastroDtcDtaBean.camposObrigatorios}"
+			decimalSeparator="," thousandSeparator="." disabled="#{cadastroDtcDtaBean.entidade.enviarParaMapa}" />
+	</p:panelGrid>
+
+	<p:panelGrid id="panelBL_02" columns="4" layout="grid" columnClasses="ui-grid-col-1,ui-grid-col-5,ui-grid-col-1,ui-grid-col-5"
+		styleClass="ui-panelgrid-blank">
+
+		<p:panelGrid id="panelBL_comissa5" columns="1" layout="grid" columnClasses="ui-grid-col-12">
+			<p:outputLabel for="acPaisOrigem" value="#{bundle.cadastroBLPaisOrigem}" />
+		</p:panelGrid>
+		<p:panelGrid id="panelBL_comissa6" columns="1" layout="grid" columnClasses="ui-grid-col-12">
+			<p:autoComplete id="acPaisOrigem" value="#{cadastroDtcDtaBean.paisSelecionado}" var="item" itemLabel="#{item.descricaoPais}"
+				converter="cadastroPaisConverter" completeMethod="#{cadastroDtcDtaBean.listaCodigoPais}" emptyMessage="Nenhum registro encontrado"
+				itemValue="#{item}" minQueryLength="3" style="width:100%" required="#{cadastroDtcDtaBean.camposObrigatorios}"
+				placeholder="Informe 3 digitos pesquisar..." disabled="#{cadastroDtcDtaBean.entidade.enviarParaMapa}">
+				<p:column>
+					<h:outputText value="#{item.codigoPaisIBGE}" />
+				</p:column>
+				<p:column>
+					<h:outputText value="#{item.abreviacaoPais}" />
+				</p:column>
+				<p:column>
+					<h:outputText value="#{item.descricaoPais}" />
+				</p:column>
+			</p:autoComplete>
+		</p:panelGrid>
+
+		<p:outputLabel for="acPaisprocedencia" value="#{bundle.cadastroBLPaisProcedencia}" />
+		<p:autoComplete id="acPaisprocedencia" value="#{cadastroDtcDtaBean.paisProcedenciaSelecionado}" var="item" itemLabel="#{item.descricaoPais}"
+			converter="cadastroPaisConverter" completeMethod="#{cadastroDtcDtaBean.listaCodigoPais}" emptyMessage="Nenhum registro encontrado"
+			itemValue="#{item}" minQueryLength="3" style="width:100%" required="#{cadastroDtcDtaBean.camposObrigatorios}"
+			placeholder="Informe 3 digitos pesquisar..." disabled="#{cadastroDtcDtaBean.entidade.enviarParaMapa}">
+			<p:column>
+				<h:outputText value="#{item.codigoPaisIBGE}" />
+			</p:column>
+			<p:column>
+				<h:outputText value="#{item.abreviacaoPais}" />
+			</p:column>
+			<p:column>
+				<h:outputText value="#{item.descricaoPais}" />
+			</p:column>
+		</p:autoComplete>
+	</p:panelGrid>
+
+	<p:panelGrid id="panelBL_04_1" columns="4" layout="grid" columnClasses="ui-grid-col-1,ui-grid-col-5,ui-grid-col-1,ui-grid-col-5"
+		styleClass="ui-panelgrid-blank">
+
+		<p:panelGrid id="panelBL_porto" columns="1" layout="grid" columnClasses="ui-grid-col-12">
+			<p:outputLabel for="acPortoRepresentante" value="#{bundle.cadastroRepresentante}" />
+		</p:panelGrid>
+		<p:panelGrid id="panelBL_ACporto" columns="2" layout="grid" columnClasses="ui-grid-col-6,ui-grid-col-6">
+			<p:autoComplete id="acPortoRepresentante" value="#{cadastroDtcDtaBean.representanteSelecionado}" var="item" itemLabel="#{item.razaoSocial}"
+				converter="cadastroRepresentanteConverter" maxResults="15" completeMethod="#{cadastroDtcDtaBean.listaRepresentante}"
+				emptyMessage="Nenhum registro encontrado" itemValue="#{item}" minQueryLength="3" style="width:100%"
+				required="#{cadastroDtcDtaBean.camposObrigatorios}" placeholder="Informe 3 digitos pesquisar..."
+				disabled="#{cadastroDtcDtaBean.entidade.enviarParaMapa}">
+				<p:column>
+					<h:outputText value="#{item.razaoSocial}" />
+				</p:column>
+				<p:column>
+					<h:outputText value="#{item.cnpj}" />
+				</p:column>
+			</p:autoComplete>
+
+			<p:commandButton id="idIncluirRep" icon="fa fa-plus" oncomplete="PF('dlgBLIncluir').show();" process="@this"
+				action="#{cadastroDtcDtaBean.instanciarImportadorComissaria(3)}" update=":incluir:idDlgBLIncluir">
+				<p:tooltip for="idIncluirRep" value="#{bundle.incluir}" showEffect="clip" hideEffect="explode" />
+			</p:commandButton>
+		</p:panelGrid>
+
+		<p:outputLabel for="tipoContainer" value="#{bundle.cadastroBLTipo}" />
+		<p:selectOneMenu id="tipoContainer" value="#{cadastroDtcDtaBean.entidade.tipoContainerEnum}" style="width:45%"
+			styleClass="estendido alinhadoEsquerda" required="#{cadastroDtcDtaBean.camposObrigatorios}"
+			disabled="#{cadastroDtcDtaBean.validarNavioViagemAtracacao() || cadastroDtcDtaBean.entidade.enviarParaMapa }">
+
+			<f:selectItem itemLabel="Selecione ..." itemValue="#{null}" />
+			<f:selectItems value="#{cadastroDtcDtaBean.todosTiposContainerEnum}" var="tipo" itemValue="#{tipo}" itemLabel="#{tipo.descricao}" />
+		</p:selectOneMenu>
+	</p:panelGrid>
+
+
+	<p:panelGrid id="panelBL_04_5" columns="4" layout="grid" columnClasses="ui-grid-col-1,ui-grid-col-5,ui-grid-col-1,ui-grid-col-5"
+		styleClass="ui-panelgrid-blank">
+
+		<p:panelGrid id="panelBL_comissa8" columns="1" layout="grid" columnClasses="ui-grid-col-12">
+			<p:outputLabel for="tipoMadeira" value="#{bundle.cadastroCargaMadeira}" />
+		</p:panelGrid>
+		<p:panelGrid id="panelBL_comissa9" columns="1" layout="grid" columnClasses="ui-grid-col-12">
+			<p:selectOneMenu id="tipoMadeira" value="#{cadastroDtcDtaBean.entidade.cargaComMadeira}" style="width:28%" styleClass="estendido alinhadoEsquerda"
+				required="#{cadastroDtcDtaBean.camposObrigatorios}" disabled="#{cadastroDtcDtaBean.entidade.enviarParaMapa}">
+				<f:selectItem itemLabel="Selecione ..." itemValue="#{null}" />
+				<f:selectItems value="#{cadastroDtcDtaBean.todosTipoSimNao}" var="tipo" itemValue="#{tipo}" itemLabel="#{tipo.descricao}" />
+			</p:selectOneMenu>
+		</p:panelGrid>
+
+		<p:outputLabel for="acPorto_alterado" value="#{bundle.cadastroPortos}" />
+		<p:autoComplete id="acPorto_alterado" value="#{cadastroDtcDtaBean.portoSelecionado}" var="item" itemLabel="#{item.nome}"
+			converter="cadastroPortosConverter" maxResults="15" completeMethod="#{cadastroDtcDtaBean.listaPortos}" emptyMessage="Nenhum registro encontrado"
+			itemValue="#{item}" minQueryLength="3" style="width:100%" required="#{cadastroDtcDtaBean.camposObrigatorios}"
+			placeholder="Informe 3 digitos pesquisar..." disabled="#{cadastroDtcDtaBean.entidade.enviarParaMapa}">
+		</p:autoComplete>
+
+	</p:panelGrid>
+
+	<p:panelGrid id="panelBL_05_5" columns="4" layout="grid" columnClasses="ui-grid-col-1,ui-grid-col-5,ui-grid-col-1,ui-grid-col-5"
+		styleClass="ui-panelgrid-blank">
+
+		<p:panelGrid id="panelBL_comissa45" columns="1" layout="grid" columnClasses="ui-grid-col-12">
+			<p:outputLabel for="tipoReefer" value="#{bundle.cadastroReefer}" />
+		</p:panelGrid>
+		<p:panelGrid id="panelBL_comissa91" columns="2" layout="grid" columnClasses="ui-grid-col-6,ui-grid-col-6">
+			<p:selectOneMenu id="tipoReefer" value="#{cadastroDtcDtaBean.entidade.cargaReefer}" style="width:60%" styleClass="estendido alinhadoEsquerda"
+				required="#{cadastroDtcDtaBean.camposObrigatorios}" disabled="#{cadastroDtcDtaBean.entidade.enviarParaMapa}">
+				<f:selectItem itemLabel="Selecione ..." itemValue="#{null}" />
+				<f:selectItems value="#{cadastroDtcDtaBean.todosTipoSimNao}" var="tipo" itemValue="#{tipo}" itemLabel="#{tipo.descricao}" />
+
+				<p:ajax event="change" listener="#{cadastroDtcDtaBean.mostrarInformacaoTemperatura()}" update="frmCadastrarEntidade:formCadEntidadeBL:temperatura" />
+			</p:selectOneMenu>
+
+			<p:inputMask id="temperatura" placeholder="Temperatura..." value="#{cadastroDtcDtaBean.entidade.temperaturaString}" style="width:40%"
+				disabled="#{cadastroDtcDtaBean.mostrarInformacaoTemperatura()}" />
+		</p:panelGrid>
+
+		<p:outputLabel for="tipoEntrePosto" value="#{bundle.cadastroEntreposto}" />
+		<p:selectOneMenu id="tipoEntrePosto" value="#{cadastroDtcDtaBean.entidade.entrePosto}" style="width:28%" styleClass="estendido alinhadoEsquerda"
+			required="#{cadastroDtcDtaBean.camposObrigatorios}" disabled="#{cadastroDtcDtaBean.entidade.enviarParaMapa}">
+			<f:selectItem itemLabel="Selecione ..." itemValue="#{null}" />
+			<f:selectItems value="#{cadastroDtcDtaBean.todosTipoSimNao}" var="tipo" itemValue="#{tipo}" itemLabel="#{tipo.descricao}" />
+		</p:selectOneMenu>
+
+		<p:panelGrid id="panelBL_referencia" columns="1" layout="grid" columnClasses="ui-grid-col-12">
+			<p:outputLabel for="refCliente" value="#{bundle.cadastroReferenciaCliente}" />
+		</p:panelGrid>
+		<p:panelGrid id="panelBL_referencia11" columns="1" layout="grid" columnClasses="ui-grid-col-12">
+			<p:inputText id="refCliente" value="#{cadastroDtcDtaBean.entidade.referenciaCliente}" style="width:46%"
+				required="#{cadastroDtcDtaBean.camposObrigatorios}" disabled="#{cadastroDtcDtaBean.entidade.enviarParaMapa}" />
+		</p:panelGrid>
+
+		<p:outputLabel for="freeTime" value="#{bundle.cadastroFreeTime}" />
+		<p:inputText id="freeTime" value="#{cadastroDtcDtaBean.entidade.freeTime}" style="width:32%" required="#{cadastroDtcDtaBean.camposObrigatorios}"
+			disabled="#{cadastroDtcDtaBean.entidade.enviarParaMapa}" />
+
+
+		<p:panelGrid id="panelBL_respLote" columns="1" layout="grid" columnClasses="ui-grid-col-12">
+			<p:outputLabel for="acRespolote" value="#{bundle.cadastroResponsavelLote}" />
+		</p:panelGrid>
+		<p:panelGrid id="panelBL1_respLote" columns="2" layout="grid" columnClasses="ui-grid-col-6,ui-grid-col-6">
+			<p:autoComplete id="acRespolote" value="#{cadastroDtcDtaBean.responsavelLoteSelecionado}" var="item" itemLabel="#{item.razaoSocial}"
+				converter="cadastroResponsavelLoteConverter" maxResults="15" completeMethod="#{cadastroDtcDtaBean.listaResponsavelLote}"
+				emptyMessage="Nenhum registro encontrado" itemValue="#{item}" minQueryLength="3" style="width:100%"
+				required="#{cadastroDtcDtaBean.camposObrigatorios}" placeholder="Informe 3 digitos pesquisar..."
+				disabled="#{cadastroDtcDtaBean.entidade.enviarParaMapa}">
+				<p:column>
+					<h:outputText value="#{item.razaoSocial}" />
+				</p:column>
+				<p:column>
+					<h:outputText value="#{item.cnpj}" />
+				</p:column>
+			</p:autoComplete>
+
+			<p:commandButton id="idIncluirRespLote" icon="fa fa-plus" oncomplete="PF('dlgBLIncluir').show();" process="@this"
+				action="#{cadastroDtcDtaBean.instanciarImportadorComissaria(4)}" update=":incluir:idDlgBLIncluir"
+				disabled="#{cadastroDtcDtaBean.userMB.usuarioMaster}">
+				<p:tooltip for="idIncluirRespLote" value="#{bundle.incluir}" showEffect="clip" hideEffect="explode" />
+			</p:commandButton>
+		</p:panelGrid>
+
+		<p:outputLabel for="inp_armador" id="label_armador" value="#{bundle.cadastroBLArmador}" />
+		<p:inputText id="inp_armador" value="#{cadastroDtcDtaBean.entidade.armador}" style="width:46%" required="#{cadastroDtcDtaBean.camposObrigatorios}"
+			disabled="#{cadastroDtcDtaBean.entidade.enviarParaMapa}" />
+
+		<p:panelGrid id="panelBL_faturar" columns="1" layout="grid" columnClasses="ui-grid-col-12">
+			<p:outputLabel for="acFaturarContra" value="#{bundle.cadastroFaturarContra}" />
+		</p:panelGrid>
+		<p:panelGrid id="panelBL1_faturar" columns="2" layout="grid" columnClasses="ui-grid-col-6,ui-grid-col-6">
+			<p:autoComplete id="acFaturarContra" value="#{cadastroDtcDtaBean.faturarContraSelecionado}" var="item" itemLabel="#{item.razaoSocial}"
+				converter="cadastroFaturarContraConverter" maxResults="15" completeMethod="#{cadastroDtcDtaBean.listaFaturarContra}"
+				emptyMessage="Nenhum registro encontrado" itemValue="#{item}" minQueryLength="3" style="width:100%"
+				required="#{cadastroDtcDtaBean.camposObrigatorios}" placeholder="Informe 3 digitos pesquisar..."
+				disabled="#{cadastroDtcDtaBean.entidade.enviarParaMapa}">
+				<p:column>
+					<h:outputText value="#{item.razaoSocial}" />
+				</p:column>
+				<p:column>
+					<h:outputText value="#{item.cnpj}" />
+				</p:column>
+			</p:autoComplete>
+
+			<p:commandButton id="idIncluirFatContra" icon="fa fa-plus" oncomplete="PF('dlgBLIncluir').show();" process="@this"
+				action="#{cadastroDtcDtaBean.instanciarImportadorComissaria(5)}" update=":incluir:idDlgBLIncluir">
+				<p:tooltip for="idIncluirFatContra" value="#{bundle.incluir}" showEffect="clip" hideEffect="explode" />
+			</p:commandButton>
+		</p:panelGrid>
+
+		<p:outputLabel for="tipoCargaIMO" value="#{bundle.cadastroCargaImo}" />
+		<p:selectOneMenu id="tipoCargaIMO" value="#{cadastroDtcDtaBean.entidade.cargaImo}" style="width:28%" styleClass="estendido alinhadoEsquerda"
+			disabled="#{cadastroDtcDtaBean.entidade.enviarParaMapa}" required="true">
+			<f:selectItem itemLabel="Selecione ..." itemValue="#{null}" />
+			<f:selectItems value="#{cadastroDtcDtaBean.todosTipoSimNao}" var="tipo" itemValue="#{tipo}" itemLabel="#{tipo.descricao}" />
+		</p:selectOneMenu>
+
+		<p:outputLabel id="label_fatContraEmail" for="fatContraEmail" value="#{bundle.cadastroFaturarContraEmail}" />
+		<p:panelGrid id="panelBL_fatcontraemail" columns="1" layout="grid" columnClasses="ui-grid-col-12" styleClass="ui-panelgrid-blank">
+			<p:inputText id="fatContraEmail" value="#{cadastroDtcDtaBean.entidade.faturarContraEmail}" style="width:100%"
+				required="#{cadastroDtcDtaBean.camposObrigatorios}" disabled="#{cadastroDtcDtaBean.entidade.enviarParaMapa}" />
+		</p:panelGrid>
+
+		<p:outputLabel value="" />
+		<p:outputLabel value="" />
+
+	</p:panelGrid>
+
+	<p:separator />
+
+	<p:panelGrid id="panelBL_04_salvar" columns="2" layout="grid" columnClasses="ui-grid-col-1,ui-grid-col-1,ui-grid-col-1"
+		styleClass="ui-panelgrid-blank" rendered="#{cadastroDtcDtaBean.controlaSalvar}">
+
+		<p:commandButton id="idSalvar" icon="fa fa-floppy-o" value="#{bundle.salvar}" action="#{cadastroDtcDtaBean.salvarEntidade()}"
+			update=":frmCadastrarEntidade :frmListarPrincipal panelBL_03 panelBL_NroATI" />
+
+		<p:commandButton id="cancelarVoltar" icon="fa fa-rotate-left" value="#{bundle.voltar}" action="#{cadastroDtcDtaBean.voltarPgPrincipal()}"
+			update=":frmListarPrincipal :frmCadastrarEntidade :frmCadastrarEntidade:panelCadastrarEntidade" process="@this">
+			<p:resetInput target=":frmCadastrarEntidade:panelCadastrarEntidade" />
+		</p:commandButton>
+	</p:panelGrid>
+
+	<p:panelGrid id="panelBL_04_salvarRasqunho" columns="2" layout="grid" columnClasses="ui-grid-col-2,ui-grid-col-1" styleClass="ui-panelgrid-blank"
+		rendered="#{cadastroDtcDtaBean.controlaSalvarRasqunho}">
+
+		<p:commandButton id="idSalvarRasqunho" icon="fa fa-floppy-o" value="Salvar Rasqunho" action="#{cadastroDtcDtaBean.salvarEntidadeRasqunho()}"
+			update="panelBL_03 panelBL_NroATI" />
+
+		<p:commandButton id="cancelarVoltarRascunho" icon="fa fa-rotate-left" value="#{bundle.voltar}" action="#{cadastroDtcDtaBean.voltarPgPrincipal()}"
+			update=":frmListarPrincipal :frmCadastrarEntidade :frmCadastrarEntidade:panelCadastrarEntidade" process="@this">
+			<p:resetInput target=":frmCadastrarEntidade:panelCadastrarEntidade" />
+		</p:commandButton>
+	</p:panelGrid>
+
+	<p:separator />
+
+	<p:panelGrid id="panelBL_03" columns="5" layout="grid" columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-1,ui-grid-col-1"
+		styleClass="ui-panelgrid-blank">
+		<p:inputMask id="inpContainer" placeholder="Incluir Container..." value="#{cadastroDtcDtaBean.numeroContainer}" mask="aaaa 999999 9"
+			disabled="#{cadastroDtcDtaBean.entidade.id == null }" />
+
+		<p:inputText id="inpLacreContainer" placeholder="Incluir Lacre..." value="#{cadastroDtcDtaBean.lacreContainer}"
+			disabled="#{cadastroDtcDtaBean.entidade.id == null }" />
+
+		<p:selectOneMenu id="tipoCargaContainer" value="#{cadastroDtcDtaBean.selecionadoCargaImo}" style="width:80%" styleClass="estendido alinhadoEsquerda">
+			<f:selectItem itemLabel="Selecione carga IMO..." itemValue="#{null}" />
+			<f:selectItems value="#{cadastroDtcDtaBean.todosTipoSimNao}" var="tipo" itemValue="#{tipo}" itemLabel="#{tipo.descricao}" />
+		</p:selectOneMenu>
+
+		<p:commandButton id="idAddContainer" icon="fa fa-plus" action="#{cadastroDtcDtaBean.incluirContainer()}"
+			update=":frmCadastrarEntidade:formCadEntidadeBL:tbListaTodosContanier :frmCadastrarEntidade:formCadEntidadeBL:inpContainer
+			:frmCadastrarEntidade:formCadEntidadeBL:inpLacreContainer"
+			disabled="#{cadastroDtcDtaBean.entidade.id == null }">
+
+			<p:tooltip for="idAddContainer" value="#{bundle.cadastroIncluirContainer}" showEffect="clip" hideEffect="explode" />
+		</p:commandButton>
+
+		<p:commandButton id="btnAnexos" value="Documentos" ajax="true" action="#{cadastroDtcDtaBean.instanciarAnexos(null)}" icon="fa fa-list-ul"
+			oncomplete="PF('dlgAnexosGenerico').show();" disabled="#{cadastroDtcDtaBean.entidade.id == null }">
+			<p:resetInput target=":frmCadastrarEntidade :frmListarPrincipal  :frmCadastrarEntidade:panelCadastrarEntidade" />
+		</p:commandButton>
+	</p:panelGrid>
+
+	<p:panelGrid id="panelBL_032" columns="1" layout="grid" columnClasses="ui-grid-col-6" styleClass="ui-panelgrid-blank">
+		<p:dataTable id="tbListaTodosContanier" value="#{cadastroDtcDtaBean.listaBLContanier}" var="item" reflow="true"
+			emptyMessage="Nenhum registro encontrado.">
+
+			<p:column id="idNroContainer" headerText="#{bundle.cadastroBLContainer}" width="80">
+				<h:outputText value="#{item.numeroContanier}" />
+			</p:column>
+
+			<p:column id="idNroLacreContainer" headerText="#{bundle.cadastroBLlacre}" width="80">
+				<h:outputText value="#{item.numeroLacre}" />
+			</p:column>
+
+			<p:column id="idCargaImo" headerText="#{bundle.cadastroCargaImo}" width="80">
+				<h:outputText value="#{item.cargaImo.descricao}" />
+			</p:column>
+
+			<p:column id="columRemoverVinculoPermissao" headerText="Excluir" width="15">
+				<p:commandButton id="btnRemoverContanier" action="#{cadastroDtcDtaBean.removerContanier(item)}" update="tbListaTodosContanier"
+					icon="fa fa-trash-o" style="color: red">
+					<p:tooltip for="btnRemoverContanier" value="#{bundle.delete}" showEffect="clip" hideEffect="explode" />
+					<p:confirm header="Excluir" message="Deseja excluir este item ?" icon="ui-icon-alert" />
+				</p:commandButton>
+			</p:column>
+
+		</p:dataTable>
+
+	</p:panelGrid>
+
+</composite:implementation>
+
+</html>

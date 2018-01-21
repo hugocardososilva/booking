@@ -1,0 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" template="/templates/modeloSistema.xhtml"
+	xmlns:cadastroDtcDta="http://java.sun.com/jsf/composite/pages/cadastroLCL"
+                xmlns:diaLogGenerico="http://java.sun.com/jsf/composite/pages/dialogGeneric"
+                xmlns:consultar="http://java.sun.com/jsf/composite/pages/cadastroLCL">
+
+	<ui:define name="menu">
+		<ui:include src="/includes/menuPrincipal.xhtml" />
+	</ui:define>
+
+	<ui:define name="conteudo_pg_principal">
+		<h:form id="frmListarPrincipal" styleClass="body_teste">
+			<p:panelGrid id="panelTitulo" columns="1" layout="grid" columnClasses="ui-grid-col-12" styleClass="ui-panelgrid-blank" style="text-align: center">
+				<h:outputText value="#{bundle.cadastroLCLTela}" styleClass="estiloTituloTela" />
+			</p:panelGrid>
+			<p:separator />
+
+			<p:growl id="message" showDetail="true" />
+
+			<p:panel id="panellistarUsr" visible="#{cadastroLCLBean.controlarFormListar}" styleClass="esconderBorda">
+				<cadastroDtcDta:cadastroLCLFormPrincipal id="tabItensBL" />
+			</p:panel>
+		</h:form>
+
+		<h:form id="frmCadastrarEntidade">
+			<p:panel id="panelCadastrarEntidade" visible="#{cadastroLCLBean.controlarFormCadastrar}" styleClass="esconderBorda">
+				<cadastroDtcDta:cadastroLCLFormCadastroEntidade id="formCadEntidadeBL" />
+			</p:panel>
+		</h:form>
+
+		<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+			<p:commandButton value="#{bundle.sim}" type="button" styleClass="ui-confirmdialog-yes" icon="fa fa-check" />
+			<p:commandButton value="#{bundle.nao}" type="button" styleClass="ui-confirmdialog-no" icon="fa fa-times-circle" />
+		</p:confirmDialog>
+
+		<diaLogGenerico:cadastroBLIncluir bean="#{cadastroLCLBean}" id="incluir" /> 
+		<diaLogGenerico:dialogAnexosGenerico bean="#{cadastroLCLBean}" id="anexosGenerico" />
+		<diaLogGenerico:dialogNcmLista bean="#{cadastroLCLBean}" id="listaNCM" />
+		<consultar:dialogContainer id="dialogContainer" />
+
+	</ui:define>
+</ui:composition>

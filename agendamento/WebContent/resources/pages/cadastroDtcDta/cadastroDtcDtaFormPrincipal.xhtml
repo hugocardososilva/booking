@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" xmlns:cc="http://java.sun.com/jsf/composite"
+	xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:composite="http://java.sun.com/jsf/composite">
+
+<!-- INTERFACE -->
+<composite:interface>
+	<composite:attribute name="id"></composite:attribute>
+</composite:interface>
+
+<!-- IMPLEMENTATION -->
+<composite:implementation>
+
+	<p:panelGrid id="panelBL_novo" columns="1" layout="grid" columnClasses="ui-grid-col-1" styleClass="ui-panelgrid-blank">
+		<p:commandButton id="idNovaEntidade" icon="fa fa-plus" value="#{bundle.novo}" action="#{cadastroDtcDtaBean.redirecionarCadastro(true)}"
+			update="@form" />
+	</p:panelGrid>
+
+	<p:dataTable id="tbListarEntidade" value="#{cadastroDtcDtaBean.lazyModel}" var="item" emptyMessage="#{bundle.noRecords}" paginator="true" rows="10"
+		paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+		rowsPerPageTemplate="10,20" lazy="true" paginatorPosition="bottom" reflow="true">
+
+		<f:facet name="header">
+			<p:outputPanel id="idHeader" style="text-align: left;">
+				<p:remoteCommand name="filtroTable" actionListener="#{cadastroDtcDtaBean.filtroTabela()}" process="@this filtroGeral" update="tbListarEntidade" />
+				<p:inputText id="filtroGeral" placeholder="Pesquisar..." value="#{cadastroDtcDtaBean.filtroGeral}"
+					onkeypress="if (event.keyCode == 13) {filtroTable(); return false; }" />
+				<p:commandButton id="btFiltroTabela" icon="fa fa-search" action="#{cadastroDtcDtaBean.filtroTabela()}" update="tbListarEntidade"
+					title="#{bundle.pesquisar}" />
+
+			</p:outputPanel>
+		</f:facet>
+
+		<p:column id="idImportador" headerText="#{bundle.importador}" width="60">
+			<h:outputText value="#{item.importador.razaoSocial}" />
+		</p:column>
+
+		<p:column id="idNroATI" headerText="#{bundle.cadastroNrpATI}" width="40">
+			<h:outputText value="#{item.numeroATI}" />
+		</p:column>
+
+		<p:column id="columnDataCadastro" headerText="#{bundle.cadastroBLData}" width="30">
+			<h:outputText value="#{item.dataCadastro}">
+				<f:convertDateTime pattern="dd/MM/yyyy" />
+			</h:outputText>
+		</p:column>
+
+		<p:column id="idDescricaoBL" headerText="#{bundle.cadastroBL}" width="40">
+			<h:outputText value="#{item.descricaoBL}" />
+		</p:column>
+
+
+		<p:column id="columEditar" headerText="#{bundle.editar}" width="10">
+			<p:commandButton id="btnEditar" actionListener="#{cadastroDtcDtaBean.editarEntidade(item)}" ajax="false" icon="fa fa-pencil">
+
+				<p:tooltip for="btnEditar" value="#{bundle.editar}" showEffect="clip" hideEffect="explode" />
+			</p:commandButton>
+		</p:column>
+
+		<p:column id="columRemover" headerText="#{bundle.excluir}" width="10">
+			<p:commandButton id="btnRemover" action="#{cadastroDtcDtaBean.remover(item)}" update="tbListarEntidade" icon="fa fa-trash-o" style="color: red">
+				<p:tooltip for="btnRemover" value="#{bundle.excluir}" showEffect="clip" hideEffect="explode" />
+				<p:confirm header="Excluir" message="Deseja excluir este item ?" icon="ui-icon-alert" />
+			</p:commandButton>
+		</p:column>
+
+	</p:dataTable>
+
+</composite:implementation>
+
+</html>

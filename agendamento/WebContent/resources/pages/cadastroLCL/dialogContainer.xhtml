@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:cc="http://java.sun.com/jsf/composite">
+
+<cc:interface>
+</cc:interface>
+
+<cc:implementation>
+	<p:dialog id="idContainer" widgetVar="dlgContainer" closable="true" draggable="false" resizable="false" modal="false" appendTo="@(body)"
+		header="Unidade" responsive="true" position="center">
+		<h:form id="frmStatusContainer" enctype="multipart/form-data">
+
+			<p:panelGrid id="pnlTable" columns="1" layout="grid" columnClasses="ui-grid-col-12" styleClass="ui-panelgrid-blank">
+				<p:dataTable id="tbListaDados" value="#{cadastroLCLBean.listaContainerBL}" var="item" reflow="true" emptyMessage="Nenhum registro encontrado.">
+					<p:column id="idNroContainerLog" headerText="#{bundle.cadastroBLContainer}" width="10">
+						<f:facet name="header">
+							<h:outputText value="#{bundle.cadastroBLContainer}" />
+						</f:facet>
+						<h:outputText value="#{item.numeroContanier}" disabled="true" />
+					</p:column>
+
+					<p:column headerText="#{bundle.cadastroBLlacre}" width="55">
+						<h:outputText value="#{item.numeroLacre}" />
+					</p:column>
+
+					<p:column id="columRemoverCont" headerText="#{bundle.excluir}" width="5">
+						<p:commandButton id="btnRemoverCont" action="#{cadastroLCLBean.excluirContainer(item)}" update="tbListaDados" icon="fa fa-trash-o"
+							style="color: red">
+							<p:tooltip for="btnRemoverCont" value="#{bundle.excluir}" showEffect="clip" hideEffect="explode" />
+							<p:confirm header="Excluir" message="Deseja excluir este item ?" icon="ui-icon-alert" />
+						</p:commandButton>
+					</p:column>
+
+				</p:dataTable>
+			</p:panelGrid>
+
+			<p:separator />
+
+			<p:panelGrid id="pnlFechar" columns="1" layout="grid" columnClasses="ui-grid-col-4" styleClass="ui-panelgrid-blank">
+				<p:commandButton value="Fechar" icon="fa fa-times-circle" action="#{consultaProcessosBean.fecharStatusContainer()}"
+					onclick="PF('dlgStatusContainer').hide();" />
+			</p:panelGrid>
+		</h:form>
+	</p:dialog>
+
+</cc:implementation>
+</html>

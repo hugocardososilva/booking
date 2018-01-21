@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="1.0"
+	xmlns="http://java.sun.com/xml/ns/persistence">
+	<persistence-unit name="portalclif" transaction-type="RESOURCE_LOCAL">
+		<provider>org.hibernate.ejb.HibernatePersistence</provider>
+
+		<class>seguranca.com.entidade.ArquivosCobrancaEsalesSeguranca</class>
+		<class>seguranca.com.entidade.User</class>
+		<class>seguranca.com.entidade.UserLoginLogaut</class>
+		<class>seguranca.com.entidade.UserDadosConexao</class>
+		<class>seguranca.com.entidade.UserPermissoes</class>
+		<class>seguranca.com.entidade.UserImportador</class>
+		<class>seguranca.com.entidade.UserComissario</class>
+		<class>seguranca.com.entidade.UserResponsavelLote</class>
+		<class>seguranca.com.entidade.CadastroBL</class>
+		<class>seguranca.com.entidade.CadastroBLAnexos</class>
+		<class>seguranca.com.entidade.CadastroBLContanier</class>
+		<class>seguranca.com.entidade.CadastroBLDescricaoMercadoria</class>
+		<class>seguranca.com.entidade.CadastroBlLogAlteracao</class>
+		<class>seguranca.com.entidade.CadastroBLRiscoFitossanitario</class>
+		<class>seguranca.com.entidade.CadastroCodigoPais</class>
+		<class>seguranca.com.entidade.CadastroComissario</class>
+		<class>seguranca.com.entidade.CadastroEspecie</class>
+		<class>seguranca.com.entidade.CadastroImportador</class>
+		<class>seguranca.com.entidade.CadastroNcm</class>
+		<class>seguranca.com.entidade.MapaNcm</class>
+		<class>seguranca.com.entidade.CadastroPortos</class>
+		<class>seguranca.com.entidade.CadastroRepresentante</class>
+		<class>seguranca.com.entidade.CadastroBLContanierLCL</class>
+		<class>seguranca.com.entidade.ProgramacaoNavio</class>
+		<class>seguranca.com.entidade.CadastroFaturarContra</class>
+		<class>seguranca.com.entidade.CadastroResponsavelLote</class>
+		
+
+		<properties>
+			<property name="hibernate.archive.autodetection" value="class" />
+
+			<property name="hibernate.hbm2ddl.auto" value="update" />
+			<property name="hibernate.show_sql" value="true" />
+			<property name="hibernate.format_sql" value="false" />
+
+			<!-- configuracao do Envers -->
+			<property name="hibernate.ejb.event.post-insert"
+				value="org.hibernate.envers.event.AuditEventListener" />
+			<property name="hibernate.ejb.event.post-update"
+				value="org.hibernate.envers.event.AuditEventListener" />
+			<property name="hibernate.ejb.event.post-delete"
+				value="org.hibernate.envers.event.AuditEventListener" />
+			<property name="hibernate.ejb.event.pre-collection-update"
+				value="org.hibernate.envers.event.AuditEventListener" />
+			<property name="hibernate.ejb.event.pre-collection-remove"
+				value="org.hibernate.envers.event.AuditEventListener" />
+			<property name="hibernate.ejb.event.post-collection-recreate"
+				value="org.hibernate.envers.event.AuditEventListener" />
+
+
+		</properties>
+	</persistence-unit>
+</persistence>

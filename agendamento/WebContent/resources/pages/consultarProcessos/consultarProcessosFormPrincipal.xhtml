@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" xmlns:cc="http://java.sun.com/jsf/composite"
+	xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:composite="http://java.sun.com/jsf/composite">
+
+<!-- INTERFACE -->
+<composite:interface>
+	<composite:attribute name="id"></composite:attribute>
+</composite:interface>
+
+<!-- IMPLEMENTATION -->
+<composite:implementation>
+
+	<p:dataTable id="tbListarEntidade" value="#{consultaProcessosBean.lazyModel}" var="item" emptyMessage="#{bundle.noRecords}" paginator="true"
+		rows="10" scrollable="true" scrollHeight="400"
+		paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+		currentPageReportTemplate="Total de {totalRecords} registros - Página: {currentPage} de {totalPages} " rowsPerPageTemplate="10,20,30,40,50"
+		lazy="true" paginatorPosition="bottom" reflow="true">
+
+		<f:facet name="header">
+			<p:selectOneMenu id="tipoModal" value="#{consultaProcessosBean.tipoModalSelecionadoEnum}" style="float:left;width:15%;">
+				<f:selectItem id="selecao_1" itemLabel="Todos Documentos" itemValue="#{null}" />
+				<f:selectItems id="selecao_2" value="#{consultaProcessosBean.todosTipoModalEnum}" var="tipo" itemValue="#{tipo}" itemLabel="#{tipo.descricao}" />
+
+				<p:ajax event="change" listener="#{consultaProcessosBean.filtroTabela()}" process="@this filtroGeral tipoModal" update="tbListarEntidade" />
+			</p:selectOneMenu>
+
+			<p:selectOneMenu id="lclSelecionado" value="#{consultaProcessosBean.lclSelecionado}" style="float:left;width:15%;"
+				converter="cadastroLCLContainerConverter"
+				rendered="#{consultaProcessosBean.userMB.user.admin || consultaProcessosBean.userMB.user.clif || consultaProcessosBean.userMB.user.utilizarFiltroLCL}">
+				<f:selectItem itemLabel="Selecione um BL Master ( Todos )" itemValue="#{null}" />
+				<f:selectItems value="#{consultaProcessosBean.listaLCL}" var="itemLCL" itemValue="#{itemLCL}" itemLabel="#{itemLCL.numeroBLMaster}" />
+
+				<p:ajax event="change" listener="#{consultaProcessosBean.filtroTabela()}" process="@this filtroGeral lclSelecionado" update="tbListarEntidade" />
+			</p:selectOneMenu>
+
+			<p:outputPanel id="idHeader" style="text-align: left;">
+				<p:remoteCommand name="filtroTable" actionListener="#{consultaProcessosBean.filtroTabela()}" process="@this filtroGeral" update="tbListarEntidade" />
+				<p:inputText id="filtroGeral" placeholder="Pesquisar..." value="#{consultaProcessosBean.filtroGeral}"
+					onkeypress="if (event.keyCode == 13) {filtroTable(); return false; }" />
+				<p:commandButton id="btFiltroTabela" icon="fa fa-search" action="#{consultaProcessosBean.filtroTabela()}" update="tbListarEntidade"
+					title="#{bundle.pesquisar}" />
+
+			</p:outputPanel>
+		</f:facet>
+
+		<p:column id="columEditar" headerText="#{bundle.editar}" width="5">
+			<p:commandButton id="btnEditar" actionListener="#{consultaProcessosBean.editarEntidadeEdicaoBL(item)}" ajax="false" icon="fa fa-pencil">
+				<p:tooltip for="btnEditar" value="#{bundle.editar}" showEffect="clip" hideEffect="explode" />
+			</p:commandButton>
+		</p:column>
+
+		<p:column id="columnDataCadastro" headerText="#{bundle.cadastroBLData}" width="30">
+			<h:outputText value="#{item.dataCadastro}">
+				<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+			</h:outputText>
+		</p:column>
+
+		<p:column id="columNroATI" headerText="#{bundle.cadastroNrpATI}" width="30">
+			<h:outputText value="#{item.numeroATI}" />
+		</p:column>
+
+		<p:column id="columnAVIO" headerText="#{bundle.cadastroBLNavio}" width="40">
+			<h:outputText value="#{item.programacaoNavio.navio}" />
+		</p:column>
+
+		<p:column id="columViagem" headerText="#{bundle.cadastroBLViagem}" width="40">
+			<h:outputText value="#{item.programacaoNavio.navioViagem}" />
+		</p:column>
+
+		<p:column id="columnDataAtracacao" headerText="#{bundle.cadastroBLDatracacao}" width="35">
+			<h:outputText value="#{item.programacaoNavio.dataETA}">
+				<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
+			</h:outputText>
+		</p:column>
+
+		<p:column id="columBL" headerText="#{bundle.cadastroBL}" width="80">
+			<h:outputText value="#{item.descricaoBL}" />
+		</p:column>
+
+		<p:column id="columIMP" headerText="#{bundle.importador}" width="60">
+			<h:outputText value="#{item.importador.razaoSocial}" />
+		</p:column>
+
+		<p:column id="columModalidade" headerText="#{bundle.cadastroBLModalide}" width="15">
+			<h:outputText value="#{item.modalidadeBLEnum.descricao}" />
+		</p:column>
+
+		<p:column id="status" headerText="Status Clif" width="50">
+			<h:outputText value="#{item.statusAtiLclFclEnum.descricao}" />
+		</p:column>
+
+		<p:column id="statusMapa" headerText="Status Mapa" width="50">
+			<h:outputText value="#{item.cadastroBL.statusBLEnum.descricaoAgendamento}" />
+
+			<p:commandButton id="btContainer" icon="fa fa-search" oncomplete="PF('dlgStatusContainer').show();"
+				action="#{consultaProcessosBean.instanciarStatusContainer(item)}" title="Status"
+				update=":dialogStatusContainer:frmStatusContainer :dialogStatusContainer:frmStatusContainer:tbListaDados" />
+		</p:column>
+
+		<p:column id="deferimento" headerText="Deferimento Mapa" width="50">
+			<h:outputText value="#{item.deferimentoSimNao}" />
+		</p:column>
+
+		<p:column id="Anuência" headerText="Anuência Mapa" width="50">
+			<h:outputText value="#{consultaProcessosBean.anuenciaMapaSimNao(item)}" />
+		</p:column>
+
+		<p:column id="anexos" headerText="Anexos" width="20" exportable="false">
+			<p:commandButton id="btnAnexos" actionListener="#{consultaProcessosBean.instanciarEntidadeAnexos(item)}" ajax="false" icon="fa fa-list-ul">
+				<p:tooltip for="btnAnexos" value="#{bundle.anexo}" showEffect="clip" hideEffect="explode" />
+			</p:commandButton>
+		</p:column>
+
+		<p:column id="columTriagem" headerText="#{bundle.processosTriagem}" width="20"
+			rendered="#{consultaProcessosBean.userMB.user.clif || consultaProcessosBean.userMB.user.admin}">
+			<p:commandButton id="btnTriagem" actionListener="#{consultaProcessosBean.editarEntidadeEdicaoBL(item)}" ajax="false" icon="fa fa-pencil"
+				update=":frmCadastrarEntidade:formCadEntidadeBL:envioMapa">
+				<p:tooltip for="btnTriagem" value="#{bundle.editar}" showEffect="clip" hideEffect="explode" />
+			</p:commandButton>
+		</p:column>
+	</p:dataTable>
+
+</composite:implementation>
+
+</html>

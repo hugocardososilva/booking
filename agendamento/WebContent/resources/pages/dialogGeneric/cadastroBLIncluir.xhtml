@@ -1,0 +1,51 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:cc="http://java.sun.com/jsf/composite">
+
+<cc:interface>
+	<cc:attribute name="bean" required="true" />
+	<cc:attribute name="id" type="java.lang.String" />
+</cc:interface>
+
+<cc:implementation>
+	<p:dialog id="idDlgBLIncluir" widgetVar="dlgBLIncluir" closable="true" draggable="false" resizable="false" modal="false" appendTo="@(body)"
+		header="Incluir" responsive="true" position="center">
+		<h:form id="frmBLIncluir" enctype="multipart/form-data">
+
+			<p:panelGrid id="pnlIncluir" columns="1" layout="grid" columnClasses="ui-grid-col-12" styleClass="ui-panelgrid-blank">
+				<p:outputLabel id="labelRazaoSocial" value="#{bundle.cadastroRazaoSocial}" />
+				<p:inputText id="inpRazaoSocial" value="#{cc.attrs.bean.razaoSocial}" style="width:100%" />
+
+				<p:selectOneMenu id="tipoPessoaFisJuridic" value="#{cc.attrs.bean.selecionadoPessoaFisicaJuridicaEnum}" style="width:50%"
+					styleClass="estendido alinhadoEsquerda">
+					<f:selectItems value="#{cc.attrs.bean.todasTipoPessoaFisicaJuridicaEnum}" var="tipo" itemValue="#{tipo}" itemLabel="#{tipo.descricao}" />
+
+					<p:ajax event="change" listener="#{cc.attrs.bean.alterarMasCara()}" update="inpCnpj" />
+				</p:selectOneMenu>
+
+				<p:outputLabel id="labelCnpj" value="#{bundle.cadastroCNPJ}" />
+				<p:inputMask id="inpCnpj" value="#{cc.attrs.bean.cnpj}" style="width:100%" mask="#{cc.attrs.bean.mascaraCnpjCpf}" />
+
+				<p:outputLabel id="labelEmail" value="#{bundle.usuarioEmail}" rendered="#{cc.attrs.bean.mostrarEmail}" />
+				<p:inputText id="inpEmail" value="#{cc.attrs.bean.email}" style="width:100%" rendered="#{cc.attrs.bean.mostrarEmail}" >
+					<p:tooltip for="inpEmail" value="Obs:. Para informar mais de um e-mail, informar com ';'. Exemplo: teste@teste.com.br;teste1@teste.com.br"
+						showEffect="clip" hideEffect="explode" />
+				</p:inputText>
+			</p:panelGrid>
+
+			<p:separator />
+
+			<p:panelGrid id="pnlBLIncluirFechar" columns="2" layout="grid" columnClasses="ui-grid-col-6,ui-grid-col-6" styleClass="ui-panelgrid-blank">
+				<p:commandButton id="idSalvarBLIncluir" icon="fa fa-check" value="#{bundle.salvar}" action="#{cc.attrs.bean.salvarImportadorComissaria()}">
+					<p:tooltip for="idSalvarBLIncluir" value="#{bundle.salvar}" showEffect="clip" hideEffect="explode" />
+				</p:commandButton>
+
+				<p:commandButton value="Fechar" onclick="PF('dlgBLIncluir').hide();" icon="fa fa-times-circle">
+					<p:resetInput target="pnlIncluir" />
+				</p:commandButton>
+			</p:panelGrid>
+		</h:form>
+	</p:dialog>
+
+</cc:implementation>
+</html>

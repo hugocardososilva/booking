@@ -1,0 +1,45 @@
+.exception-body {
+    background-color: #6d6d7e;
+    box-sizing: border-box;
+    background: radial-gradient(circle at 50% 100%, #6d6d7e, #3b3b48);
+    padding-top: 100px;
+    border-top: 10px solid #e96d66;
+    
+    .exception-panel {
+        background-color: #f7f7f7;
+        width: 600px;
+        margin: 0 auto;
+        text-align: center;
+        padding: 100px;
+        box-sizing: border-box;
+        @include border-radius($borderRadius);
+        
+        img {
+            width: 128px;
+        }
+        
+        h1 {
+            font-size: 22px;
+            color: #2d353c;
+            margin-top: 50px;
+            margin-bottom: 10px;
+        }
+        
+        p {
+            font-size: 15px;
+            margin: 0 0 30px 0px;
+            color: #6a6a7d;
+        }
+    }
+}
+
+@media (max-width: 640px) {
+    .exception-body {
+        padding-top: 80px;
+            
+        .exception-panel {
+            width: 100%;
+            padding: 50px;
+        }
+    }
+}

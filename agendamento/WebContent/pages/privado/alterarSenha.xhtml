@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" template="/templates/modeloSistema.xhtml">
+
+	<ui:define name="menu">
+		<ui:include src="/includes/menuPrincipal.xhtml" />
+	</ui:define>
+
+	<ui:define name="conteudo_pg_principal">
+		<h:form id="frmAlterarSenhaAviso">
+			<p:panel id="pnlAlterarSenhaAviso" style="background: #4297d;" header="Alteração da senha de acesso ao portal ">
+				<h:outputText value="Após alteração da senha você será redirecionado para a tela de login." />
+				<br />
+				<h:outputText value="Para alterar sua senha clique no botão abaixo." />
+
+				<h:panelGrid columns="1">
+					<p:commandButton value="Alterar Senha" oncomplete="PF('dlgAlterarSenha').show();" update=":frmAlterarSenha:pnlAlterarSenhaConteudo" />
+				</h:panelGrid>
+			</p:panel>
+
+		</h:form>
+
+		<p:dialog widgetVar="dlgAlterarSenha" closable="false" draggable="false" resizable="false" modal="true" appendTo="@(body)" header="Alterar Senha"
+			height="350" width="380" style="opacity: 1 !important; height: 350px !important; width: 380px !important;">
+			<h:form id="frmAlterarSenha">
+
+				<h:panelGrid cellpadding="3">
+					<p:outputLabel value="Informações"
+						style="color: #2191c0 !important;  font-size: 16px !important; font-weight: bold !important;" />
+					<p:outputLabel value="A senha devera conter as seguintes combinações:" style="color: #2191c0 !important;" />
+					<p:outputLabel value="* Usar Letras Maiusculas e/ou Minusculas" style="color: #2191c0 !important;" />
+					<p:outputLabel value="* Usar numeros" style="color: #2191c0 !important;" />
+					<p:outputLabel value="* Usar caracteres especiais (@, #, $, %, * ou ?)" style="color: #2191c0 !important;" />
+					<p:outputLabel value="* Minimo de 8 digitos" style="color: #2191c0 !important;" />
+				</h:panelGrid>
+
+				<h:panelGrid id="pnlAlterarSenhaConteudo" columns="2" cellpadding="3">
+
+					<p:outputLabel for="txtSenhaAntiga" value="Senha Antiga:" />
+					<p:password id="txtSenhaAntiga" label="Senha Antiga:" redisplay="true" value="#{loginMB.password}" size="25" maxlength="25" required="true"
+						requiredMessage="Senha antiga obrigatória." />
+
+					<p:outputLabel for="txtSenhaNova" value="Nova Senha:" />
+					<p:password id="txtSenhaNova" value="#{loginMB.novaSenha}" size="25" maxlength="25" required="true" feedback="true"
+						promptLabel="Digite a senha" weakLabel="Força da senha: Fraca" goodLabel="Força da senha: Média" strongLabel="Força da senha: Forte"
+						match="txtSenhaConfirmar" validatorMessage="As duas senhas devem ser iguais" requiredMessage="Nova senha obrigatória." />
+
+					<p:outputLabel for="txtSenhaConfirmar" value="Confirma Senha:" />
+					<p:password id="txtSenhaConfirmar" value="#{loginMB.confirmarNovaSenha}" size="25" maxlength="25" required="true" feedback="true"
+						promptLabel="Digite a senha" weakLabel="Força da senha: Fraca" goodLabel="Força da senha: Média" strongLabel="Força da senha: Forte"
+						requiredMessage="Confirma senha obrigatório." />
+				</h:panelGrid>
+
+				<h:panelGrid columns="2">
+					<p:commandButton value="Salvar" actionListener="#{loginMB.salvarSenha()}" update="@form">
+					</p:commandButton>
+
+					<p:commandButton value="Fechar" process="@this" onclick="PF('dlgAlterarSenha').hide();">
+						<p:resetInput target="pnlAlterarSenhaConteudo" />
+					</p:commandButton>
+
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
+
+	</ui:define>
+</ui:composition>

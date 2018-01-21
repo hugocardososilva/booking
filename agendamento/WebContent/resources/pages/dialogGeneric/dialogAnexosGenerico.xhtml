@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:cc="http://java.sun.com/jsf/composite">
+
+<cc:interface>
+	<cc:attribute name="bean" required="true" />
+	<cc:attribute name="id" type="java.lang.String" required="true" />
+</cc:interface>
+
+<cc:implementation>
+	<p:dialog id="idDlgAnexosImportacao" widgetVar="dlgAnexosGenerico" closable="false" draggable="false" resizable="false" modal="true" appendTo="@(body)"
+		header="Anexos" height="450" width="500" style="opacity: 1 !important; height: 450px !important; width: 500px !important;" responsive="true">
+
+		<h:panelGrid id="pnlAnexosImportacaoCabecalho" columns="2" cellspacing="10">
+			<h:outputLabel value="BL:" />
+			<h:outputText value="#{cc.attrs.bean.entidade.descricaoBL}" />
+		</h:panelGrid>
+
+		<p:tabView id="abas" value="#{cc.attrs.bean.todasTipoAnexosEnum}" var="item">
+			<p:ajax event="tabChange" listener="#{cc.attrs.bean.instanciarAnexos(item)}" />
+
+			<p:tab title="#{item.descricao}">
+				<h:form id="frmAnexosStatus" enctype="multipart/form-data" rendered="#{item.codigo==5}">
+					<h:panelGrid id="panelStatus" columns="1" cellspacing="10">
+						<h:outputLabel value="#{cc.attrs.bean.retornoBL}" style="font-weight: bold; #{cc.attrs.bean.retornoCorBL}" />
+						<h:outputLabel value="#{cc.attrs.bean.retornoCE}" style="font-weight: bold; #{cc.attrs.bean.retornoCorCE}" />
+						<h:outputLabel value="#{cc.attrs.bean.retornoINVOICE}" style="font-weight: bold; #{cc.attrs.bean.retornoCorINVOICE}" />
+						<h:outputLabel value="#{cc.attrs.bean.retornoPACKING}" style="font-weight: bold; #{cc.attrs.bean.retornoCorPACKING}" />
+						<h:outputLabel value="#{cc.attrs.bean.retornoDTC_DTA}" style="font-weight: bold; #{cc.attrs.bean.retornoCorDTC_DTA}" />
+					</h:panelGrid>
+				</h:form>
+
+				<h:form id="frmAnexosImportacao" enctype="multipart/form-data" rendered="#{item.codigo!=5}">
+					<h:panelGrid id="pnlAnexosImportacao" columns="1">
+
+						<p:fileUpload label="Escolher arquivo (formato pdf até 3MB)" mode="advanced" dragDropSupport="false" sizeLimit="3000000"
+							invalidSizeMessage="Tamanho máximo permitido: 3MB" allowTypes="/(\.|\/)(pdf)$/" invalidFileMessage="Extensão de arquivo permitida: PDF."
+							fileUploadListener="#{cc.attrs.bean.upload}" auto="true" update="tblAnexosImportacao" />
+						<p:growl id="messages" showDetail="true" />
+
+						<p:dataTable id="tblAnexosImportacao" emptyMessage="Nenhum registro encontrado." value="#{cc.attrs.bean.listaAnexosPorTipo}" var="anexo" rows="03"
+							paginator="true" style="margin-bottom:20px">
+
+							<p:column headerText="Arquivo" width="270">
+								<p:commandLink value="#{anexo.caminhoAnexo}" actionListener="#{cc.attrs.bean.download}" ajax="false" process="@this :frmPrincipal">
+									<f:attribute name="anexoSelecionado" value="#{anexo}" />
+									<p:fileDownload value="#{cc.attrs.bean.pdf}" />
+								</p:commandLink>
+							</p:column>
+
+							<p:column id="columRemoverAnexo">
+								<p:commandButton id="btnRemoverAnexo" action="#{cc.attrs.bean.removerAnexo(anexo)}" icon="fa fa-trash-o" style="color: red">
+									<p:tooltip for="btnRemoverAnexo" value="#{bundle.excluir}" showEffect="clip" hideEffect="explode" />
+									<p:confirm header="Excluir" message="Deseja excluir este item ?" icon="ui-icon-alert" />
+								</p:commandButton>
+							</p:column>
+
+							<p:column id="columEnvioEmail" rendered="#{cc.attrs.bean.userMB.user.clif || cc.attrs.bean.userMB.user.admin}" >
+								<p:selectBooleanCheckbox id="cheBoxEnvioEmail" value="#{anexo.envioEmail}" >
+									<p:ajax event="change" listener="#{cc.attrs.bean.salvarAnexoAlteracao(anexo)}" update="cheBoxEnvioEmail columEnvioEmail" />
+								</p:selectBooleanCheckbox>
+							</p:column>
+
+						</p:dataTable>
+
+					</h:panelGrid>
+				</h:form>
+			</p:tab>
+		</p:tabView>
+
+		<p:commandButton value="Fechar" onclick="PF('dlgAnexosGenerico').hide();" action="#{cc.attrs.bean.fecharAnexo}" />
+	</p:dialog>
+</cc:implementation>
+</html>

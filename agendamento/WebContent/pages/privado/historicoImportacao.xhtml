@@ -1,0 +1,181 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/modeloSistema.xhtml">
+
+	<ui:define name="menu">
+		<ui:include src="/includes/menuPrincipal.xhtml" />
+	</ui:define>
+
+	<ui:define name="conteudo">
+		<h:form id="frmHistoricoImportacao">
+			<p:panel id="pnlConsultaHistoricoImportacao"
+			         style="background: #4297d;"
+				     header="Consulta - Histórico Importação">
+				<h:panelGrid id="pnlgConsultaHistoricoImportacao" 
+				             columns="2" 
+				             cellpadding="3">
+
+					<p:outputLabel for="txtConhecimento" 
+					               value="BL:" />
+					<p:inputText id="txtConhecimento" 
+					             value="#{MBHistoricoImportacao.conhecimento}"
+					             required="true"
+					             requiredMessage="BL obrigatório."
+						         size="25" 
+						         maxlength="30" />
+
+				</h:panelGrid>
+
+				<h:panelGrid columns="3">
+
+					<p:commandButton value="Pesquisar" 
+					                 icon="ui-icon-search"
+						             actionListener="#{MBHistoricoImportacao.pesquisar}" 
+						             update="@form" />
+
+					<p:commandButton value="Limpar Pesquisa"
+						             icon="ui-icon-circle-close" 
+						             actionListener="#{MBHistoricoImportacao.limpar}"
+						             update="@form" />
+				</h:panelGrid>
+			</p:panel>
+			
+			<h:commandLink id="excel">
+           		<p:graphicImage library="images" 
+                                name="excel.png" 
+                                rendered="#{!empty MBHistoricoImportacao.itens}"
+                                width="30"/>
+                <p:dataExporter type="xls" 
+                                target="tblHistoricoImportacao" 
+                                fileName="HistoricoImportacao" />
+            </h:commandLink>
+            		
+           	<h:commandLink id="pdf">
+            	<p:graphicImage library="images" 
+                                name="pdf.png" 
+                                rendered="#{!empty MBHistoricoImportacao.itens}"
+                                width="30"/>
+                <p:dataExporter type="pdf" 
+                                target="tblHistoricoImportacao" 
+                                fileName="HistoricoImportacao"
+                                preProcessor="#{MBHistoricoImportacao.preProcessPDF}" />
+            </h:commandLink>
+            	
+			<p:dataTable id="tblHistoricoImportacao" 
+			             widgetVar="tabelaHistoricoImportacao"
+				         emptyMessage="Nenhum registro encontrado." 
+				         value="#{MBHistoricoImportacao.itens}"
+				         var="historicoImportacao" 
+				         paginator="true" 
+				         rows="10" 
+				         rowsPerPageTemplate="10,15,20"
+				         rowKey="" 
+				         selectionMode="single"
+				         style="margin-bottom:20px">
+
+				<p:column sortBy="#{historicoImportacao.lote_conhec}">
+				    
+				    <f:facet name="header">
+				    	<h:outputText value="BL" />
+				    </f:facet>
+				    
+					<h:outputText value="#{historicoImportacao.lote_conhec}" />
+				</p:column>
+
+				<p:column sortBy="#{historicoImportacao.cnt_id}">
+				    
+				    <f:facet name="header">
+				    	<h:outputText value="Container" />
+				    </f:facet>
+				    
+					<h:outputText value="#{historicoImportacao.cnt_id}" />
+				</p:column>
+
+				<p:column sortBy="#{historicoImportacao.cnt_tipo}">
+				
+					<f:facet name="header">
+				    	<h:outputText value="Tipo" />
+				    </f:facet>
+				    
+					<h:outputText value="#{historicoImportacao.cnt_tipo}" />
+				</p:column>
+
+				<p:column sortBy="#{historicoImportacao.pais_nome}">	
+				
+				    <f:facet name="header">
+				    	<h:outputText value="País Orig" />
+				    </f:facet>
+				    				
+					<h:outputText value="#{historicoImportacao.pais_nome}" />
+				</p:column>
+
+				<p:column sortBy="#{historicoImportacao.esp_descricao}">
+				
+				    <f:facet name="header">
+				    	<h:outputText value="Tipo Embalagem" />
+				    </f:facet>
+				    
+					<h:outputText value="#{historicoImportacao.esp_descricao}" />
+				</p:column>
+
+				<p:column sortBy="#{historicoImportacao.ncm_descricao}">
+				    
+				    <f:facet name="header">
+				    	<h:outputText value="Descrição do NCM" />
+				    </f:facet>
+				    
+					<h:outputText value="#{historicoImportacao.ncm_descricao}" />
+				</p:column>
+
+				<p:column sortBy="#{historicoImportacao.litem_descricao}">
+				    
+				    <f:facet name="header">
+				    	<h:outputText value="Descrição da Mercadoria" />
+				    </f:facet>
+				    
+					<h:outputText value="#{historicoImportacao.litem_descricao}" />
+				</p:column>
+
+				<p:column headerText="Inspeção"
+				          exportable="false">
+					<p:selectBooleanCheckbox value="#{historicoImportacao.inspecao}"
+					                         disabled="true" />
+				</p:column>
+
+				<p:column headerText="Liberado"
+				          exportable="false">
+					<p:selectBooleanCheckbox value="#{historicoImportacao.liberado}" 
+					                         disabled="true"/>
+				</p:column>
+				
+				<p:column sortBy="#{historicoImportacao.usu_nome}">
+				    
+				    <f:facet name="header">
+				    	<h:outputText value="Usuário" />
+				    </f:facet>
+				    
+					<h:outputText value="#{historicoImportacao.usu_nome}" />
+				</p:column>
+				
+				<p:column sortBy="#{historicoImportacao.log_datahora}">
+				    
+				    <f:facet name="header">
+				    	<h:outputText value="Data/Hora" />
+				    </f:facet>
+				    
+					<h:outputText value="#{historicoImportacao.log_datahora}" />
+				</p:column>
+				
+				<f:facet name="footer">  
+            		Total de registros: <h:outputText value="#{MBHistoricoImportacao.contador}" /> 
+        		</f:facet>
+			</p:dataTable>
+			
+		</h:form>
+		
+	</ui:define>
+</ui:composition>

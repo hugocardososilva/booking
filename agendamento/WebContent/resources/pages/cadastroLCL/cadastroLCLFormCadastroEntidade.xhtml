@@ -1,0 +1,525 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" xmlns:cc="http://java.sun.com/jsf/composite"
+	xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:composite="http://java.sun.com/jsf/composite">
+
+<!-- INTERFACE -->
+<composite:interface>
+</composite:interface>
+
+<!-- IMPLEMENTATION -->
+<composite:implementation>
+
+	<p:panelGrid id="panelLCL_geral" columns="1" layout="grid" columnClasses="ui-grid-col-12" styleClass="ui-panelgrid-blank">
+
+		<p:panelGrid id="panelLCL_master" columns="1" layout="grid" columnClasses="ui-grid-col-12" styleClass="ui-panelgrid-blank"
+			style="background: #e8eff2;">
+
+			<p:panelGrid id="panelTitulomBLMaster" columns="1" layout="grid" columnClasses="ui-grid-col-12" styleClass="ui-panelgrid-blank"
+				style="text-align: center;">
+
+				<h:outputText value="#{bundle.cadastroBLMaster}" style="font-weight: bold !important; color: black !important; font-size: 16px;" />
+			</p:panelGrid>
+
+			<p:panelGrid id="panelLCL_Container" columns="6" layout="grid"
+				columnClasses="ui-grid-col-1,ui-grid-col-2,ui-grid-col-1,ui-grid-col-2,ui-grid-col-1,ui-grid-col-2" styleClass="ui-panelgrid-blank">
+
+				<p:outputLabel value="#{bundle.cadastroBLContainer}" />
+				<p:inputMask id="inpContainer" placeholder="Incluir Container..." value="#{cadastroLCLBean.containerLCL.numeroContanier}" mask="aaaa 999999 9" />
+
+				<p:outputLabel value="#{bundle.cadastroBLlacre}" />
+				<p:inputText id="inpLacreContainer" placeholder="Incluir Lacre..." value="#{cadastroLCLBean.containerLCL.numeroLacre}" />
+
+				<p:outputLabel value="#{bundle.cadastroCargaImo}" />
+				<p:selectOneMenu id="tipoCargaContainer" value="#{cadastroLCLBean.selecionadoCargaImo}" style="width:80%" styleClass="estendido alinhadoEsquerda">
+					<f:selectItem itemLabel="Selecione carga IMO..." itemValue="#{null}" />
+					<f:selectItems value="#{cadastroLCLBean.todosTipoSimNao}" var="tipo" itemValue="#{tipo}" itemLabel="#{tipo.descricao}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="#{bundle.cadastroQtdeBL}" />
+				<pe:inputNumber id="quantidadeBL" value="#{cadastroLCLBean.containerLCL.quantidadeBL}" decimalSeparator="," thousandSeparator="." />
+
+				<p:outputLabel value="#{bundle.cadastroVolume}" />
+				<pe:inputNumber id="quantidadeVolume" value="#{cadastroLCLBean.containerLCL.quantidadeVolume}" decimalSeparator="," thousandSeparator="." />
+
+				<p:outputLabel value="#{bundle.cadastroMercadoria}" />
+				<pe:inputNumber id="quantidadeMercadoria" value="#{cadastroLCLBean.containerLCL.quantidadeMercadoria}" decimalSeparator="," thousandSeparator="." />
+			</p:panelGrid>
+
+			<p:panelGrid id="panelLCL_cliente_blmaster" columns="4" layout="grid" columnClasses="ui-grid-col-1,ui-grid-col-2,ui-grid-col-1,ui-grid-col-2"
+				styleClass="ui-panelgrid-blank">
+
+				<p:outputLabel value="#{bundle.cadastroBLMaster}" />
+				<p:inputText id="inpNroBLMaster" placeholder="Nro BL Master..." value="#{cadastroLCLBean.containerLCL.numeroBLMaster}" />
+
+				<p:outputLabel value="#{bundle.importador}" />
+				<p:autoComplete id="acImportadorLCL" value="#{cadastroLCLBean.containerLCL.importadorLCL}" var="item" itemLabel="#{item.razaoSocial}"
+					converter="cadastroImportadorConverter" completeMethod="#{cadastroLCLBean.listaImportador}" emptyMessage="Nenhum registro encontrado"
+					itemValue="#{item}" minQueryLength="3" style="width:100%" placeholder="Informe 3 digitos pesquisar...">
+					<p:column>
+						<h:outputText value="#{item.razaoSocial}" />
+					</p:column>
+					<p:column>
+						<h:outputText value="#{item.cnpj}" />
+					</p:column>
+				</p:autoComplete>
+			</p:panelGrid>
+
+			<p:panelGrid id="panelLCL_botao_salvar" columns="3" layout="grid" columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-5"
+				styleClass="ui-panelgrid-blank">
+				<p:commandButton id="salvarLCL" icon="fa fa-plus" value="Salvar LCL" action="#{cadastroLCLBean.salvarLCL()}"
+					process="@this panelLCL_Container panelLCL_cliente_blmaster" update="panelLCL_Container dataTableListaLCL lclSelecionado" />
+
+				<p:commandButton id="blMaster" value="Visualizar" type="button" icon="#{bundle.iconLupaLocalizar}" />
+				<p:overlayPanel id="blMasterPanel" for="blMaster" hideEffect="fade">
+					<p:dataTable id="dataTableListaLCL" var="item" value="#{cadastroLCLBean.listaLCLMemoria}" rows="5">
+						<p:column headerText="#{bundle.cadastroBLMasterNroMaster}" width="95">
+							<h:outputText value="#{item.numeroBLMaster}" />
+						</p:column>
+
+						<p:column headerText="#{bundle.cadastroBLContainer}" width="95">
+							<h:outputText value="#{item.numeroContanier}" />
+						</p:column>
+
+						<p:column headerText="#{bundle.importadorRazazaoSocial}" width="95">
+							<h:outputText value="#{item.importadorLCL.razaoSocial}" />
+						</p:column>
+
+						<p:column headerText="#{bundle.cadastroBLlacre}" width="55">
+							<h:outputText value="#{item.numeroLacre}" />
+						</p:column>
+					</p:dataTable>
+				</p:overlayPanel>
+			</p:panelGrid>
+		</p:panelGrid>
+
+		<p:separator />
+
+		<p:panelGrid id="panelLCL_botao" columns="2" layout="grid" columnClasses="ui-grid-col-1,ui-grid-col-1" styleClass="ui-panelgrid-blank">
+			<p:commandButton id="visualizarBLs" icon="#{cadastroLCLBean.controlarImagem}" value="Expandir" action="#{cadastroLCLBean.expandirdDados()}"
+				process="@this panelLCL_Container" update="panelLCL_geral" />
+
+			<p:commandButton id="voltar" icon="fa fa-rotate-left" value="#{bundle.voltar}" action="#{cadastroLCLBean.voltarPgPrincipal()}"
+				update=":frmListarPrincipal :frmCadastrarEntidade :frmCadastrarEntidade:panelCadastrarEntidade" process="@this">
+				<p:resetInput target=":frmCadastrarEntidade:panelCadastrarEntidade" />
+			</p:commandButton>
+		</p:panelGrid>
+
+		<p:panelGrid id="panelLCL_cadBL" columns="4" layout="grid" columnClasses="ui-grid-col-1,ui-grid-col-5,ui-grid-col-1,ui-grid-col-5"
+			styleClass="ui-panelgrid-blank" rendered="#{cadastroLCLBean.controlarDados}">
+
+			<p:panelGrid id="panel_labeldescBL" columns="1" layout="grid" columnClasses="ui-grid-col-12">
+				<p:outputLabel for="inpdesc_BL" id="label_descBL" value="#{bundle.cadastroBLHouse}" />
+			</p:panelGrid>
+			<p:panelGrid id="panelBL_desc_BL" columns="1" layout="grid" columnClasses="ui-grid-col-12">
+				<p:inputText id="inpdesc_BL" value="#{cadastroLCLBean.entidadeDTCDTA.descricaoBL}" style="width:100%" required="true" />
+			</p:panelGrid>
+
+			<p:outputLabel for="tipoModal" value="#{bundle.cadastroBLDocumentoEntrada}" />
+			<p:selectOneMenu id="tipoModal" value="#{cadastroLCLBean.entidadeDTCDTA.tipoModalEnum}" style="width:28%" styleClass="estendido alinhadoEsquerda"
+				required="true">
+				<f:selectItem itemLabel="Selecione ..." itemValue="#{null}" />
+				<f:selectItems value="#{cadastroLCLBean.todasTipoModalEnum}" var="tipo" itemValue="#{tipo}" itemLabel="#{tipo.descricao}" />
+
+				<p:ajax event="change" listener="#{cadastroLCLBean.validarNavioViagemAtracacao()}"
+					update="inp_navioViagem button_calendar inp_Viagem tipoContainer" />
+			</p:selectOneMenu>
+
+			<p:panelGrid id="panelBL_label_mercadoria" columns="1" layout="grid" columnClasses="ui-grid-col-12">
+				<p:outputLabel for="inp_descr_mercadoria" id="labelMercadoria" value="#{bundle.cadastroBLMercadoria}" />
+			</p:panelGrid>
+			<p:panelGrid id="panelBL_descr_mercadoria" columns="1" layout="grid" columnClasses="ui-grid-col-12">
+				<p:inputText id="inp_descr_mercadoria" value="#{cadastroLCLBean.entidadeDTCDTA.descricaoMercadoria}" style="width:100%" required="true" />
+			</p:panelGrid>
+
+			<p:outputLabel for="acEspecie" value="#{bundle.cadastroBLEmbalagem}" />
+			<p:autoComplete id="acEspecie" value="#{cadastroLCLBean.especieSelecionado}" var="item" itemLabel="#{item.descricao}"
+				converter="cadastroEspecieConverter" completeMethod="#{cadastroLCLBean.listaCadastroEspecie}" emptyMessage="Nenhum registro encontrado"
+				itemValue="#{item}" minQueryLength="2" placeholder="Informe 3 digitos pesquisar..." required="true">
+				<p:column>
+					<h:outputText value="#{item.abreviacao}" />
+				</p:column>
+				<p:column>
+					<h:outputText value="#{item.descricao}" />
+				</p:column>
+			</p:autoComplete>
+
+			<p:panelGrid id="panelBL_navioViagem" columns="1" layout="grid" columnClasses="ui-grid-col-12">
+				<p:outputLabel for="inp_navioViagem" id="label_navioViagem" value="#{bundle.cadastroBLNavio}" />
+			</p:panelGrid>
+			<p:panelGrid id="panelBL_navioViagem1" columns="1" layout="grid" columnClasses="ui-grid-col-12">
+				<p:autoComplete id="inp_navioViagem" value="#{cadastroLCLBean.programacaoNavioSelecionado}" var="item" itemLabel="#{item.navio}"
+					converter="programacaoNavioConverter" completeMethod="#{cadastroLCLBean.listaProgramacaoNavio}" emptyMessage="Nenhum registro encontrado"
+					itemValue="#{item}" minQueryLength="2" placeholder="Informe 3 digitos pesquisar..." disabled="#{cadastroLCLBean.bloquearNavio}" required="true">
+					<p:column>
+						<h:outputText value="#{item.navio}" />
+					</p:column>
+					<p:column>
+						<h:outputText value="#{item.navioViagem}" />
+					</p:column>
+					<p:column>
+						<h:outputText value="#{item.dataETA}">
+							<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
+						</h:outputText>
+					</p:column>
+
+					<p:ajax event="itemSelect" listener="#{cadastroLCLBean.setarInformacaoNavio()}" update="inp_Viagem button_calendar" />
+				</p:autoComplete>
+			</p:panelGrid>
+
+			<p:outputLabel id="label_atracacao" value="#{bundle.cadastroBLDatracacao}" for="button_calendar" />
+			<p:calendar id="button_calendar" value="#{cadastroLCLBean.entidadeDTCDTA.programacaoNavio.dataETA}" pattern="dd/MM/yyyy HH:mm:ss" mask="true"
+				disabled="true" />
+
+			<p:panelGrid id="panelBL_comissa" columns="1" layout="grid" columnClasses="ui-grid-col-12">
+				<p:outputLabel for="comissario" value="#{bundle.cadastroBLComissario}" />
+			</p:panelGrid>
+			<p:panelGrid id="panelBL_comissa1" columns="3" layout="grid" columnClasses="ui-grid-col-6,ui-grid-col-1,ui-grid-col-1">
+				<p:selectOneMenu id="comissario" value="#{cadastroLCLBean.comissarioSelecionado}" style="width:90%" styleClass="estendido alinhadoEsquerda"
+					converter="cadastroComissarioConverter" required="true">
+					<f:selectItem itemLabel="Selecione um comissária" itemValue="#{null}" />
+					<f:selectItems value="#{cadastroLCLBean.listaUserComissario}" var="item" itemValue="#{item}" itemLabel="#{item}" />
+				</p:selectOneMenu>
+
+				<p:commandButton id="idIncluirCom" icon="fa fa-plus" oncomplete="PF('dlgBLIncluir').show();" process="@this"
+					action="#{cadastroLCLBean.instanciarImportadorComissaria(2)}" update=":incluir:idDlgBLIncluir" disabled="#{cadastroLCLBean.userMB.usuarioMaster}">
+					<p:tooltip for="idIncluirCom" value="#{bundle.incluir}" showEffect="clip" hideEffect="explode" />
+				</p:commandButton>
+
+				<p:commandButton id="idCargaComissaria" icon="fa fa-refresh" action="#{cadastroLCLBean.carregarDadosComissarias()}" update="comissario"
+					disabled="#{cadastroLCLBean.userMB.usuarioMaster}">
+					<p:tooltip for="idCargaComissaria" value="#{bundle.atualizar}" showEffect="clip" hideEffect="explode" />
+					<p:resetInput target=":frmCadastrarEntidade:formCadEntidadeBL:panelBL_comissa1" />
+				</p:commandButton>
+			</p:panelGrid>
+
+			<p:outputLabel id="label_Viagem" value="#{bundle.cadastroBLViagem}" />
+			<p:inputText id="inp_Viagem" value="#{cadastroLCLBean.entidadeDTCDTA.programacaoNavio.navioViagem}" style="width:46%" disabled="true" />
+
+			<p:panelGrid id="panelBL_importador" columns="1" layout="grid" columnClasses="ui-grid-col-12">
+				<p:outputLabel value="#{bundle.importador}" for="acImportador" />
+			</p:panelGrid>
+			<p:panelGrid id="panelBL_imp_incluir" columns="2" layout="grid" columnClasses="ui-grid-col-6,ui-grid-col-6">
+				<p:autoComplete id="acImportador" value="#{cadastroLCLBean.importadorSelecionado}" var="item" itemLabel="#{item.razaoSocial}"
+					converter="cadastroImportadorConverter" completeMethod="#{cadastroLCLBean.listaImportador}" emptyMessage="Nenhum registro encontrado"
+					itemValue="#{item}" minQueryLength="3" style="width:100%" placeholder="Informe 3 digitos pesquisar..." required="true">
+					<p:column>
+						<h:outputText value="#{item.razaoSocial}" />
+					</p:column>
+					<p:column>
+						<h:outputText value="#{item.cnpj}" />
+					</p:column>
+				</p:autoComplete>
+
+				<p:commandButton id="idIncluirImp" icon="fa fa-plus" oncomplete="PF('dlgBLIncluir').show();" process="@this"
+					action="#{cadastroLCLBean.instanciarImportadorComissaria(1)}" update=":incluir:idDlgBLIncluir" disabled="#{cadastroLCLBean.userMB.usuarioMaster}">
+					<p:tooltip for="idIncluirImp" value="#{bundle.incluir}" showEffect="clip" hideEffect="explode" />
+				</p:commandButton>
+			</p:panelGrid>
+
+			<p:outputLabel for="quantidade" value="#{bundle.cadastroBLQuantidade}" />
+			<pe:inputNumber id="quantidade" value="#{cadastroLCLBean.entidadeDTCDTA.quantidade}" required="true" decimalSeparator="," thousandSeparator="." />
+
+			<p:panelGrid id="panelBL_outncm" columns="1" layout="grid" columnClasses="ui-grid-col-12">
+				<p:outputLabel for="acNcm" value="#{bundle.cadastroBLNCM}" />
+			</p:panelGrid>
+			<p:panelGrid id="panelBL_ncm" columns="3" layout="grid" columnClasses="ui-grid-col-6,ui-grid-col-1,ui-grid-col-1">
+				<p:autoComplete id="acNcm" value="#{cadastroLCLBean.ncmSelecionado}" var="item" itemLabel="#{item.ncmCodigo}" converter="cadastroNcmConverter"
+					maxResults="15" completeMethod="#{cadastroLCLBean.listaCadastroNCM}" emptyMessage="Nenhum registro encontrado" itemValue="#{item}"
+					minQueryLength="3" style="width:100%" placeholder="Informe 3 digitos pesquisar..." scrollHeight="250" required="true">
+					<p:column>
+						<h:outputText value="#{item.ncmCodigo}" />
+					</p:column>
+					<p:column>
+						<h:outputText value="#{item.descricaoNcm}" />
+					</p:column>
+				</p:autoComplete>
+
+				<p:commandButton id="idIncluirNCM" icon="fa fa-plus" process="@this acNcm" action="#{cadastroLCLBean.incluirNCM()}">
+					<p:tooltip for="idIncluirNCM" value="#{bundle.incluirNCM}" showEffect="clip" hideEffect="explode" />
+				</p:commandButton>
+
+				<p:commandButton id="localizarNCM" icon="#{bundle.iconLupaLocalizar}" oncomplete="PF('dlgNcmLista').show();"
+					update=":listaNCM:frmNcmlista:tbListaDados" action="#{cadastroLCLBean.carregarNCM()}" immediate="true">
+					<p:tooltip for="localizarNCM" value="Visualizar NCM" showEffect="clip" hideEffect="explode" />
+				</p:commandButton>
+			</p:panelGrid>
+
+			<p:outputLabel for="cifMercadoria" value="#{bundle.cadastroMercadoria}" />
+			<pe:inputNumber id="cifMercadoria" value="#{cadastroLCLBean.entidadeDTCDTA.cifMercadoria}" required="true" decimalSeparator=","
+				thousandSeparator="." />
+
+			<p:panelGrid id="panelBL_comissa5" columns="1" layout="grid" columnClasses="ui-grid-col-12">
+				<p:outputLabel for="acPaisOrigem" value="#{bundle.cadastroBLPaisOrigem}" />
+			</p:panelGrid>
+			<p:panelGrid id="panelBL_comissa6" columns="1" layout="grid" columnClasses="ui-grid-col-12">
+				<p:autoComplete id="acPaisOrigem" value="#{cadastroLCLBean.paisSelecionado}" var="item" itemLabel="#{item.descricaoPais}"
+					converter="cadastroPaisConverter" completeMethod="#{cadastroLCLBean.listaCodigoPais}" emptyMessage="Nenhum registro encontrado"
+					itemValue="#{item}" minQueryLength="3" style="width:100%" placeholder="Informe 3 digitos pesquisar..." required="true">
+					<p:column>
+						<h:outputText value="#{item.codigoPaisIBGE}" />
+					</p:column>
+					<p:column>
+						<h:outputText value="#{item.abreviacaoPais}" />
+					</p:column>
+					<p:column>
+						<h:outputText value="#{item.descricaoPais}" />
+					</p:column>
+				</p:autoComplete>
+			</p:panelGrid>
+
+			<p:outputLabel value="#{bundle.cadastroBLPaisProcedencia}" for="acPaisprocedencia" />
+			<p:autoComplete id="acPaisprocedencia" value="#{cadastroLCLBean.paisProcedenciaSelecionado}" var="item" itemLabel="#{item.descricaoPais}"
+				converter="cadastroPaisConverter" completeMethod="#{cadastroLCLBean.listaCodigoPais}" emptyMessage="Nenhum registro encontrado"
+				itemValue="#{item}" minQueryLength="3" style="width:100%" placeholder="Informe 3 digitos pesquisar..." required="true">
+				<p:column>
+					<h:outputText value="#{item.codigoPaisIBGE}" />
+				</p:column>
+				<p:column>
+					<h:outputText value="#{item.abreviacaoPais}" />
+				</p:column>
+				<p:column>
+					<h:outputText value="#{item.descricaoPais}" />
+				</p:column>
+			</p:autoComplete>
+
+			<p:panelGrid id="panelBL_porto" columns="1" layout="grid" columnClasses="ui-grid-col-12">
+				<p:outputLabel value="#{bundle.cadastroRepresentante}" for="acPortoRepresentante" />
+			</p:panelGrid>
+			<p:panelGrid id="panelBL_ACporto" columns="2" layout="grid" columnClasses="ui-grid-col-6,ui-grid-col-6">
+				<p:autoComplete id="acPortoRepresentante" value="#{cadastroLCLBean.representanteSelecionado}" var="item" itemLabel="#{item.razaoSocial}"
+					converter="cadastroRepresentanteConverter" maxResults="15" completeMethod="#{cadastroLCLBean.listaRepresentante}"
+					emptyMessage="Nenhum registro encontrado" itemValue="#{item}" minQueryLength="3" style="width:100%" placeholder="Informe 3 digitos pesquisar..."
+					required="true">
+					<p:column>
+						<h:outputText value="#{item.razaoSocial}" />
+					</p:column>
+					<p:column>
+						<h:outputText value="#{item.cnpj}" />
+					</p:column>
+				</p:autoComplete>
+
+				<p:commandButton id="idIncluirRep" icon="fa fa-plus" oncomplete="PF('dlgBLIncluir').show();" process="@this"
+					action="#{cadastroLCLBean.instanciarImportadorComissaria(3)}" update=":incluir:idDlgBLIncluir">
+					<p:tooltip for="idIncluirRep" value="#{bundle.incluir}" showEffect="clip" hideEffect="explode" />
+				</p:commandButton>
+			</p:panelGrid>
+
+			<p:outputLabel value="#{bundle.cadastroBLTipo}" for="tipoContainer" />
+			<p:selectOneMenu id="tipoContainer" value="#{cadastroLCLBean.entidadeDTCDTA.tipoContainerEnum}" style="width:45%"
+				styleClass="estendido alinhadoEsquerda" required="true" disabled="#{cadastroLCLBean.validarNavioViagemAtracacao()}">
+				<f:selectItem itemLabel="Selecione ..." itemValue="#{null}" />
+				<f:selectItems value="#{cadastroLCLBean.todosTiposContainerEnum}" var="tipo" itemValue="#{tipo}" itemLabel="#{tipo.descricao}" />
+			</p:selectOneMenu>
+
+			<p:panelGrid id="panelBL_comissa8" columns="1" layout="grid" columnClasses="ui-grid-col-12">
+				<p:outputLabel value="#{bundle.cadastroCargaMadeira}" for="tipoMadeira" />
+			</p:panelGrid>
+			<p:panelGrid id="panelBL_comissa9" columns="1" layout="grid" columnClasses="ui-grid-col-12">
+				<p:selectOneMenu id="tipoMadeira" value="#{cadastroLCLBean.entidadeDTCDTA.cargaComMadeira}" style="width:28%"
+					styleClass="estendido alinhadoEsquerda" required="true">
+					<f:selectItem itemLabel="Selecione ..." itemValue="#{null}" />
+					<f:selectItems value="#{cadastroLCLBean.todosTipoSimNao}" var="tipo" itemValue="#{tipo}" itemLabel="#{tipo.descricao}" />
+				</p:selectOneMenu>
+			</p:panelGrid>
+
+			<p:outputLabel value="#{bundle.cadastroPortos}" for="acPorto_alterado" />
+			<p:autoComplete id="acPorto_alterado" value="#{cadastroLCLBean.portoSelecionado}" var="item" itemLabel="#{item.nome}"
+				converter="cadastroPortosConverter" maxResults="15" completeMethod="#{cadastroLCLBean.listaPortos}" emptyMessage="Nenhum registro encontrado"
+				itemValue="#{item}" minQueryLength="3" style="width:100%" placeholder="Informe 3 digitos pesquisar..." required="true">
+			</p:autoComplete>
+
+			<p:panelGrid id="panelBL_comissa45" columns="1" layout="grid" columnClasses="ui-grid-col-12">
+				<p:outputLabel value="#{bundle.cadastroReefer}" for="tipoReefer" />
+			</p:panelGrid>
+			<p:panelGrid id="panelBL_comissa91" columns="2" layout="grid" columnClasses="ui-grid-col-6,ui-grid-col-6">
+				<p:selectOneMenu id="tipoReefer" value="#{cadastroLCLBean.entidadeDTCDTA.cargaReefer}" style="width:60%" styleClass="estendido alinhadoEsquerda"
+					required="true">
+					<f:selectItem itemLabel="Selecione ..." itemValue="#{null}" />
+					<f:selectItems value="#{cadastroLCLBean.todosTipoSimNao}" var="tipo" itemValue="#{tipo}" itemLabel="#{tipo.descricao}" />
+
+					<p:ajax event="change" listener="#{cadastroLCLBean.mostrarInformacaoTemperatura()}" update="temperatura" />
+				</p:selectOneMenu>
+
+				<p:inputMask id="temperatura" placeholder="Temperatura..." value="#{cadastroLCLBean.entidadeDTCDTA.temperatura}" mask="99" style="width:40%"
+					disabled="#{cadastroLCLBean.mostrarInformacaoTemperatura()}" />
+			</p:panelGrid>
+
+			<p:outputLabel value="#{bundle.cadastroEntreposto}" for="tipoEntrePosto" />
+			<p:selectOneMenu id="tipoEntrePosto" value="#{cadastroLCLBean.entidadeDTCDTA.entrePosto}" style="width:28%" styleClass="estendido alinhadoEsquerda"
+				required="true">
+				<f:selectItem itemLabel="Selecione ..." itemValue="#{null}" />
+				<f:selectItems value="#{cadastroLCLBean.todosTipoSimNao}" var="tipo" itemValue="#{tipo}" itemLabel="#{tipo.descricao}" />
+			</p:selectOneMenu>
+
+			<p:panelGrid id="panelBL_referencia" columns="1" layout="grid" columnClasses="ui-grid-col-12">
+				<p:outputLabel value="#{bundle.cadastroReferenciaCliente}" for="refCliente" />
+			</p:panelGrid>
+			<p:panelGrid id="panelBL_referencia11" columns="1" layout="grid" columnClasses="ui-grid-col-12">
+				<p:inputText id="refCliente" value="#{cadastroLCLBean.entidadeDTCDTA.referenciaCliente}" style="width:46%" required="true" />
+			</p:panelGrid>
+
+			<p:outputLabel value="#{bundle.cadastroFreeTime}" for="freeTime" />
+			<p:inputText id="freeTime" value="#{cadastroLCLBean.entidadeDTCDTA.freeTime}" style="width:32%" required="true" />
+
+			<p:panelGrid id="panelBL_faturar" columns="1" layout="grid" columnClasses="ui-grid-col-12">
+				<p:outputLabel for="acFaturarContra" value="#{bundle.cadastroFaturarContra}" />
+			</p:panelGrid>
+			<p:panelGrid id="panelBL1_faturar" columns="2" layout="grid" columnClasses="ui-grid-col-6,ui-grid-col-6">
+				<p:autoComplete id="acFaturarContra" value="#{cadastroLCLBean.faturarContraSelecionado}" var="item" itemLabel="#{item.razaoSocial}"
+					converter="cadastroFaturarContraConverter" maxResults="15" completeMethod="#{cadastroLCLBean.listaFaturarContra}"
+					emptyMessage="Nenhum registro encontrado" itemValue="#{item}" minQueryLength="3" style="width:100%" required="true"
+					placeholder="Informe 3 digitos pesquisar...">
+					<p:column>
+						<h:outputText value="#{item.razaoSocial}" />
+					</p:column>
+					<p:column>
+						<h:outputText value="#{item.cnpj}" />
+					</p:column>
+				</p:autoComplete>
+
+				<p:commandButton id="idIncluirFatContra" icon="fa fa-plus" oncomplete="PF('dlgBLIncluir').show();" process="@this"
+					action="#{cadastroLCLBean.instanciarImportadorComissaria(5)}" update=":incluir:idDlgBLIncluir">
+					<p:tooltip for="idIncluirFatContra" value="#{bundle.incluir}" showEffect="clip" hideEffect="explode" />
+				</p:commandButton>
+			</p:panelGrid>
+
+			<p:outputLabel for="inp_armador" id="label_armador" value="#{bundle.cadastroBLArmador}" />
+			<p:inputText id="inp_armador" value="#{cadastroLCLBean.entidadeDTCDTA.armador}" style="width:46%" required="true" />
+
+			<p:panelGrid id="panelBL_respLote" columns="1" layout="grid" columnClasses="ui-grid-col-12">
+				<p:outputLabel for="acRespolote" value="#{bundle.cadastroResponsavelLote}" />
+			</p:panelGrid>
+			<p:panelGrid id="panelBL1_respLote" columns="2" layout="grid" columnClasses="ui-grid-col-6,ui-grid-col-6">
+				<p:autoComplete id="acRespolote" value="#{cadastroLCLBean.responsavelLoteSelecionado}" var="item" itemLabel="#{item.razaoSocial}"
+					converter="cadastroResponsavelLoteConverter" maxResults="15" completeMethod="#{cadastroLCLBean.listaResponsavelLote}"
+					emptyMessage="Nenhum registro encontrado" itemValue="#{item}" minQueryLength="3" style="width:100%" required="true"
+					placeholder="Informe 3 digitos pesquisar...">
+					<p:column>
+						<h:outputText value="#{item.razaoSocial}" />
+					</p:column>
+					<p:column>
+						<h:outputText value="#{item.cnpj}" />
+					</p:column>
+				</p:autoComplete>
+
+				<p:commandButton id="idIncluirRespLote" icon="fa fa-plus" oncomplete="PF('dlgBLIncluir').show();" process="@this"
+					action="#{cadastroLCLBean.instanciarImportadorComissaria(4)}" update=":incluir:idDlgBLIncluir" disabled="#{cadastroLCLBean.userMB.usuarioMaster}">
+					<p:tooltip for="idIncluirRespLote" value="#{bundle.incluir}" showEffect="clip" hideEffect="explode" />
+				</p:commandButton>
+			</p:panelGrid>
+
+			<p:outputLabel value="#{bundle.cadastroCargaImo}" for="tipoCargaContainerBL" />
+			<p:selectOneMenu id="tipoCargaContainerBL" value="#{cadastroLCLBean.selecionadoCargaImoPorBL}" style="width:28%"
+				styleClass="estendido alinhadoEsquerda" required="true">
+				<f:selectItem itemLabel="Selecione carga IMO..." itemValue="#{null}" />
+				<f:selectItems value="#{cadastroLCLBean.todosTipoSimNao}" var="tipo" itemValue="#{tipo}" itemLabel="#{tipo.descricao}" />
+			</p:selectOneMenu>
+
+
+			<p:panelGrid id="panelLCL_Selecionar" columns="1" layout="grid" columnClasses="ui-grid-col-12">
+				<p:outputLabel for="lclSelecionado" value="Selecionar Container do BL Master" />
+			</p:panelGrid>
+			<p:panelGrid id="panelLCL" columns="4" layout="grid" columnClasses="ui-grid-col-6,ui-grid-col-1,ui-grid-col-1,ui-grid-col-4">
+				<p:selectOneMenu id="lclSelecionado" value="#{cadastroLCLBean.lclSelecionar}" style="float:left;width:90%;"
+					converter="cadastroLCLContainerConverter" required="true" styleClass="estendido alinhadoEsquerda">
+
+					<f:selectItem itemLabel="Selecione Container..." itemValue="#{null}" />
+					<f:selectItems value="#{cadastroLCLBean.listaLCLMemoria}" var="itemLCL" itemValue="#{itemLCL}" itemLabel="#{itemLCL.numeroContanier}" />
+				</p:selectOneMenu>
+
+				<p:commandButton id="cbVincularLCL" icon="fa fa-plus" process="@this panelLCL lclSelecionado" action="#{cadastroLCLBean.vincularLCL()}"
+					update="dataTableListaLCLsVinculados">
+					<p:tooltip for="cbVincularLCL" value="Vincular LCL" />
+				</p:commandButton>
+
+				<p:commandButton id="cbLCLsVinculados" value="Visualizar" type="button" icon="#{bundle.iconLupaLocalizar}" />
+				<p:overlayPanel id="ovpLCLsVinculados" for="cbLCLsVinculados" hideEffect="fade">
+					<p:dataTable id="dataTableListaLCLsVinculados" var="item" value="#{cadastroLCLBean.listaLCLIncluirBL}" rows="5">
+						<p:column headerText="#{bundle.cadastroBLMasterNroMaster}">
+							<h:outputText value="#{item.numeroBLMaster}" />
+						</p:column>
+
+						<p:column headerText="#{bundle.cadastroBLContainer}">
+							<h:outputText value="#{item.numeroContanier}" />
+						</p:column>
+
+						<p:column headerText="#{bundle.importadorRazazaoSocial}">
+							<h:outputText value="#{item.importadorLCL.razaoSocial}" />
+						</p:column>
+
+						<p:column headerText="#{bundle.cadastroBLlacre}">
+							<h:outputText value="#{item.numeroLacre}" />
+						</p:column>
+					</p:dataTable>
+				</p:overlayPanel>
+			</p:panelGrid>
+
+			<p:outputLabel value="" />
+			<p:outputLabel value="" />
+
+			<p:outputLabel id="label_fatContraEmail" for="fatContraEmail" value="#{bundle.cadastroFaturarContraEmail}" />
+			<p:panelGrid id="panelBL_fatcontraemail" columns="1" layout="grid" columnClasses="ui-grid-col-12" styleClass="ui-panelgrid-blank">
+				<p:inputText id="fatContraEmail" value="#{cadastroLCLBean.entidadeDTCDTA.faturarContraEmail}" style="width:100%" required="true" />
+			</p:panelGrid>
+
+			<p:outputLabel value="" />
+			<p:outputLabel value="" />
+
+		</p:panelGrid>
+
+		<p:panelGrid id="panelLCL_addSalvar" columns="2" layout="grid" columnClasses="ui-grid-col-2,ui-grid-col-2" styleClass="ui-panelgrid-blank">
+			<p:commandButton id="idAddBL" icon="fa fa-plus" value="Incluir BL House" action="#{cadastroLCLBean.incluirBL(true)}" process="@this panelLCL_geral"
+				update="tbListaTodosContanier dataTableListaLCLsVinculados lclSelecionado" rendered="#{cadastroLCLBean.controlarDados}" />
+
+			<p:commandButton id="idSalvarBL" icon="#{bundle.iconSalvar}" value="Salvar BL House" action="#{cadastroLCLBean.incluirBL(false)}"
+				process="@this panelLCL_geral" update="tbListaTodosContanier idSalvarBL" rendered="#{cadastroLCLBean.controlarDados}"
+				disabled="#{cadastroLCLBean.controlarBtSalvarBL}" />
+		</p:panelGrid>
+
+		<p:separator />
+
+		<p:panelGrid id="panelLCL_listaBLs" columns="1" layout="grid" columnClasses="ui-grid-col-12" styleClass="ui-panelgrid-blank">
+			<p:dataTable id="tbListaTodosContanier" value="#{cadastroLCLBean.listaBL}" var="item" reflow="true" emptyMessage="Nenhum registro encontrado.">
+
+				<p:column id="idNroContainer" headerText="#{bundle.cadastroBL}" width="80">
+					<h:outputText value="#{item.descricaoBL}" />
+				</p:column>
+
+				<p:column id="idNroLacreContainer" headerText="#{bundle.cadastroNrpATI}" width="80">
+					<h:outputText value="#{item.numeroATI}" />
+				</p:column>
+
+				<p:column id="columQtdeVolumes" headerText="#{bundle.cadastroVolume}" width="80">
+					<h:outputText value="#{item.quantidade}" />
+				</p:column>
+
+				<p:column id="columValorCif" headerText="#{bundle.cadastroMercadoria}" width="80">
+					<h:outputText value="#{item.cifMercadoria}" />
+				</p:column>
+
+				<p:column id="editar" headerText="Editar" width="20" exportable="false">
+					<p:commandButton id="btnEditar" actionListener="#{cadastroLCLBean.editarBL(item)}" icon="#{bundle.iconEditar}"
+						update="frmCadastrarEntidade:formCadEntidadeBL:panelLCL_cadBL :frmCadastrarEntidade:formCadEntidadeBL:idSalvarBL :frmCadastrarEntidade:formCadEntidadeBL:comissario">
+						<p:resetInput target=":frmCadastrarEntidade:panelCadastrarEntidade" />
+					</p:commandButton>
+				</p:column>
+
+				<p:column id="anexos" headerText="Anexos" width="20" exportable="false">
+					<p:commandButton id="btnAnexos" ajax="false" actionListener="#{cadastroLCLBean.instanciarEntidadeAnexos(item)}" icon="fa fa-list-ul" />
+				</p:column>
+
+				<p:column id="statusMapa" headerText="Unidades" width="50">
+					<p:commandButton id="btContainer" icon="fa fa-search" oncomplete="PF('dlgContainer').show();"
+						action="#{cadastroLCLBean.instanciarLista(item)}" title="Unidade"
+						update=":dialogContainer:frmStatusContainer :dialogContainer:frmStatusContainer:tbListaDados" />
+				</p:column>
+			</p:dataTable>
+		</p:panelGrid>
+	</p:panelGrid>
+
+</composite:implementation>
+
+</html>

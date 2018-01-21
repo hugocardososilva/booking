@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:cc="http://java.sun.com/jsf/composite">
+
+<cc:interface>
+	<cc:attribute name="bean" required="true" />
+	<cc:attribute name="id" type="java.lang.String" required="true" />
+</cc:interface>
+
+<cc:implementation>
+	<p:dialog id="idDlgBLIncluir" widgetVar="dlgRelatorioSegregacao" closable="true" draggable="false" resizable="false" modal="false" appendTo="@(body)"
+		header="Imprimir" responsive="true" position="center">
+		<h:form id="frmBLIncluir" enctype="multipart/form-data">
+
+			<p:panelGrid id="pnlIncluir" columns="1" layout="grid" columnClasses="ui-grid-col-12" styleClass="ui-panelgrid-blank">
+				<p:outputLabel id="labelNroProcesso" value="#{bundle.processoAgenteNome}" />
+				<p:inputText id="inpProcesso" value="#{cc.attrs.bean.entidade.agenteNome}" style="width:100%" />
+
+				<p:outputLabel id="labelRazaoSocial" value="#{bundle.processoAgenteCnpj}" />
+				<p:inputText id="inpRazaoSocial" value="#{cc.attrs.bean.entidade.agenteCnpj}" style="width:100%" />
+
+				<p:outputLabel id="labelCnpj" value="#{bundle.processoSegregacaoCeMaster}" />
+				<p:inputMask id="inpCnpj" value="#{cc.attrs.bean.entidade.segregacaoCeMaster}" style="width:100%" mask="#{cc.attrs.bean.mascaraCnpjCpf}" />
+
+				<p:outputLabel id="labelEmail" value="#{bundle.processoSegregacaoCeHouse}" />
+				<p:inputText id="inpEmail" value="#{cc.attrs.bean.entidade.segregacaoCeHouse}" style="width:100%" />
+			</p:panelGrid>
+
+			<p:separator />
+
+			<p:panelGrid id="pnlBLIncluirFechar" columns="3" layout="grid" columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4" styleClass="ui-panelgrid-blank">
+				<p:commandButton id="idSalvarBLIncluir" icon="fa fa-fw fa-print" value="#{bundle.confirmar}" action="#{cc.attrs.bean.salvarImprimir(2, false)}"
+					update="@form" ajax="false">
+					<p:tooltip for="idSalvarBLIncluir" value="#{bundle.confirmar}" showEffect="clip" hideEffect="explode" />
+				</p:commandButton>
+
+				<p:commandButton id="idRelEnvioEmailSegregacao" icon="fa fa-envelope-o" value="Envio E-mail" ajax="true" oncomplete="PF('dlgEnvioEmail').show();"
+					action="#{consultaProcessosBean.instanciarEmail(1)}" update=":envioEmail:frmBLIncluir:pnlIncluir :envioEmail:frmBLIncluir:pnlBLIncluirFechar" >
+					<p:tooltip for="idRelEnvioEmailSegregacao" value="#{bundle.confirmar}" showEffect="clip" hideEffect="explode" />
+				</p:commandButton>
+
+				<p:commandButton value="Fechar" onclick="PF('dlgRelatorioSegregacao').hide();" icon="fa fa-times-circle">
+					<p:resetInput target="pnlIncluir" />
+				</p:commandButton>
+			</p:panelGrid>
+		</h:form>
+	</p:dialog>
+
+</cc:implementation>
+</html>

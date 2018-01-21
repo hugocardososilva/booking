@@ -1,0 +1,48 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:pv="http://primefaces.org/verona">
+    
+    <div class="layout-menu-wrapper">
+        <div class="nano">
+            <div class="nano-content sidebar-scroll-content">
+                <div class="layout-menu-container">
+                    <h:form id="menuform">
+                        <pv:menu>
+                           <p:submenu label="Agendamento" icon="fa fa-angle-double-down">
+								<p:submenu label="Cadastros" icon="ui-icon-search">
+									<p:menuitem value="Solitação DTC/DTA - FCL" outcome="/pages/publico/cadastros/cadastroDtcDta.xhtml" icon="fa fa-angle-double-right"
+										rendered="#{loginMB.userMB.telaLiberadaFCL}" />
+									<p:menuitem value="Solitação DTC/DTA - LCL" outcome="/pages/publico/cadastros/cadastroLCL.xhtml" icon="fa fa-angle-double-right"
+										rendered="#{loginMB.userMB.telaLiberadaLCL}" />
+									<p:menuitem value="Programação Navio" outcome="/pages/publico/cadastros/programacaoNavio.xhtml" icon="fa fa-angle-double-right"
+										rendered="#{loginMB.userMB.telaLiberadaProgramacaoNavio}" />
+								</p:submenu>
+								<p:submenu label="Consulta" icon="ui-icon-search">
+									<p:menuitem value="Processos" outcome="/pages/publico/consultas/consultarProcessos.xhtml" icon="fa fa-angle-double-right"
+										rendered="#{loginMB.userMB.telaLiberadaConsultaProcesso}" />
+								</p:submenu>
+				
+							</p:submenu>
+				
+							<p:submenu label="Cadastro - Usuários">
+								<p:menuitem value="Usuários CLIF" outcome="/pages/privado/usuario/listarUsuarios.xhtml" icon="ui-icon-person" rendered="#{userMB.admin}" />
+				
+								<p:menuitem value="Usuários Importador" outcome="/pages/publico/cadastros/userImportador.xhtml" icon="fa fa-angle-double-right"
+									rendered="#{loginMB.userMB.telaLiberadaUserImportadorNotify}" />
+				
+								<p:menuitem value="Usuários Comissária" outcome="/pages/publico/cadastros/userComissaria.xhtml" icon="fa fa-angle-double-right"
+									rendered="#{loginMB.userMB.telaLiberadaDespachanteUsuarios}" />
+							</p:submenu>
+
+                        </pv:menu>
+                    </h:form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</ui:composition>

@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui">
+
+	<h:form>
+
+		<p:growl autoUpdate="true" />
+
+		<p:panel id="aapnlListaItens" style="text-align:center; background: none;">
+			<h:outputText value="PORTAL DE RELACIONAMENTO AO CLIENTE - CLIF" style="font-size:26px; font-weight:bold; color: #1e94d2;" />
+		</p:panel>
+
+		<p:dataGrid id="telas" var="item" value="#{loginMB.todasTelasEnum}" columns="3" layout="grid" styleClass="center">
+
+			<p:panel id="pnlListaItens" style="text-align:center;background: #1e94d2;">
+				<h:panelGrid id="pnlGridListaItens" columns="1" style="width:100%;">
+					<p:column>
+						<h:outputText value="#{item.descricao}" style="font-size:17px; font-weight:bold; color: white;" />
+					</p:column>
+					<p:column>
+						<h:commandLink action="#{loginMB.redirecionar(item)}" styleClass="botoesTamanho esconderBorda">
+							<h:graphicImage library="images" name="#{item.imagem}" style="float:center;" />
+						</h:commandLink>
+					</p:column>
+				</h:panelGrid>
+			</p:panel>
+
+		</p:dataGrid>
+	</h:form>
+
+	<ui:define name="conteudo_pg_bottom">
+		<ui:include src="/includes/modeloSistema3Bottom.xhtml" />
+	</ui:define>
+
+</ui:composition>

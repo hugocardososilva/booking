@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:cc="http://java.sun.com/jsf/composite">
+
+<cc:interface>
+</cc:interface>
+
+<cc:implementation>
+	<p:dialog id="idStatusContainer" widgetVar="dlgStatusContainer" closable="true" draggable="false" resizable="false" modal="false" appendTo="@(body)"
+		header="Status Mapa - Container" responsive="true" position="center">
+		<h:form id="frmStatusContainer" enctype="multipart/form-data">
+
+			<h:outputText value="#{bundle.cadastroBLEnvioMapa}" />
+			<h:outputText value="#{consultaProcessosBean.entidade.dataEnvioMapa}">
+				<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+			</h:outputText>
+
+			<p:panelGrid id="pnlTable" columns="1" layout="grid" columnClasses="ui-grid-col-12" styleClass="ui-panelgrid-blank">
+				<p:dataTable id="tbListaDados" value="#{consultaProcessosBean.listaBLContanier}" var="item" reflow="true" emptyMessage="Nenhum registro encontrado.">
+					<p:column id="idNroContainerLog" headerText="#{bundle.cadastroBLContainer}" width="10">
+						<f:facet name="header">
+							<h:outputText value="#{bundle.cadastroBLContainer}" />
+						</f:facet>
+						<h:outputText value="#{item.numeroContanier}" disabled="true" />
+					</p:column>
+
+					<p:column id="idInspecaoLog" headerText="#{bundle.cadastroBLInspecao}" width="10">
+						<f:facet name="header">
+							<h:outputText value="#{bundle.cadastroBLInspecao}" />
+						</f:facet>
+						<p:selectBooleanCheckbox value="#{item.inspecao}" disabled="true" />
+					</p:column>
+
+					<p:column id="idLiberadoLog" headerText="#{bundle.cadastroBLLiberado}" width="10">
+						<f:facet name="header">
+							<h:outputText value="#{bundle.cadastroBLLiberado}" />
+						</f:facet>
+						<p:selectBooleanCheckbox value="#{item.liberado}" disabled="true" />
+					</p:column>
+
+				</p:dataTable>
+			</p:panelGrid>
+
+			<p:separator />
+
+			<p:panelGrid id="pnlFechar" columns="1" layout="grid" columnClasses="ui-grid-col-4" styleClass="ui-panelgrid-blank">
+				<p:commandButton value="Fechar" icon="fa fa-times-circle" action="#{consultaProcessosBean.fecharStatusContainer()}"
+					onclick="PF('dlgStatusContainer').hide();" />
+			</p:panelGrid>
+		</h:form>
+	</p:dialog>
+
+</cc:implementation>
+</html>

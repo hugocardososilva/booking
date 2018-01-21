@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" xmlns:cc="http://java.sun.com/jsf/composite"
+	xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:composite="http://java.sun.com/jsf/composite"
+	xmlns:diaLogGenerico="http://java.sun.com/jsf/composite/pages/dialogGeneric">
+
+<!-- INTERFACE -->
+<composite:interface>
+</composite:interface>
+
+<!-- IMPLEMENTATION -->
+<composite:implementation>
+
+	<p:panelGrid id="panel_geral" columns="1" layout="grid" columnClasses="ui-grid-col-12" styleClass="ui-panelgrid-blank">
+
+		<p:panelGrid id="panel_linha_1" columns="8" layout="grid"
+			columnClasses="ui-grid-col-1,ui-grid-col-2,ui-grid-col-1,ui-grid-col-2,ui-grid-col-1,ui-grid-col-2,ui-grid-col-1,ui-grid-col-1"
+			styleClass="ui-panelgrid-blank">
+
+			<p:outputLabel value="Status" />
+			<p:selectOneMenu id="tipoCargaContainer" value="#{consultaProcessosBean.entidade.statusAtiLclFclEnum}" style="width:80%"
+				styleClass="estendido alinhadoEsquerda" disabled="#{consultaProcessosBean.controlaStatusClif()}">
+				<f:selectItems value="#{consultaProcessosBean.todasStatusAtiLclFclEnum}" var="tipo" itemValue="#{tipo}" itemLabel="#{tipo.descricao}" />
+				<p:ajax event="change" listener="#{consultaProcessosBean.salvarStatusClif()}" update="tipoCargaContainer" />
+
+			</p:selectOneMenu>
+
+			<p:outputLabel id="labelTI_1" value="#{bundle.cadastroNrpATI}" />
+			<p:inputText id="labelTI_2" value="#{consultaProcessosBean.entidade.numeroATI}" readonly="true" styleClass="estiloCamposFormProcessos" />
+
+			<p:outputLabel value="#{bundle.cadastroBL}" />
+			<p:inputText value="#{consultaProcessosBean.entidade.descricaoBL}" readonly="true" styleClass="estiloCamposFormProcessos" />
+
+			<p:commandButton id="envioMapa" icon="fa fa-check" value="#{bundle.processosEnviarMapa}" action="#{consultaProcessosBean.envioProcessoMapa()}"
+				update="envioMapa cancelarprocesso salvar" process="@this"
+				disabled="#{!consultaProcessosBean.habilitarBotaoEnvioMapa || consultaProcessosBean.entidade.enviarParaMapa}" style="color: red;">
+				<p:tooltip for="envioMapa" value="Envio mapa" showEffect="clip" hideEffect="explode" />
+				<p:confirm header="Envio" message="Confirma o envio para o Mapa ?" icon="ui-icon-alert" />
+			</p:commandButton>
+
+			<p:splitButton value="Documentos" icon="fa fa-paperclip">
+				<p:menuitem id="menuA" value="Retirada Importação" icon="fa fa-fw fa-print" ajax="true" oncomplete="PF('dlgRelatorioIncluir').show();"
+					action="#{consultaProcessosBean.antesImprimir()}" />
+
+				<p:menuitem id="menuB" value="Requisição Segregação" icon="fa fa-fw fa-print" ajax="true" oncomplete="PF('dlgRelatorioSegregacao').show();"
+					action="#{consultaProcessosBean.instalanciarSegregacao()}" />
+
+				<p:menuitem value="Anexos" icon="fa fa-list-ul" oncomplete="PF('dlgAnexosGenerico').show();" ajax="true"
+					action="#{consultaProcessosBean.instanciarEntidadeAnexos(null)}" />
+
+				<p:menuitem value="Envio e-mail" icon="fa fa-envelope-o" ajax="true" oncomplete="PF('dlgEnvioEmail').show();"
+					action="#{consultaProcessosBean.instanciarEmail(0)}" update=":envioEmail:frmBLIncluir:pnlIncluir :envioEmail:frmBLIncluir:pnlBLIncluirFechar" />
+			</p:splitButton>
+		</p:panelGrid>
+
+		<p:commandButton id="cancelarprocesso" icon="fa fa-ban" value="Cancelar Processo" oncomplete="PF('dlgCancelamentoGenerico').show();" style="color: red;"
+			rendered="#{consultaProcessosBean.userMB.user.clif || consultaProcessosBean.userMB.user.admin}" disabled="#{consultaProcessosBean.entidade.enviarParaMapa}"
+			action="#{consultaProcessosBean.instanciarCancelamento()}" update=":cancelGenerico:formCancelamento:cancelGenericoidDlgCancelamento">
+		</p:commandButton>
+
+		<p:panelGrid id="panel_defirimento" columns="2" layout="grid" columnClasses="ui-grid-col-1,ui-grid-col-1" styleClass="ui-panelgrid-blank">
+			<h:outputText value="#{bundle.cadastroBLDeferido}" />
+			<p:selectBooleanCheckbox id="cheBoxDeferido" value="#{consultaProcessosBean.entidade.deferido}" disabled="#{consultaProcessosBean.habilitarDeferimento}">
+				<p:ajax event="change" listener="#{consultaProcessosBean.diferimento()}" update="cheBoxDeferido" />
+			</p:selectBooleanCheckbox>
+		</p:panelGrid>
+
+		<p:commandButton id="visualizarBLs" icon="#{consultaProcessosBean.controlarImagem}" value="Expandir" action="#{consultaProcessosBean.expandirdDados()}"
+			process="@this" update="panel_geral" />
+
+		<diaLogGenerico:dadosBLEdicaoAlteracao bean="#{consultaProcessosBean}" />
+
+		<p:panelGrid id="panelBL_032" columns="1" layout="grid" columnClasses="ui-grid-col-6" styleClass="ui-panelgrid-blank"
+			rendered="#{consultaProcessosBean.controlarDados}">
+			<p:dataTable id="tbListaTodosContanier" value="#{consultaProcessosBean.listaBLContanier}" var="item" reflow="true" emptyMessage="Nenhum registro encontrado."
+				editable="#{consultaProcessosBean.userMB.user.clif || consultaProcessosBean.userMB.user.admin}" >
+
+				<p:ajax event="rowEdit" listener="#{consultaProcessosBean.onRowEdit}" update=":frmListarPrincipal" />
+				<p:ajax event="rowEditCancel" listener="#{consultaProcessosBean.onRowCancel}" update=":frmListarPrincipal" />
+
+				<p:column id="idNroContainer" headerText="#{bundle.cadastroBLContainer}" width="80">
+					<h:outputText value="#{item.numeroContanier}" />
+				</p:column>
+
+				<p:column id="idNroLacreContainer" headerText="#{bundle.cadastroBLlacre}" width="90">
+					<h:outputText value="#{item.numeroLacre}" />
+				</p:column>
+
+				<p:column id="idCargaImo" headerText="#{bundle.cadastroCargaImo}" width="38">
+					<h:outputText value="#{item.cargaImo.descricao}" />
+				</p:column>
+
+				<p:column id="nroDtc" headerText="#{bundle.cadastroNroprocesso}" width="80">
+					<p:cellEditor>
+						<f:facet name="output"><h:outputText value="#{item.numeroDtcProcesso}" /></f:facet>
+						<f:facet name="input"><p:inputText value="#{item.numeroDtcProcesso}" /></f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="Editar" style="width:15px" rendered="#{consultaProcessosBean.userMB.user.clif || consultaProcessosBean.userMB.user.admin}">
+					<p:rowEditor />
+				</p:column>
+			</p:dataTable>
+		</p:panelGrid>
+
+		<p:separator />
+		<p:panelGrid id="panelBL_botoes" columns="2" layout="grid" columnClasses="ui-grid-col-1,ui-grid-col-1" styleClass="ui-panelgrid-blank">
+			<p:commandButton id="salvar" icon="fa fa fa-floppy-o" value="#{bundle.salvar}" action="#{consultaProcessosBean.salvar()}" update="panel_geral"
+				disabled="#{consultaProcessosBean.entidade.enviarParaMapa}" />
+
+			<p:commandButton id="cancelarVoltar" icon="fa fa-rotate-left" value="#{bundle.voltar}" action="#{consultaProcessosBean.voltarPgPrincipal()}"
+				update=":frmListarPrincipal :frmCadastrarEntidade :frmCadastrarEntidade:panelCadastrarEntidade :frmListarPrincipal:tabItensBL:tbListarEntidade"
+				process="@this">
+				<p:resetInput target=":frmCadastrarEntidade:panelCadastrarEntidade" />
+			</p:commandButton>
+		</p:panelGrid>
+	</p:panelGrid>
+
+</composite:implementation>
+
+</html>

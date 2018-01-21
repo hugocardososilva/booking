@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:cc="http://java.sun.com/jsf/composite">
+
+<cc:interface>
+	<cc:attribute name="bean" required="true" />
+	<cc:attribute name="id" type="java.lang.String" required="true" />
+</cc:interface>
+
+<cc:implementation>
+	<h:form id="formCancelamento">
+		<p:dialog id="#{cc.attrs.id}idDlgCancelamento" widgetVar="dlgCancelamentoGenerico" closable="false" draggable="false" resizable="false"
+			header="Motivo" style="opacity: 1 !important;" responsive="true" dynamic="true">
+
+			<p:panelGrid id="panel_descricao" columns="1" layout="grid" columnClasses="ui-grid-col-12" styleClass="ui-panelgrid-blank">
+				<p:inputTextarea id="texto" value="#{consultaProcessosBean.textoMotivoCancelamento}" minQueryLength="15" maxlength="500" requiredMessage="true">
+					<p:ajax event="blur" update="panel_descricao" />
+				</p:inputTextarea>
+			</p:panelGrid>
+
+
+			<p:panelGrid id="panel_botoes" columns="2" layout="grid" columnClasses="ui-grid-col-6,ui-grid-col-6" styleClass="ui-panelgrid-blank">
+
+				<p:commandButton id="cancelarprocesso" icon="fa fa-check" value="#{bundle.confirmar}" action="#{cc.attrs.bean.cancelarProcesso()}"
+					process="@this" onsuccess="PF('dlgCancelamentoGenerico').hide()"  >
+					<p:tooltip for="cancelarprocesso" value="Cancelar processo" showEffect="clip" hideEffect="explode" />
+				</p:commandButton>
+
+				<p:commandButton value="#{bundle.fechar}" onclick="PF('dlgCancelamentoGenerico').hide();" icon="fa fa-ban" />
+			</p:panelGrid>
+		</p:dialog>
+	</h:form>
+</cc:implementation>
+</html>

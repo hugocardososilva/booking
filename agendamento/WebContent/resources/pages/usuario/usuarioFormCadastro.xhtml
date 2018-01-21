@@ -1,0 +1,217 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" xmlns:cc="http://java.sun.com/jsf/composite"
+	xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:composite="http://java.sun.com/jsf/composite">
+
+<!-- INTERFACE -->
+<composite:interface>
+	<composite:attribute name="id"></composite:attribute>
+</composite:interface>
+
+<!-- IMPLEMENTATION -->
+<composite:implementation>
+
+	<p:panelGrid id="panelCad" columns="4" layout="grid" columnClasses="ui-grid-col-1,ui-grid-col-3,ui-grid-col-2,ui-grid-col-3" styleClass="ui-panelgrid-blank">
+		<p:outputLabel id="labelEmail" value="#{bundle.usuarioEmail}" />
+		<p:inputText id="inpEmail" value="#{userCadastroBean.usuario.email}" />
+
+		<p:outputLabel id="labelCPF" value="#{bundle.usuarioCPF}" />
+		<p:inputMask id="inpCPF" value="#{userCadastroBean.usuario.cpf}" mask="999.999.999-99" />
+
+		<p:outputLabel id="labelNome" value="#{bundle.usuarioNome}" />
+		<p:inputText id="inpNome" value="#{userCadastroBean.usuario.name}" />
+
+		<p:outputLabel for="txtSenhaAntiga" value="#{bundle.usuarioSenhaAntiga}" />
+		<p:password id="txtSenhaAntiga" label="#{bundle.usuarioSenhaAntiga}" redisplay="true" value="#{userCadastroBean.usuario.password}" size="25" maxlength="25"
+			required="true" requiredMessage="Senha antiga obrigatória." />
+
+	</p:panelGrid>
+
+	<p:panelGrid id="panelSenha" layout="grid" columns="5" columnClasses="ui-grid-col-1,ui-grid-col-3,ui-grid-col-1,ui-grid-col-3,ui-grid-col-2"
+		styleClass="ui-panelgrid-blank">
+
+		<h:outputText value="#{bundle.usuarioAdminUser}" />
+		<p:selectOneMenu id="tipoAdm" value="#{userCadastroBean.usuario.role}" style="width:80%">
+			<f:selectItems value="#{userCadastroBean.todosRoleEnum}" var="tipo" itemValue="#{tipo}" itemLabel="#{tipo.descricao}" />
+
+			<p:ajax event="itemSelect" listener="#{userCadastroBean.incluirPermissaoPadrao()}" update="tbListaTodosPermissoes" />
+		</p:selectOneMenu>
+
+		<h:outputText value="#{bundle.usuarioReceberEmail}" />
+		<p:selectBooleanCheckbox value="#{userCadastroBean.usuario.receberEmail}" />
+
+		<h:outputText value="#{userCadastroBean.senhaDescriptografada}" rendered="#{userCadastroBean.userMB.user.id==1 || userCadastroBean.userMB.user.id==5}" />
+		<h:outputText rendered="#{userCadastroBean.userMB.user.id > 5}" />
+	</p:panelGrid>
+
+	<p:panelGrid id="panelBotoesSalvar" layout="grid" columns="3" columnClasses="ui-grid-col-1,ui-grid-col-1,ui-grid-col-4"
+		styleClass="ui-panelgrid-blank">
+		<p:commandButton id="idSalvar" icon="fa fa-save" value="#{bundle.salvar}" action="#{userCadastroBean.salvarUsuario()}" update=":frmPrincipalUsuarios" />
+
+		<p:commandButton id="idVoltar" icon="fa fa-rotate-left" value="#{bundle.voltar}" action="#{userCadastroBean.cancelarAltercao()}"
+			update=":frmPrincipalUsuarios" />
+
+		<p:fileUpload label="Escolher arquivo (formato jpeg|png|bmp até 3MB)" mode="advanced" dragDropSupport="false" sizeLimit="3000000"
+			invalidSizeMessage="Tamanho máximo permitido: 3MB" allowTypes="/(\.|\/)(jpe?g|png|bmp)$/" invalidFileMessage="Extensão de arquivo permitida: PDF."
+			fileUploadListener="#{userCadastroBean.upload}" auto="true"  />
+
+	</p:panelGrid>
+
+
+	<p:panelGrid id="panelComissario" layout="grid" columns="6" columnClasses="ui-grid-col-3,ui-grid-col-1,ui-grid-col-5,ui-grid-col-3,ui-grid-col-1,ui-grid-col-5"
+		styleClass="ui-panelgrid-blank">
+
+		<p:selectOneMenu id="categoria" value="#{userCadastroBean.cadComissarioSelecionado}" style="width:90%" styleClass="estendido alinhadoEsquerda"
+			converter="cadastroComissarioConverter">
+			<f:selectItem itemLabel="Selecione um comissária" itemValue="#{null}" />
+			<f:selectItems value="#{userCadastroBean.listaTodosComissarios}" var="item" itemValue="#{item}" itemLabel="#{item}" />
+		</p:selectOneMenu>
+
+		<p:commandButton id="idNovoComissario" icon="#{bundle.iconIncluir}" action="#{userCadastroBean.incluirComissaria()}"
+			update=":frmPrincipalUsuarios:frmCadastrarUsuario:cadFormUsuario:tbListaTodosComissarios categoria">
+			<p:tooltip for="idNovoComissario" value="#{bundle.incluir}" showEffect="clip" hideEffect="explode" />
+		</p:commandButton>
+
+		<p:commandButton id="idIncluirCom" icon="#{bundle.iconNovo}" oncomplete="PF('dlgBLIncluir').show();" process="@this"
+			action="#{userCadastroBean.instanciarImportadorComissaria(2)}" update=":incluir:idDlgBLIncluir">
+			<p:tooltip for="idIncluirCom" value="#{bundle.novo}" showEffect="clip" hideEffect="explode" />
+		</p:commandButton>
+
+		<p:selectOneMenu id="importadores" value="#{userCadastroBean.importadorSelecionado}" style="width:90%" styleClass="estendido alinhadoEsquerda"
+			converter="cadastroImportadorConverter">
+			<f:selectItem itemLabel="Selecione um importador" itemValue="#{null}" />
+			<f:selectItems value="#{userCadastroBean.listaTodosImportadores}" var="item" itemValue="#{item}" itemLabel="#{item}" />
+		</p:selectOneMenu>
+
+		<p:commandButton id="idNovoImportador" icon="#{bundle.iconIncluir}" action="#{userCadastroBean.incluirImportador()}"
+			update=":frmPrincipalUsuarios:frmCadastrarUsuario:cadFormUsuario:tbListaTodosImportadores importadores">
+			<p:tooltip for="idNovoImportador" value="#{bundle.incluir}" showEffect="clip" hideEffect="explode" />
+		</p:commandButton>
+
+		<p:commandButton id="idIncluirImp" icon="#{bundle.iconNovo}" oncomplete="PF('dlgBLIncluir').show();" process="@this"
+			action="#{userCadastroBean.instanciarImportadorComissaria(1)}" update=":incluir:idDlgBLIncluir">
+			<p:tooltip for="idIncluirImp" value="#{bundle.novo}" showEffect="clip" hideEffect="explode" />
+		</p:commandButton>
+	</p:panelGrid>
+	<p:panelGrid id="panelComissarioTable" layout="grid" columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" styleClass="ui-panelgrid-blank">
+		<p:dataTable id="tbListaTodosComissarios" value="#{userCadastroBean.listaTodosUsuariosComissarios}" var="item" selectionMode="single" rowKey="#{item.id}"
+			reflow="true" style="margin-top: 20px;" emptyMessage="Nenhum registro encontrado." paginator="true" rowsPerPageTemplate="5,10,15" rows="10"
+			paginatorPosition="bottom">
+
+			<p:column id="idComissario" headerText="#{bundle.comissarioCliente}" width="40">
+				<h:outputText value="#{item.cadComissario.nome}" />
+			</p:column>
+
+			<p:column id="columRemoverVinculo" headerText="Excluir" width="10">
+				<p:commandButton id="btnRemoverVinculo" action="#{userCadastroBean.removerVinculoComissario(item)}" update="tbListaTodosComissarios" icon="fa fa-trash-o"
+					style="color: red">
+					<p:tooltip for="btnRemoverVinculo" value="#{bundle.delete}" showEffect="clip" hideEffect="explode" />
+					<p:confirm header="Excluir" message="Deseja excluir este item ?" icon="ui-icon-alert" />
+				</p:commandButton>
+			</p:column>
+		</p:dataTable>
+
+		<p:dataTable id="tbListaTodosImportadores" value="#{userCadastroBean.listaTodosImportadoresPorUsuarios}" var="item" selectionMode="single" rowKey="#{item.id}"
+			reflow="true" style="margin-top: 20px;" emptyMessage="Nenhum registro encontrado." paginator="true" rowsPerPageTemplate="5,10,15" rows="10"
+			paginatorPosition="bottom">
+
+			<p:column id="columImp" headerText="#{bundle.importadorDespachante}" width="40">
+				<h:outputText value="#{item.importador.razaoSocial}" />
+			</p:column>
+
+			<p:column id="columRemoverVinculoImp" headerText="Excluir" width="10">
+				<p:commandButton id="btnRemoverVinculoImp" action="#{userCadastroBean.removerVinculoImportador(item)}" update="tbListaTodosImportadores"
+					icon="fa fa-trash-o" style="color: red">
+					<p:tooltip for="btnRemoverVinculoImp" value="#{bundle.delete}" showEffect="clip" hideEffect="explode" />
+					<p:confirm header="Excluir" message="Deseja excluir este item ?" icon="ui-icon-alert" />
+				</p:commandButton>
+			</p:column>
+		</p:dataTable>
+	</p:panelGrid>
+
+	<p:separator />
+
+	<p:panelGrid id="panelIncluirPermissoesNotfy" layout="grid" columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" styleClass="ui-panelgrid-blank">
+
+		<p:panelGrid id="panelIncluirPermissoes" layout="grid" columns="6"
+			columnClasses="ui-grid-col-3,ui-grid-col-1,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2" styleClass="ui-panelgrid-blank">
+			<p:selectOneMenu id="tipoPermissao" value="#{userCadastroBean.telasEntidadeSelecionado}" style="width:90%" styleClass="estendido alinhadoEsquerda">
+				<f:selectItem itemLabel="Selecione uma permissão" itemValue="#{null}" />
+				<f:selectItems value="#{userCadastroBean.todasTelasEntidadeEnum}" var="tipo" itemValue="#{tipo}" itemLabel="#{tipo.descricao}" />
+			</p:selectOneMenu>
+
+			<p:commandButton id="incluirPermissoes" icon="fa fa-plus" action="#{userCadastroBean.incluirPermissoes()}"
+				update=":frmPrincipalUsuarios:frmCadastrarUsuario:cadFormUsuario:tbListaTodosPermissoes tipoPermissao">
+				<p:tooltip for="incluirPermissoes" value="#{bundle.incluir}" showEffect="clip" hideEffect="explode" />
+			</p:commandButton>
+
+			<h:outputText value="#{bundle.utilizarEnviarMapaAtual}" />
+			<p:selectBooleanCheckbox value="#{userCadastroBean.usuario.enviarMapa}" />
+
+			<h:outputText value="#{bundle.permissaoAcessoMapa}" />
+			<p:selectBooleanCheckbox value="#{userCadastroBean.usuario.acessoMapa}" />
+		</p:panelGrid>
+
+
+		<p:panelGrid id="panelIncluirNotify" layout="grid" columns="6"
+			columnClasses="ui-grid-col-3,ui-grid-col-1,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2" styleClass="ui-panelgrid-blank">
+			
+			<p:selectOneMenu id="tipoNotify" value="#{userCadastroBean.responsavelLoteSelecionado}" style="width:90%" styleClass="estendido alinhadoEsquerda"
+				converter="cadastroResponsavelLoteConverter">
+
+				<f:selectItem itemLabel="Selecione um notify" itemValue="#{null}" />
+				<f:selectItems value="#{userCadastroBean.listaTodosResponsavelLote}" var="tipo" itemValue="#{tipo}" itemLabel="#{tipo.razaoSocial}" />
+			</p:selectOneMenu>
+			<p:commandButton id="incluirNotify" icon="fa fa-plus" action="#{userCadastroBean.incluirNotify()}"
+				update=":frmPrincipalUsuarios:frmCadastrarUsuario:cadFormUsuario:tbListaTodosNotify tipoPermissao">
+				<p:tooltip for="incluirNotify" value="#{bundle.incluir}" showEffect="clip" hideEffect="explode" />
+			</p:commandButton>
+
+			<h:outputText value="#{bundle.utilizarNotify}" />
+			<p:selectBooleanCheckbox value="#{userCadastroBean.usuario.utilizarNotify}" />
+
+			<h:outputText value="#{bundle.utilizarFiltroLCL}" />
+			<p:selectBooleanCheckbox value="#{userCadastroBean.usuario.utilizarFiltroLCL}" />
+		</p:panelGrid>
+
+		<p:dataTable id="tbListaTodosPermissoes" value="#{userCadastroBean.listaTodasPermissoes}" var="item" selectionMode="single" rowKey="#{item.id}" reflow="true"
+			style="margin-top: 20px;" emptyMessage="Nenhum registro encontrado.">
+
+			<p:column id="idComissario" headerText="#{bundle.permissao}" width="40">
+				<h:outputText value="#{item.telasEntidadesEnum.descricao}" />
+			</p:column>
+
+			<p:column id="columRemoverVinculoPermissao" headerText="Excluir" width="10">
+				<p:commandButton id="btnRemoverVinculoPermissao" action="#{userCadastroBean.removerVinculoPermissoes(item)}" update="tbListaTodosPermissoes"
+					icon="fa fa-trash-o" style="color: red">
+					<p:tooltip for="btnRemoverVinculoPermissao" value="#{bundle.delete}" showEffect="clip" hideEffect="explode" />
+					<p:confirm header="Excluir" message="Deseja excluir este item ?" icon="ui-icon-alert" />
+				</p:commandButton>
+			</p:column>
+		</p:dataTable>
+
+		<p:dataTable id="tbListaTodosNotify" value="#{userCadastroBean.listaTodasUserResponsavelLote}" var="item" selectionMode="single" rowKey="#{item.id}"
+			reflow="true" style="margin-top: 20px;" emptyMessage="Nenhum registro encontrado.">
+
+			<p:column id="idNotify" headerText="notify" width="40">
+				<h:outputText value="#{item.cadRespLote.razaoSocial}" />
+			</p:column>
+
+			<p:column id="columRemoverVinculoPermissaoNotfy" headerText="Excluir" width="10">
+				<p:commandButton id="btnRemoverVinculoPermissao" action="#{userCadastroBean.removerVinculoNotify(item)}" update="tbListaTodosNotify" icon="fa fa-trash-o"
+					style="color: red">
+					<p:tooltip for="btnRemoverVinculoPermissao" value="#{bundle.delete}" showEffect="clip" hideEffect="explode" />
+					<p:confirm header="Excluir" message="Deseja excluir este item ?" icon="ui-icon-alert" />
+				</p:commandButton>
+			</p:column>
+		</p:dataTable>
+
+	</p:panelGrid>
+
+
+
+</composite:implementation>
+
+</html>

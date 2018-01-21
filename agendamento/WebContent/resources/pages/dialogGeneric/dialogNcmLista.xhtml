@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:cc="http://java.sun.com/jsf/composite">
+
+<cc:interface>
+	<cc:attribute name="bean" required="true" />
+	<cc:attribute name="id" type="java.lang.String" required="true" />
+</cc:interface>
+
+<cc:implementation>
+	<p:dialog id="ncmLista" widgetVar="dlgNcmLista" closable="true" draggable="false" resizable="false" modal="false" appendTo="@(body)"
+		header="Lista NCM" responsive="true" position="center">
+		<h:form id="frmNcmlista" enctype="multipart/form-data">
+			<p:panelGrid id="pnlTable" columns="1" layout="grid" columnClasses="ui-grid-col-12" styleClass="ui-panelgrid-blank">
+				<p:dataTable id="tbListaDados" value="#{cc.attrs.bean.listaMapaNCM}" var="item" reflow="true" emptyMessage="Nenhum registro encontrado.">
+					<p:column id="idNroContainerLog" headerText="Codigo" width="10">
+						<h:outputText value="#{item.ncm.ncmCodigo}" disabled="true" />
+					</p:column>
+
+					<p:column id="idLiberadoLog" headerText="Descrição" width="20">
+						<h:outputText value="#{item.ncm.descricaoNcm}" disabled="true" />
+					</p:column>
+
+					<p:column id="idInspecaoLog" headerText="Anuencia" width="2">
+						<h:outputText value="#{item.ncm.produtoAnuenciaSimNao}" disabled="true" />
+					</p:column>
+
+					<p:column id="columRemover" headerText="#{bundle.excluir}" width="10">
+						<p:commandButton id="btnRemover" action="#{cc.attrs.bean.excluirNCM(item)}" update="tbListaDados" icon="fa fa-trash-o" style="color: red">
+							<p:tooltip for="btnRemover" value="#{bundle.excluir}" showEffect="clip" hideEffect="explode" />
+							<p:confirm header="Excluir" message="Deseja excluir este item ?" icon="ui-icon-alert" />
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+			</p:panelGrid>
+
+			<p:separator />
+
+			<p:panelGrid id="pnlFechar" columns="1" layout="grid" columnClasses="ui-grid-col-4" styleClass="ui-panelgrid-blank">
+				<p:commandButton value="Fechar" icon="fa fa-times-circle" onclick="PF('dlgNcmLista').hide();" />
+			</p:panelGrid>
+		</h:form>
+	</p:dialog>
+</cc:implementation>
+</html>

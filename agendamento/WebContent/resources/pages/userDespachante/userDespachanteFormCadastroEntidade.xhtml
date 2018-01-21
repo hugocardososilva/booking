@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" xmlns:cc="http://java.sun.com/jsf/composite"
+	xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:composite="http://java.sun.com/jsf/composite">
+
+<!-- INTERFACE -->
+<composite:interface>
+</composite:interface>
+
+<!-- IMPLEMENTATION -->
+<composite:implementation>
+
+	<p:panelGrid id="panel_principal" columns="1" layout="grid" columnClasses="ui-grid-col-12" styleClass="ui-panelgrid-blank">
+
+		<p:panel id="panelVincularUsuarios" header="Vincular Usuários" toggleable="true" closable="false" toggleSpeed="500" closeSpeed="500"
+			widgetVar="panel_usuarios" style="margin-bottom:20px" styleClass="ui-panelgrid-blank">
+
+			<p:panelGrid id="panel_incluir_user" columns="4" layout="grid" columnClasses="ui-grid-col-3,ui-grid-col-3,ui-grid-col-3,ui-grid-col-1"
+				styleClass="ui-panelgrid-blank">
+
+				<p:inputMask id="inpCpf" value="#{userComissariaBean.entidadeUser.cpf}" style="width:100%" placeholder="Informe o CPF do Usuário..."
+					mask="999.999.999-99">
+
+					<p:ajax event="change" listener="#{userComissariaBean.verificaUserCadastrado()}"
+						update="inpCpf inpName inpEmail :frmCadastrarEntidade:formCadEntidadeBL:tbListaTodosUser" />
+				</p:inputMask>
+
+				<p:inputText id="inpName" value="#{userComissariaBean.entidadeUser.name}" style="width:100%" placeholder="Informe o nome do Usuário..." />
+				<p:inputText id="inpEmail" value="#{userComissariaBean.entidadeUser.email}" style="width:100%" placeholder="Informe o Email do Usuário..." />
+
+				<p:commandButton id="btIncluirUser" icon="#{bundle.iconIncluir}" action="#{userComissariaBean.incluirUsuario()}"
+					update=":frmCadastrarEntidade:formCadEntidadeBL:tbListaTodosUser panel_incluir_user">
+					<p:tooltip for="btIncluirUser" value="#{bundle.incluir}" />
+				</p:commandButton>
+			</p:panelGrid>
+
+			<p:panelGrid id="panel_dataTable_user" columns="1" layout="grid" columnClasses="ui-grid-col-6" styleClass="ui-panelgrid-blank">
+				<p:dataTable id="tbListaTodosUser" value="#{userComissariaBean.listaComissariaUsuarios}" var="item" reflow="true"
+					emptyMessage="Nenhum registro encontrado.">
+
+					<p:column id="idComissaria" headerText="#{bundle.comissario}" width="80">
+						<h:outputText value="#{userComissariaBean.comissaria}" />
+					</p:column>
+
+					<p:column id="idUserNome" headerText="#{bundle.usuarioNome}" width="80">
+						<h:outputText value="#{item.user.name}" />
+					</p:column>
+
+					<p:column id="idUserCPF" headerText="#{bundle.usuarioCPF}" width="80">
+						<h:outputText value="#{item.user.cpf}" />
+					</p:column>
+
+					<p:column id="idUserEMAIL" headerText="#{bundle.usuarioEmail}" width="80">
+						<h:outputText value="#{item.user.email}" />
+					</p:column>
+
+					<p:column id="columRemoverUser" headerText="Ativo" width="15">
+						<p:commandButton id="btnRemoverUser" icon="#{userComissariaBean.controlarIcone(item)}" style="#{userComissariaBean.controlarCorIcone(item)}"
+							action="#{userComissariaBean.ativarDesativarUser(item)}" update="btnRemoverUser">
+							<p:tooltip for="btnRemoverUser" value="Ativar / Desativar" />
+							<p:confirm header="Ativar / Desativar" message="Deseja desativar ou ativar ?" icon="ui-icon-alert" />
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+			</p:panelGrid>
+		</p:panel>
+	</p:panelGrid>
+
+
+	<p:separator />
+	<p:panelGrid id="painelSelect1" columns="1" layout="grid" columnClasses="ui-grid-col-1,ui-grid-col-1" styleClass="ui-panelgrid-blank">
+		<p:commandButton id="cancelarVoltar" icon="fa fa-rotate-left" value="#{bundle.voltar}" action="#{userComissariaBean.voltarPgPrincipal()}"
+			update=":frmListarPrincipal" />
+	</p:panelGrid>
+
+</composite:implementation>
+
+</html>

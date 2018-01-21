@@ -1,0 +1,48 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<link rel="shortcut icon" type="image/x-icon" href="resources/images/clif_ico.png" />
+
+	<title>Agendamento</title>
+	<h:outputStylesheet library="css" name="estilos.css" />
+	<h:outputScript library="js" name="scripts.js" />
+	<h:outputScript library="js" name="calendar.js" />
+	
+	
+</h:head>
+
+<h:body>
+	<p:layout fullPage="true">
+		<p:layoutUnit position="center" resizable="false" closable="false" collapsible="false">
+			<h:graphicImage library="images" name="area.jpg" width="100%" height="100%" />
+		</p:layoutUnit>
+
+		<p:growl id="mensagem" />
+		<p:dialog styleClass="dlgLogin" id="dlgLogin" closable="false" draggable="false" resizable="false" modal="true" visible="true" height="320"
+			width="400" style="opacity: 0.70 !important; height: 320px !important; width: 400px !important;">
+			<h:form style="text-align:center;">
+				<p:graphicImage library="images" name="clif.jpg" />
+				<h:panelGrid columns="2" cellpadding="8">
+					<p:outputLabel for="cpf" value="USUÁRIO:" />
+					<p:inputMask id="cpf" value="#{loginMB.email}" size="30" required="true" requiredMessage="O campo Usuário é obrigatório" mask="999.999.999-99">
+						<p:ajax event="blur" listener="#{loginMB.validarUsuario()}" />
+					</p:inputMask>
+
+					<p:outputLabel for="senha" value="SENHA:" />
+					<p:password id="senha" value="#{loginMB.password}" size="30" required="true" requiredMessage="O campo Senha é obrigatório" />
+				</h:panelGrid>
+
+				<h:panelGrid columns="1">
+					<p:commandButton value="Entrar" update=":mensagem" style="left: 98px !important;" actionListener="#{loginMB.login()}" icon="fa fa-sign-out" />
+				</h:panelGrid>
+
+				<h:panelGrid columns="1">
+					<h:link value="Esqueci minha senha" outcome="/pages/publico/enviarSenha.xhtml"
+						style="margin-left: 98px !important; text-decoration: none !important; font-size: 10px !important;" />
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
+	</p:layout>
+</h:body>
+</html>

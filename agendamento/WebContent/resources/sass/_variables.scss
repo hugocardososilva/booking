@@ -1,0 +1,86 @@
+/******************************/
+/*           Common           */
+/******************************/
+$fontFamily: "Lato","Helvetica Neue",sans-serif;
+$fontSize:13px;
+$textColor:#2d353c;
+$textSecondaryColor:lighten($textColor,25%);
+$borderRadius:2px;
+$dividerColor:#dce2e7;
+
+/******************************/
+/*           Layout           */
+/******************************/
+$bodyBgColor:#eaeff2;
+$footerBgColor:#dee0e3;
+$appNameTextColor:#ffffff;
+$searchInputBgColor:#f5f8f9;
+$searchInputBorderColor:#f5f8f9;
+$searchInputFocusBorderColor:#a8b4be;
+$menuItemActiveTextColor:#ffffff;
+$cardBgColor:#f7f9fa;
+
+/******************************/
+/*           THEME            */
+/******************************/
+
+/* Icons */
+$iconFontSize:13px;
+$iconWidth:16px;
+
+/* Headers */
+$headerPadding:6px 12px;
+$headerBgColor:#f5f8f9;
+$headerTextColor:#2d353c;
+$headerHoverBgColor:#dcdfe0;
+$headerBorderColor:#dce2e7;
+$headerIconColor:lighten($textColor,25%);
+$headerIconHoverColor:#2d353c;
+
+/* Contents */
+$contentPadding:6px 12px;
+$contentBorderColor:#dce2e7;
+$contentBgColor:#f5f8f9;
+
+/* Forms */
+$inputBgColor:#ffffff;
+$inputPadding:4px;
+$inputBorderColor:#dce2e7;
+$inputHoverBorderColor:#a8b4be;
+$inputInvalidBorderColor:#e13131;
+
+/* Buttons */
+$toggleButtonBgColor:#c6cbcf;
+
+/* List Items */
+$listItemPadding:6px 12px;
+$listItemHoverBgColor:#dce2e7;
+$listItemHoverTextColor:#525262;
+
+/* Messages */
+$infoMessageBgColor:#e0f6b1;
+$infoMessageTextColor:#7fb30f;
+$warnMessageBgColor:#fff1ae;
+$warnMessageTextColor:#f7b000;
+$errorMessageBgColor:#f0d1d0;
+$errorMessageTextColor:#e96d66;
+$fatalMessageBgColor:#afafc0;
+$fatalMessageTextColor:#3b3b48;
+
+/* Data */
+$paginatorBgColor:#ffffff;
+$paginatorHoverBgColor:#dce2e7;
+$datableOddRowBgColor:#ffffff;
+$datatableHoverBgColor:#dce2e7;
+
+/* Menu */
+$menuHeaderBgColor:#dcdfe0;
+$menuHeaderHoverBgColor:#c4c6c7;
+
+/* Predefined Colors */
+$blue:#3ebaf8;
+$orange:#f7cb00;
+$purple:#985edb;
+$pink:#f18983;
+$green:#9fd037;
+$black:#525262;
