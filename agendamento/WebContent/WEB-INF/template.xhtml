@@ -13,9 +13,11 @@
             <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
             <meta name="apple-mobile-web-app-capable" content="yes" />
         </f:facet>
+        <link rel="shortcut icon" type="image/x-icon" href="resources/images/clif_ico.png" />
         <title><ui:insert name="title">Agendamento</ui:insert></title>
         <h:outputScript name="js/nanoscroller.js" library="verona-layout" />
         <h:outputScript name="js/layout.js" library="verona-layout" />
+        <h:outputStylesheet library="css" name="estilos.css" />
         <ui:insert name="head"/>
 
     </h:head>
@@ -25,7 +27,17 @@
             <ui:include src="./topbar.xhtml" />
         
             <div class="layout-content">
+            <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+
+			<p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="true" header="Processando"
+				appendTo="@(body)" height="50" width="248"
+				style="opacity: 1 !important;
+			                 height: 30px !important;
+			                 width: 248px !important;">
+				<h:graphicImage library="images" name="processando.gif" />
+			</p:dialog>
                 <ui:insert name="conteudo_pg_principal"/>
+                
             </div>
             
             <ui:include src="./footer.xhtml" />

@@ -1,187 +1,24 @@
-@CHARSET "ISO-8859-1";
 
-.ui-layout-north {
-	z-index: 25 !important;
-	overflow: visible !important;
-	text-align: center;
+.footer{
+	 position: relative;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 1rem;
+  text-align: center;
 }
-
-.ui-layout-center {
-	visibility: hidden !important;
-	background: #ffffff;
-}
-
-.ui-datatable .ui-datatable-header {
-	background: #e8eff2;
-}
-
-/* UTILIZADO NAS DIVs PARA DEIXAR COM O FUNDO BRANCO */
-.ui-layout-unit .ui-layout-unit-content {
-	background: #ffffff;
-}
-
-.ui-layout-south {
-	text-align: center;
-}
-
-.ui-widget-header {
-	font-weight: normal;
-}
-
-/* UTILIZADO NO TAMANHO DAS FONTES */
-.ui-widget, .ui-widget .ui-widget {
-	font-size: 13px !important;
-}
-
-/* UTILIZADO NA FONTE TIPO */
-.ui-widget {
-	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-}
-
-
-/* COR DAS BORDAS */
-.ui-state-default, .ui-widget-content .ui-state-default,
-	.ui-widget-header .ui-state-default {
-	border: 1px solid #1e94d2;
-}
-
-input {
-	text-transform: uppercase !important;
-	background-color: white !important;
-	height: 22px !important;
-}
-
-.ui-dialog {
-	left: 50% !important;
-	margin: -200px 0 0 -172px !important;
-	position: center !important;
-	top: 50% !important;
-}
-
-.dlgLogin .ui-widget-header {
-	background: none !important;
-}
-
-.consolidado {
-	background-color: #FFFF99 !important;
-	background-image: none;
-}
-
-.awb {
-	background-color: #FFFF99 !important;
-	background-image: none;
-}
-
-/* UTILIZADO NA BARRA DE MENU NO TOP */
-.ui-layout-north .ui-layout-unit-content {
-	overflow: visible !important;
-	background: #1e94d2 !important;
-	padding: 1em 1em 1em 1em !important;
-	font-size: 5px;
+.ui-column-title{
 	font-weight: bold;
 }
-
-.esconderBorda {
-	background: none !important;
-	border: 0 none !important;
-}
-
-.ui-datatable tbody td {
-	border-color: inherit;
-	text-align: center;
-	background: #e8eff2;
-}
-
-/* REMOVE A BORDA DOS DATA TABLE VERSÃO FUNCIONA SOMENTE PRIMEFACES 5.3 OU 6.0 */
-.ui-datatable.borderless thead th, .ui-datatable.borderless tbody,
-	.ui-datatable.borderless tbody tr, .ui-datatable.borderless tbody td {
-	background: none !important;
-	border: 0 none !important;
-}
-
-/* REMOVE A BORDA DOS PANEL VERSÃO FUNCIONA SOMENTE PRIMEFACES 5.3 OU 6.0 */
-.ui-panelgrid.ui-panelgrid-blank .ui-panelgrid-content.ui-widget-content,
-	.ui-panelgrid.ui-panelgrid-blank .ui-panelgrid-header.ui-widget-header,
-	.ui-panelgrid.ui-panelgrid-blank .ui-panelgrid-footer.ui-widget-header,
-	.ui-panelgrid.ui-panelgrid-blank .ui-panelgrid-header>tr.ui-widget-header,
-	.ui-panelgrid.ui-panelgrid-blank tbody>tr.ui-widget-content,
-	.ui-panelgrid.ui-panelgrid-blank tbody>tr.ui-widget-content>td.ui-panelgrid-cell,
-	.ui-panelgrid.ui-panelgrid-blank .ui-panelgrid-footer>tr.ui-widget-footer
-	{
-	background: none !important;
-	border: 0 none !important;
-}
-
-.ui-widget-content {
-	border: 0 none !important;
-}
-
-/* UTILIZADO NO MENU PRINCIPAL BOTOES */
-.center {
-	position: absolute;
-	top: 30%;
-	width: 100%;
-	text-align: center;
-	font-size: 18px;
-}
-
-
-/* UTILIZADO NO MENU PRINCIPAL BOTOES */
-.centralizarImagem {
-	position: absolute;
-	left: 20%;
-}
-
-.botoesTamanho {
-	padding: .20em 10em 5em !important;
-}
-
-/* UTILIZADO NA BARRA DA PARTE DE BAIXO */
-.ui-layout-unit-header, .ui-layout-unit-footer {
-	font-size: 15px;
+.label-right{
 	font-weight: bold;
-	background: #1e94d2;
+	text-align: right;
 }
 
-.footerprincipalCentro {
-	font-weight: bold !important;
-	background: #1e94d2 !important;
+.label td{
+	text-align: right;
 }
-
-/* UTILIZADO NOS BOTOES RETIRA FUNDO DEIXANDO SOMENTE A COR DA IAMGEM */
-.ui-widget .ui-button {
-	background: none;
-	background-color: none;
-	border: 1px solid #0288D1;
-	color: #0288D1;
-}
-
-.componente_p_calendar {
-	background: blue !important;
-	background-color: none !important;
-	border: 1px solid #0288D1 !important;
-	color: #0288D1 !important;
-}
-
 .estiloTituloTela {
-	color: #0288D1;
-	font-size: 18px;
-}
-
-.estiloCamposFormProcessos {
-	font-weight: bold !important;
-	color: black !important;
-}
-
-/* UTILIZADO QUANDO FOR CAMPOS REQUIRIDOS EM "*" */
-.ui-outputlabel .ui-outputlabel-rfi {
-	color: red;
-}
-
-.fonteDialogAviso  {
-  font-size:26px !importante;
-  font-weight:bold; 
-  color: #FF0000;
-}
-
+	
+	font-size: 36px;
 }

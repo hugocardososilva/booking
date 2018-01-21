@@ -12,21 +12,23 @@
                 <div class="layout-menu-container">
                     <h:form id="menuform">
                         <pv:menu>
-                           <p:submenu label="Agendamento" icon="fa fa-angle-double-down">
-								<p:submenu label="Cadastros" icon="ui-icon-search">
-									<p:menuitem value="Solitação DTC/DTA - FCL" outcome="/pages/publico/cadastros/cadastroDtcDta.xhtml" icon="fa fa-angle-double-right"
-										rendered="#{loginMB.userMB.telaLiberadaFCL}" />
-									<p:menuitem value="Solitação DTC/DTA - LCL" outcome="/pages/publico/cadastros/cadastroLCL.xhtml" icon="fa fa-angle-double-right"
-										rendered="#{loginMB.userMB.telaLiberadaLCL}" />
-									<p:menuitem value="Programação Navio" outcome="/pages/publico/cadastros/programacaoNavio.xhtml" icon="fa fa-angle-double-right"
-										rendered="#{loginMB.userMB.telaLiberadaProgramacaoNavio}" />
-								</p:submenu>
-								<p:submenu label="Consulta" icon="ui-icon-search">
+                      		  
 									<p:menuitem value="Processos" outcome="/pages/publico/consultas/consultarProcessos.xhtml" icon="fa fa-angle-double-right"
 										rendered="#{loginMB.userMB.telaLiberadaConsultaProcesso}" />
-								</p:submenu>
+							
+                           <p:submenu label="Agendamento" icon="fa fa-angle-double-down">
+							<p:menuitem value="Programação Navio" outcome="/pages/publico/cadastros/programacaoNavio.xhtml" icon="fa fa-angle-double-right"
+										rendered="#{loginMB.userMB.telaLiberadaProgramacaoNavio}" />
 				
 							</p:submenu>
+								<p:submenu label="Solicitações">
+									<p:menuitem value="DTC/DTA - FCL" outcome="/pages/publico/cadastros/cadastroDtcDta.xhtml" icon="fa fa-angle-double-right"
+										rendered="#{loginMB.userMB.telaLiberadaFCL}" />
+									<p:menuitem value="DTC/DTA - LCL" outcome="/pages/publico/cadastros/cadastroLCL.xhtml" icon="fa fa-angle-double-right"
+										rendered="#{loginMB.userMB.telaLiberadaLCL}" />
+									
+								</p:submenu>
+								
 				
 							<p:submenu label="Cadastro - Usuários">
 								<p:menuitem value="Usuários CLIF" outcome="/pages/privado/usuario/listarUsuarios.xhtml" icon="ui-icon-person" rendered="#{userMB.admin}" />
