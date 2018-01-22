@@ -1,60 +1,68 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui"
-      lang="en">
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" lang="en">
 
-    <h:head>	
-        <f:facet name="first">
-            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
-            <meta name="apple-mobile-web-app-capable" content="yes" />
-        </f:facet>
-        <link rel="shortcut icon" type="image/x-icon" href="resources/images/clif_ico.png" />
-        <title><ui:insert name="title">Agendamento</ui:insert></title>
-        <h:outputScript name="js/nanoscroller.js" library="verona-layout" />
-        <h:outputScript name="js/layout.js" library="verona-layout" />
-        <h:outputStylesheet library="css" name="estilos.css" />
-        <ui:insert name="head"/>
+<h:head>
+	<f:facet name="first">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta name="viewport"
+			content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+	</f:facet>
+	<link rel="shortcut icon" type="image/x-icon"
+		href="resources/images/clif_ico.png" />
+	<title><ui:insert name="title">Agendamento</ui:insert></title>
+	<h:outputScript name="js/nanoscroller.js" library="verona-layout" />
+	<h:outputScript name="js/layout.js" library="verona-layout" />
+	<h:outputStylesheet library="css" name="estilos.css" />
+	<h:outputStylesheet library="css" name="estilos.css" />
+	<h:outputScript library="js" name="scripts.js" />
+	<h:outputScript library="js" name="calendar.js" />
+	<ui:insert name="head" />
 
-    </h:head>
+</h:head>
 
-    <h:body styleClass="main-body">
-        <div class="layout-wrapper layout-menu-horizontal">
-            <ui:include src="./topbar.xhtml" />
-        
-            <div class="layout-content">
-            <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+<h:body styleClass="main-body">
+	<div class="layout-wrapper layout-menu-horizontal">
+		<ui:include src="./topbar.xhtml" />
 
-			<p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="true" header="Processando"
-				appendTo="@(body)" height="50" width="248"
+		<div class="layout-content">
+			<p:ajaxStatus onstart="PF('statusDialog').show()"
+				onsuccess="PF('statusDialog').hide()" />
+
+			<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
+				closable="false" resizable="false" showHeader="true"
+				header="Processando" appendTo="@(body)" height="50" width="248"
 				style="opacity: 1 !important;
 			                 height: 30px !important;
 			                 width: 248px !important;">
 				<h:graphicImage library="images" name="processando.gif" />
 			</p:dialog>
-                <ui:insert name="conteudo_pg_principal"/>
-                
-            </div>
-            
-            <ui:include src="./footer.xhtml" />
-        </div>
-        
-        <p:ajaxStatus style="width:32px;height:32px;position:fixed;right:7px;bottom:7px">
-           <f:facet name="start">
-               <i class="fa fa-circle-o-notch fa-spin ajax-loader" aria-hidden="true"></i>
-           </f:facet>
+			<ui:insert name="conteudo_pg_principal" />
 
-           <f:facet name="complete">
-               <h:outputText value="" />
-           </f:facet>
-       </p:ajaxStatus>
-        
-        <h:outputStylesheet name="css/nanoscroller.css" library="verona-layout" />
-        <h:outputStylesheet name="css/layout-blue.css" library="verona-layout" />
-    </h:body>
+		</div>
+
+		<ui:include src="./footer.xhtml" />
+	</div>
+
+	<p:ajaxStatus
+		style="width:32px;height:32px;position:fixed;right:7px;bottom:7px">
+		<f:facet name="start">
+			<i class="fa fa-circle-o-notch fa-spin ajax-loader"
+				aria-hidden="true"></i>
+		</f:facet>
+
+		<f:facet name="complete">
+			<h:outputText value="" />
+		</f:facet>
+	</p:ajaxStatus>
+
+	<h:outputStylesheet name="css/nanoscroller.css" library="verona-layout" />
+	<h:outputStylesheet name="css/layout-blue.css" library="verona-layout" />
+</h:body>
 
 </html>

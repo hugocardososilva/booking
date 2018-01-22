@@ -44,10 +44,10 @@
 
 			</p:outputPanel>
 		</f:facet>
-		<p:column  style="width:20px">
-			<p:rowToggler />
+		<p:column  style="width:40px">
+			<p:rowToggler  />
 		</p:column>
-		<p:column id="columEditar" sortBy="${item.id}" headerText="#{bundle.editar}" width="30">
+		<p:column id="columEditar" sortBy="${item.id}" headerText="#{bundle.editar}" width="40">
 			<p:commandLink id="btnEditar" actionListener="#{consultaProcessosBean.editarEntidadeEdicaoBL(item)}" ajax="false">
 				<h:outputText value="#{item.id}"/>
 			</p:commandLink>
@@ -66,25 +66,23 @@
 		<p:column id="columnAVIO" sortBy="#{item.programacaoNavio.navio}" headerText="#{bundle.cadastroBLNavio}">
 			<h:outputText value="#{item.programacaoNavio.navio}" />
 		</p:column>
+		<p:column id="anexos" headerText="Anexos" style="width:60px" exportable="false">
+			<p:commandButton id="btnAnexos" actionListener="#{consultaProcessosBean.instanciarEntidadeAnexos(item)}" ajax="false" icon="fa fa-list-ul">
+				<p:tooltip for="btnAnexos" value="#{bundle.anexo}" showEffect="clip" hideEffect="explode" />
+			</p:commandButton>
+		</p:column>
 		
-		<p:column headerText="Status"   style="width:60px">
-			<c:choose>					
-			 <c:when test="#{item.cadastroBL.statusBLEnum.codigo eq 1}">
-				<p:commandButton type="button" style="width:30px" styleClass="green-btn raised-btn rounded-btn fa fa-exclamation" />
-			</c:when>
-			<c:when test="#{item.cadastroBL.statusBLEnum.codigo eq 2 }">
-				<p:commandButton type="button" icon="ui-icon-check" style="width:30px" styleClass="green-btn raised-btn rounded-btn" />
-			</c:when>
-			<c:when test="#{item.cadastroBL.statusBLEnum.codigo eq 3}">
-				<p:commandButton type="button" style="width:30px" styleClass="green-btn raised-btn rounded-btn fa fa-exclamation" />
-			</c:when>
-			<c:when test="#{item.cadastroBL.statusBLEnum.codigo eq 4 }">
-				<p:commandButton type="button" icon="ui-icon-check" style="width:30px" styleClass="green-btn raised-btn rounded-btn" />
-			</c:when>
-			 <c:otherwise>
-			 <h:outputText value="#{item.cadastroBL.statusBLEnum.codigo}"/>
-			 </c:otherwise>
-			</c:choose>
+		<p:column headerText="Status" style="width:60px">
+				<p:commandButton rendered="#{item.cadastroBL.statusBLEnum.codigo eq 0 }" type="button" icon="ui-icon-check" style="width:30px" styleClass="green-btn raised-btn rounded-btn" />
+				<p:commandButton rendered="#{item.cadastroBL.statusBLEnum.codigo eq 1}" type="button" icon="ui-icon-notice" style="width:30px" styleClass="orange-btn raised-btn rounded-btn " />
+			
+				<p:commandButton rendered="#{item.cadastroBL.statusBLEnum.codigo eq 2 }" type="button" icon="ui-icon-check" style="width:30px" styleClass="green-btn raised-btn rounded-btn" />
+			
+				<p:commandButton rendered="#{item.cadastroBL.statusBLEnum.codigo eq 3}" icon="ui-icon-notice" type="button" style="width:30px" styleClass="orange-btn raised-btn rounded-btn " />
+			
+				<p:commandButton rendered="#{item.cadastroBL.statusBLEnum.codigo eq 4 }" type="button" icon="ui-icon-check" style="width:30px" styleClass="green-btn raised-btn rounded-btn" />
+			
+			
 		</p:column>
 		
 		
@@ -122,6 +120,8 @@
 			
 			<h:outputText styleClass="label-right" value="Anuência Mapa:"/>
 			<h:outputText value="#{consultaProcessosBean.anuenciaMapaSimNao(item)}" />
+			
+			
 			
 		
 		

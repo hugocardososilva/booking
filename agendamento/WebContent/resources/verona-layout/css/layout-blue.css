@@ -985,10 +985,11 @@ body {
         .layout-wrapper .topbar #menu-button.menu-button-active span:before {
           content: ""; }
   .layout-wrapper .topbar .logo {
-    width: 40px;
+    width: 110px;
     display: inline-block;
     vertical-align: middle;
-    margin-left: 16px; }
+    margin : 15px;
+     }
   .layout-wrapper .topbar .app-name {
     display: inline-block;
     font-size: 28px;
@@ -1147,7 +1148,7 @@ body {
       box-sizing: border-box; }
       .layout-wrapper .topbar .layout-menu-wrapper ul li > a {
         position: relative;
-        color: #bfd0fc;
+        color: #fff;
         text-decoration: none;
         padding: 12px 14px;
         display: block;
@@ -1317,11 +1318,12 @@ body {
         .layout-wrapper.layout-menu-horizontal .topbar .layout-menu-wrapper .nano .nano-pane {
           display: none !important; }
       .layout-wrapper.layout-menu-horizontal .topbar .layout-menu-wrapper .layout-menu-container {
-        padding-left: 32px; }
+        padding-left: 132px;
+        font-size:125%; }
         .layout-wrapper.layout-menu-horizontal .topbar .layout-menu-wrapper .layout-menu-container .layout-menu > li {
           display: inline-block;
           position: relative;
-          min-width: 100px; }
+          min-width: 200px; }
           .layout-wrapper.layout-menu-horizontal .topbar .layout-menu-wrapper .layout-menu-container .layout-menu > li.active-menuitem > a:hover {
             border-color: transparent; }
           .layout-wrapper.layout-menu-horizontal .topbar .layout-menu-wrapper .layout-menu-container .layout-menu > li > a {
@@ -1408,7 +1410,7 @@ body {
               display: none;
               padding-left: 0; }
   .layout-wrapper.layout-menu-horizontal .layout-content {
-    padding-top: 117px; } }
+    padding-top: 160px; } }
 @media (max-width: 640px) {
   .layout-wrapper .topbar #user-display span {
     display: none; } }

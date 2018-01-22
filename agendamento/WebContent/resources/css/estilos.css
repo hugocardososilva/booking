@@ -22,3 +22,15 @@
 	
 	font-size: 36px;
 }
+body .ui-datatable .ui-datatable-data > tr td{
+	
+}
+.layout-wrapper .topbar #user-display .username{
+	margin-top:10px!important;
+}
+.layout-content{
+	min-height: 550px;
+}
+#panel-titulo{
+	padding: 20px 0;
+}
