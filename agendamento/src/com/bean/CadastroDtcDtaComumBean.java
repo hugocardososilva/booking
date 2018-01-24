@@ -1538,7 +1538,7 @@ public class CadastroDtcDtaComumBean extends AbstractMB {
 	}
 
 	public String anuenciaMapaSimNao(CadastroDTCDTA item) {
-		String valor = "NÃ£o";
+		String valor = "Não";
 
 		CadastroBL bl = item.getCadastroBL();
 

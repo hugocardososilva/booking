@@ -1,3 +1,5 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml"
@@ -7,6 +9,7 @@
 
 
 	<ui:define name="conteudo_pg_principal">
+	 <f:view contentType="text/html; charset=ISO-8859-1"> 
 		<h:form id="frmListarPrincipal" styleClass="body_teste">
 			<p:panelGrid id="panelTitulo" columns="1" layout="grid" columnClasses="ui-grid-col-12" styleClass="ui-panelgrid-blank" >
 				<h1><h:outputText value="Processos" styleClass="estiloTituloTela" /></h1>
@@ -40,6 +43,6 @@
 		<diaLogGenerico:dialogEnvioEmail bean="#{consultaProcessosBean}" id="envioEmail" />
 		<consultar:dialogStatusContainer id="dialogStatusContainer" />
 		<diaLogGenerico:dialogNcmLista bean="#{consultaProcessosBean}" id="listaNCM" />
-
+	</f:view>
 	</ui:define>
 </ui:composition>

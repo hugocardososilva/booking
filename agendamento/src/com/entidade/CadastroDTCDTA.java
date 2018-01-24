@@ -325,7 +325,7 @@ public class CadastroDTCDTA implements ICamposComunsBLDtcDta {
 	private CadastroRepresentante representante;
 
 	public String getDeferimentoSimNao() {
-		String valor = "NÃ£o";
+		String valor = "Não";
 
 		if (deferido) {
 			valor = "Sim";
