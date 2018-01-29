@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" xmlns:cc="http://java.sun.com/jsf/composite"
+	xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:composite="http://java.sun.com/jsf/composite">
+
+<!-- INTERFACE -->
+<composite:interface>
+</composite:interface>
+
+<!-- IMPLEMENTATION -->
+<composite:implementation>
+	<div class="card card-w-title">
+	<h3>Cadastro de Serviços</h3>
+	<p:panelGrid id="panel_principal"  columns="1" styleClass="form-group ui-panelgrid-blank" layout="grid">
+		
+		<p:outputLabel for="cadNome" value="Nome"/>
+		<p:inputText size="100" id="cadNome" style="margin-bottom:10px;" value="#{servicoBean.entidadeServico.nome}"/>
+		<p:outputLabel for="cadDesc" value="Descrição"/>
+		<p:inputTextarea cols="100" id="cadDesc" style="margin-bottom:10px;" value="#{servicoBean.entidadeServico.descricao}"/>
+		
+		<p:fieldset legend="Validações" style="margin-bottom:20px">
+			<p>
+			 <p:selectBooleanCheckbox id="cadValNCM"  value="#{servicoBean.entidadeServico.validarNCM}" />
+	         <p:spacer width="10"/>
+	         <p:outputLabel for="cadValNCM" value="Validar NCM" />
+	         </p>
+	       <p>  
+	         <p:selectBooleanCheckbox id="cadValDem" value="#{servicoBean.entidadeServico.validarDemurrage}" />
+	         <p:spacer width="10"/>
+	         <p:outputLabel for="cadValDem" value="Validar Demurrage" />
+	        </p> 
+         <p:fieldset legend="Janela de Capacidade de Atendimento" style="margin-bottom:20px">
+         	 <p:selectBooleanCheckbox id="cadJanCap"   value="#{servicoBean.entidadeServico.janelaCapacidade}" >
+         	 	 <p:ajax update="cadUnMed" listener="#{servicoBean.ativarUnJanelaCapacidade}" />
+         	 </p:selectBooleanCheckbox>
+         	 <p:spacer width="10"/>
+	         <p:outputLabel for="cadJanCap" value="Utilizar Janela de Capacidade" />
+	          <p:spacer height="20"/>
+	         <p:selectOneRadio id="cadUnMed" disabled="#{!servicoBean.entidadeServico.janelaCapacidade}" value="#{servicoBean.entidadeServico.unMedidaJanela}" layout="responsive" columns="4">
+	         	<f:selectItem itemLabel="Por dia" itemValue="D" />
+	         	<f:selectItem itemLabel="Por hora" itemValue="H" />
+	         </p:selectOneRadio>
+         </p:fieldset>			
+		</p:fieldset>
+
+		
+
+		<p:toolbar>
+			<f:facet name="left">
+			<p:commandButton value="Salvar" ajax="true"
+					update="@all" icon="fa fa-floppy-o" id="btSalvar"
+					 action="#{servicoBean.incluirEntidade}" />
+			</f:facet>
+		</p:toolbar>
+
+
+	</p:panelGrid>
+	</div>
+
+</composite:implementation>
+
+</html>

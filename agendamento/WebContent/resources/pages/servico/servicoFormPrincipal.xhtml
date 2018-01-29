@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" xmlns:cc="http://java.sun.com/jsf/composite"
+	xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:composite="http://java.sun.com/jsf/composite">
+
+<!-- INTERFACE -->
+<composite:interface>
+	<composite:attribute name="id"></composite:attribute>
+</composite:interface>
+
+<!-- IMPLEMENTATION -->
+<composite:implementation>
+
+		<p:commandButton id="idNovaEntidade" icon="fa fa-plus" value="Novo Serviço" action="#{servicoBean.novaEntidade}" update="@all" />
+		
+		
+		
+		<p:panel styleClass="esconderBorda">
+		<p:dataTable id="tbListarEntidade" value="#{servicoBean.lazyModel}" var="item" emptyMessage="#{bundle.noRecords}" paginator="true"
+		rows="10" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+		currentPageReportTemplate="Total de {totalRecords} registros - Página: {currentPage} de {totalPages} " rowsPerPageTemplate="10,20,30,40,50"
+		lazy="true" paginatorPosition="bottom" reflow="true">
+
+		
+
+		<p:column id="idCodigo" headerText="Código" width="60">
+			<p:commandLink id="btnEditar" actionListener="#{servicoBean.editarEntidade(item)}" ajax="false" icon="fa fa-pencil">
+			<h:outputText value="#{item.id}" />
+			</p:commandLink>
+		</p:column>
+		<p:column id="idDescricao" headerText="Descrição">
+			<h:outputText value="#{item.nome} - #{item.descricao}" />
+		</p:column>
+		<p:column id="idCodNCM" headerText="Validar NCM">
+			<h:outputText value="#{item.codigoNCM}" />
+		</p:column>
+		<p:column id="idJanelaCapacidade" headerText="Utilizar Agendamento">
+			<h:outputText value="#{item.janelaCapacidade}" />
+		</p:column>
+			<p:column id="idValidarDemurrage" headerText="Alerta Demurrage">
+			<h:outputText value="#{item.validarDemurrage}" />
+		</p:column>
+
+		
+
+
+	</p:dataTable>
+	</p:panel>
+
+</composite:implementation>
+
+</html>
