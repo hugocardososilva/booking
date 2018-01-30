@@ -26,7 +26,9 @@
 		
 
 		<p:column id="idCodigo" headerText="Código" width="60">
-			<p:commandLink id="btnEditar" actionListener="#{servicoBean.editarEntidade(item)}" ajax="false" icon="fa fa-pencil">
+			<p:commandLink id="btnEditar" action="#{servicoBean.editarEntidade}" update="@all">
+			<f:setPropertyActionListener value="#{item}"
+					target="#{servicoBean.entidadeServico}" />
 			<h:outputText value="#{item.id}" />
 			</p:commandLink>
 		</p:column>
@@ -37,10 +39,17 @@
 			<h:outputText value="#{item.codigoNCM}" />
 		</p:column>
 		<p:column id="idJanelaCapacidade" headerText="Utilizar Agendamento">
-			<h:outputText value="#{item.janelaCapacidade}" />
+			
+			<span class="#{item.janelaCapacidade? 'message-from' : 'message-own'}">
+			<h:outputText value="#{item.janelaCapacidade? 'Sim' : 'Não'}" />
+			</span>
+			
 		</p:column>
+			
 			<p:column id="idValidarDemurrage" headerText="Alerta Demurrage">
-			<h:outputText value="#{item.validarDemurrage}" />
+			<span class="#{item.validarDemurrage? 'message-from' : 'message-own'}">
+			<h:outputText value="#{item.validarDemurrage? 'Sim' : 'Não'}" />
+			</span>
 		</p:column>
 
 		

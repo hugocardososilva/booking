@@ -48,8 +48,14 @@ public class ServicoBean extends AbstractMB implements IGenericBean {
 		return lazyModel;
 	}
 	
-	public void editarEntidade(Servico servico) {
+	public void editarEntidade() {
 		// TO-do rotina para editar entidade
+		
+		
+		
+		setControlarFormCadastrar(true);
+		setControlarFormEditar(true);
+		setControlarFormListar(false);
 	}
 	public void novaEntidade() {
 		//TO-do rotina para uma nova entidade
@@ -68,19 +74,40 @@ public class ServicoBean extends AbstractMB implements IGenericBean {
 	public void incluirEntidade() {
 		try {
 			getServicoRN().incluir(entidadeServico);
-			
+
+			JSFMessageUtil.adicionarMensagemSucesso("Serviço Cadastrado com sucesso.");
+			setControlarFormCadastrar(false);
+			setControlarFormEditar(false);
+			setControlarFormListar(true);
 			
 			
 		}catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
 			JSFMessageUtil.adicionarMensagemErro("Não foi possível adicionar o serviço");
-		}finally {
-			JSFMessageUtil.adicionarMensagemSucesso("Serviço Cadastrado com sucesso.");
+		
+		}
+	}
+	public void alterarEntidade() {
+		try {
+			getServicoRN().alterar(entidadeServico);
 			setControlarFormCadastrar(false);
 			setControlarFormEditar(false);
 			setControlarFormListar(true);
+			JSFMessageUtil.adicionarMensagemSucesso("Serviço Editado com sucesso.");
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			JSFMessageUtil.adicionarMensagemErro("Não foi possível editar o serviço");
 		}
+		
+	}
+	public void voltarParaListagem() {
+		setEntidadeServico(null);
+		entidadeServico = new Servico();
+		setControlarFormCadastrar(false);
+		setControlarFormEditar(false);
+		setControlarFormListar(true);
 	}
 	
 	public UserMB getUserMB() {

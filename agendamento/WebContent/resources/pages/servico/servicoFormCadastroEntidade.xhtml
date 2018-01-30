@@ -16,7 +16,10 @@
 	<p:panelGrid id="panel_principal"  columns="1" styleClass="form-group ui-panelgrid-blank" layout="grid">
 		
 		<p:outputLabel for="cadNome" value="Nome"/>
-		<p:inputText size="100" id="cadNome" style="margin-bottom:10px;" value="#{servicoBean.entidadeServico.nome}"/>
+		<p:inputText size="100" id="cadNome" required="true" style="margin-bottom:10px;" value="#{servicoBean.entidadeServico.nome}">
+			
+		</p:inputText>
+		
 		<p:outputLabel for="cadDesc" value="Descrição"/>
 		<p:inputTextarea cols="100" id="cadDesc" style="margin-bottom:10px;" value="#{servicoBean.entidadeServico.descricao}"/>
 		
@@ -50,8 +53,16 @@
 		<p:toolbar>
 			<f:facet name="left">
 			<p:commandButton value="Salvar" ajax="true"
-					update="@all" icon="fa fa-floppy-o" id="btSalvar"
+					update="@all" icon="fa fa-floppy-o" rendered="#{!servicoBean.controlarFormEditar}" id="btSalvar"
 					 action="#{servicoBean.incluirEntidade}" />
+			
+			<p:commandButton value="Editar" ajax="true"
+					update="@all" icon="fa fa-floppy-o" rendered="#{servicoBean.controlarFormEditar}" id="btEditar"
+					 action="#{servicoBean.alterarEntidade}" />
+			<p:spacer width="20"/>		 
+			<p:commandButton value="Voltar" ajax="true"
+					update="@all" icon="fa fa-undo" styleClass="orange-btn" id="btVoltar"
+					 action="#{servicoBean.voltarParaListagem}" />
 			</f:facet>
 		</p:toolbar>
 
