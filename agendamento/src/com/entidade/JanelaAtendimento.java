@@ -23,12 +23,17 @@ import org.hibernate.envers.Audited;
 @Entity
 @Audited
 @Table(name="JANELA_ATENDIMENTO")
-public class JanelaAtendimento implements Serializable{
+public class JanelaAtendimento implements Serializable, Cloneable{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	public final static String sql= "select j from JanelaAtendimento j";
+	public final static String sqlCount= "select COUNT(j) from JanelaAtendimento j";
+	public final static String DATA_CAMPO = "data";
+	public final static String sqlCountFiltroData= "select COUNT(j) from JanelaAtendimento j where j.data = :data";
+	
 	
 	@Id
 	@SequenceGenerator(name = "SEQ_JANELA_ATENDIMENTO_ID", sequenceName = "SEQ_JANELA_ATENDIMENTO_ID")
@@ -108,7 +113,21 @@ public class JanelaAtendimento implements Serializable{
 		// TODO Auto-generated method stub
 		return id;
 	}
-	
+	public JanelaAtendimento clonar() {
+		 try {
+		        return (JanelaAtendimento)this.clone();
+		      }
+		      catch (CloneNotSupportedException ex) {
+		        ex.printStackTrace();
+		        return null;
+		      }
+	}
+	public void addServicoJanelaAtendimento(ServicoJanelaAtendimento servicoJanelaAtendimento) {
+		this.servicoJanelaAtendimentos.add(servicoJanelaAtendimento);
+	}
+	public void removeServicoJanelaAtendimento(ServicoJanelaAtendimento servicoJanelaAtendimento) {
+		this.servicoJanelaAtendimentos.remove(servicoJanelaAtendimento);
+	}
 	
 	
 

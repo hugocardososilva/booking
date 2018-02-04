@@ -343,8 +343,9 @@
 					<p:ajax event="change" listener="#{cadastroLCLBean.mostrarInformacaoTemperatura()}" update="temperatura" />
 				</p:selectOneMenu>
 
-				<p:inputMask id="temperatura" placeholder="Temperatura..." value="#{cadastroLCLBean.entidadeDTCDTA.temperatura}" mask="99" style="width:40%"
+				<p:inputText id="temperatura" placeholder="Temperatura..." value="#{cadastroLCLBean.entidadeDTCDTA.temperatura}" mask="99" style="width:40%"
 					disabled="#{cadastroLCLBean.mostrarInformacaoTemperatura()}" />
+					<p:keyFilter for="temperatura" mask="num" /> 
 			</p:panelGrid>
 
 			<p:outputLabel value="#{bundle.cadastroEntreposto}" for="tipoEntrePosto" />

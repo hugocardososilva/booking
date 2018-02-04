@@ -40,14 +40,14 @@
 		</p:column>
 		<p:column id="idJanelaCapacidade" headerText="Utilizar Agendamento">
 			
-			<span class="#{item.janelaCapacidade? 'message-from' : 'message-own'}">
+			<span class="#{item.janelaCapacidade? 'label-sim' : 'label-nao'}">
 			<h:outputText value="#{item.janelaCapacidade? 'Sim' : 'Não'}" />
 			</span>
 			
 		</p:column>
 			
 			<p:column id="idValidarDemurrage" headerText="Alerta Demurrage">
-			<span class="#{item.validarDemurrage? 'message-from' : 'message-own'}">
+			<span class="#{item.validarDemurrage? 'label-sim' : 'label-nao'}">
 			<h:outputText value="#{item.validarDemurrage? 'Sim' : 'Não'}" />
 			</span>
 		</p:column>

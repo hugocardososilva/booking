@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cc="http://java.sun.com/jsf/composite"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:composite="http://java.sun.com/jsf/composite">
+
+<!-- INTERFACE -->
+<composite:interface>
+</composite:interface>
+
+<!-- IMPLEMENTATION -->
+<composite:implementation>
+	<div class="card card-w-title">
+		<h3>Agendamento - Janela de Atendimento</h3>
+		<h4>
+			Dia de Atendimento:
+			<h:outputText
+				value="#{janelaAtendimentoBean.entidadeJanelaAtendimento.data}">
+				<f:convertDateTime locale="pt,BR" pattern="dd/MM/yyyy">
+				</f:convertDateTime>
+			</h:outputText>
+		</h4>
+
+
+
+
+		<p:fieldset legend="Serviço" style="margin-bottom:20px">
+
+			<p:panelGrid columns="1" styleClass="form-group ui-panelgrid-blank"
+				layout="grid">
+				<p:outputLabel value="Serviço" for="dd" />
+				<p:autoComplete id="dd" dropdown="true" size="100"
+					value="#{janelaAtendimentoBean.servico}" var="item"
+					itemLabel="#{item}" itemValue="#{item}"
+					update="#{p:component('panelCapacidade')}"
+					completeMethod="#{janelaAtendimentoBean.pesquisaServico}">
+					<p:ajax event="itemSelect"
+						listener="#{janelaAtendimentoBean.changeSelectServicos}"
+						update="#{p:component('panelCapacidade')}" />
+				</p:autoComplete>
+			</p:panelGrid>
+
+
+
+			<p:fieldset legend="Período de Atendimento"
+				style="margin-bottom:20px">
+
+				<p:outputLabel for="idInicioServico" value="Início:" />
+				<p:calendar id="idInicioServico"
+					value="#{janelaAtendimentoBean.servicoJanelaAtendimento.inicio}"
+					pattern="HH:mm" timeOnly="true" showOn="button" />
+
+				<p:spacer width="50" />
+
+				<p:outputLabel for="idFimServico" value="Término:" />
+				<p:calendar id="idFimServico"
+					value="#{janelaAtendimentoBean.servicoJanelaAtendimento.fim}"
+					pattern="HH:mm" timeOnly="true" showOn="button" />
+
+			</p:fieldset>
+			<p:panelGrid id="panelCapacidade" columns="1"
+				styleClass="form-group ui-panelgrid-blank" layout="grid">
+
+				<p:outputLabel for="idCapacidadeHora" value="Capacidade por Hora:"
+					rendered="#{janelaAtendimentoBean.servico.unMedidaJanela eq 'H'.charAt(0)}" />
+				<p:calendar id="idCapacidadeHora"
+					value="#{janelaAtendimentoBean.servicoJanelaAtendimento.capacidadeHora}"
+					rendered="#{janelaAtendimentoBean.servico.unMedidaJanela eq 'H'.charAt(0)}"
+					pattern="HH:mm" timeOnly="true" showOn="button" required="true" />
+
+				<p:outputLabel for="idCapacidadeDia" value="Capacidade por Dia:"
+					rendered="#{janelaAtendimentoBean.servico.unMedidaJanela eq 'D'.charAt(0)}" />
+				<p:inputNumber id="idCapacidadeDia"
+					value="#{janelaAtendimentoBean.servicoJanelaAtendimento.capacidadeDia}"
+					rendered="#{janelaAtendimentoBean.servico.unMedidaJanela eq 'D'.charAt(0)}"
+					required="true" />
+			</p:panelGrid>
+
+			<p:toolbar>
+				<f:facet name="left">
+					<p:commandButton value="Salvar" ajax="true" update="@all"
+						icon="#{bundle.iconSalvar}" id="btSalvar"
+						action="#{janelaAtendimentoBean.incluirServicoJanelaAtendimento}" />
+
+
+					<p:spacer width="20" />
+					<p:commandButton value="Voltar" ajax="false" update="@all"
+						icon="fa fa-undo" styleClass="orange-btn" id="btVoltar"
+						action="#{janelaAtendimentoBean.voltarParaListagem}" />
+				</f:facet>
+			</p:toolbar>
+
+		</p:fieldset>
+		<p:dataTable var="item"
+			value="#{janelaAtendimentoBean.entidadeJanelaAtendimento.servicoJanelaAtendimentos}"
+			style="margin-bottom:40px">
+
+			<p:column headerText="Servico" sortBy="#{item.servico.nome}">
+				<h:outputText value="#{item.servico.nome}" />
+			</p:column>
+			<p:column headerText="Início" sortBy="#{item.inicio}" width="50">
+				<h:outputText value="#{item.inicio}">
+					<f:convertDateTime locale="pt,BR" pattern="HH:mm" />
+				</h:outputText>
+			</p:column>
+			<p:column headerText="Fim" sortBy="#{item.fim}" width="50">
+				<h:outputText value="#{item.fim}">
+					<f:convertDateTime locale="pt,BR" pattern="HH:mm" />
+				</h:outputText>
+			</p:column>
+			<p:column headerText="Capacidade">
+				<h:outputText value="#{item.capacidadeHora}"
+					rendered="#{item.servico.unMedidaJanela eq 'H'.charAt(0)}">
+					<f:convertDateTime locale="pt,BR" pattern="HH:mm" />
+				</h:outputText>
+				<h:outputText value="#{item.capacidadeDia}"
+					rendered="#{item.servico.unMedidaJanela eq 'D'.charAt(0)}" />
+			</p:column>
+			<p:column headerText="Tipo">
+				<h:outputText value="Por Hora"
+					rendered="#{item.servico.unMedidaJanela eq 'H'.charAt(0)}">
+					
+				</h:outputText>
+				<h:outputText value="Por Dia"
+					rendered="#{item.servico.unMedidaJanela eq 'D'.charAt(0)}" />
+			</p:column>
+			<p:column headerText="Capacidade Periodo">
+				<h:outputText value="#{item.capacidadePeriodo}" />
+			</p:column>
+			<p:column headerText="Excluir">
+				<p:commandLink id="btnExcluirServ"
+					action="#{janelaAtendimentoBean.excluirServicoJanelaAtendimento}" update="@all">
+					<f:setPropertyActionListener value="#{item}"
+							target="#{janelaAtendimentoBean.servicoJanelaAtendimento}" />
+							<p:confirm header="Confirmar Exclusão" message="Tem certeza que deseja excluir o registro?" 
+						icon="ui-icon-alert" />
+					<h:outputText value="Excluir" />
+				</p:commandLink>
+			</p:column>
+			<p:column headerText="Duplicar">
+				<p:commandLink id="btnDuplicarServ"
+					action="#{janelaAtendimentoBean.duplicarServicoJanelaAtendimento}" update="@all">
+					<f:setPropertyActionListener value="#{item}"
+							target="#{janelaAtendimentoBean.servicoJanelaAtendimento}" />
+					<h:outputText value="Duplicar" />
+				</p:commandLink>
+			</p:column>
+
+
+		</p:dataTable>
+
+
+
+
+
+
+	</div>
+
+</composite:implementation>
+
+</html>

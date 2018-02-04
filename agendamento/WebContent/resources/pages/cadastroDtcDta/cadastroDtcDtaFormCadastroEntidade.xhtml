@@ -312,8 +312,9 @@
 				<p:ajax event="change" listener="#{cadastroDtcDtaBean.mostrarInformacaoTemperatura()}" update="frmCadastrarEntidade:formCadEntidadeBL:temperatura" />
 			</p:selectOneMenu>
 
-			<p:inputMask id="temperatura" placeholder="Temperatura..." value="#{cadastroDtcDtaBean.entidade.temperaturaString}" style="width:40%"
-				disabled="#{cadastroDtcDtaBean.mostrarInformacaoTemperatura()}" />
+			<p:inputText id="temperatura" placeholder="Temperatura..." value="#{cadastroDtcDtaBean.entidade.temperaturaString}" style="width:40%"
+				 disabled="#{cadastroDtcDtaBean.mostrarInformacaoTemperatura()}" />
+				 <p:keyFilter for="temperatura" mask="num" /> 
 		</p:panelGrid>
 
 		<p:outputLabel for="tipoEntrePosto" value="#{bundle.cadastroEntreposto}" />

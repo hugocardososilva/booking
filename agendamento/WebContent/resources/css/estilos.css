@@ -34,3 +34,22 @@ body .ui-datatable .ui-datatable-data > tr td{
 #panel-titulo{
 	padding: 20px 0;
 }
+
+.label-sim{
+	background-color: #9fd037;
+	color:#fff;
+	padding: 5px;
+	border-radius: 5px;
+}
+.label-sim{
+	background-color: #9fd037;
+	color:#fff;
+	padding: 5px;
+	border-radius: 5px;
+}
+.label-nao{
+	background-color: #f18983;
+	color:#fff;
+	padding: 5px;
+	border-radius: 5px;
+}

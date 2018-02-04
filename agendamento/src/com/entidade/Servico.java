@@ -32,7 +32,7 @@ public class Servico implements Serializable {
 	private static final long serialVersionUID = 1L;
 	public final static String sql= "select s from Servico s";
 	public final static String CAMPO_NOME= "nome";
-	public final static String sql_pesquisa_autocomplete= "select s from Servico s where s.nome like :nome";
+	public final static String sql_pesquisa_autocomplete= "select s from Servico s where s.nome like :nome AND s.janelaCapacidade = true";
 	public final static String sqlCount= "select COUNT(s) from Servico s";
 	
 	@Id
@@ -169,6 +169,20 @@ public class Servico implements Serializable {
 		}
 
 		return false;
+	}
+	public void addServicoJanelaAtendimento(ServicoJanelaAtendimento servicoJanelaAtendimento) {
+		this.servicoJanelaAtendimentos.add(servicoJanelaAtendimento);
+	}
+	public void removeServicoJanelaAtendimento(ServicoJanelaAtendimento servicoJanelaAtendimento) {
+		this.servicoJanelaAtendimentos.remove(servicoJanelaAtendimento);
+	}
+
+	@Override
+	public String toString() {
+		if(nome == null) {
+			return"";
+		}
+		return  nome + " - " + descricao;
 	}
 
 	
