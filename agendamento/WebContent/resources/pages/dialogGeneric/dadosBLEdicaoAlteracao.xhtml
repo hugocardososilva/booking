@@ -236,7 +236,7 @@
 				<p:ajax event="change" listener="#{cc.attrs.bean.mostrarInformacaoTemperatura()}" update="temperatura" />
 			</p:selectOneMenu>
 
-			<p:inputMask id="temperatura" placeholder="Temperatura..." value="#{cc.attrs.bean.entidade.temperaturaString}" mask="99" style="width:40%"
+			<p:inputText id="temperatura" placeholder="Temperatura..." value="#{cc.attrs.bean.entidade.temperaturaString}" size="4" style="width:40%"
 				disabled="#{cc.attrs.bean.mostrarInformacaoTemperatura()}" />
 		</p:panelGrid>
 

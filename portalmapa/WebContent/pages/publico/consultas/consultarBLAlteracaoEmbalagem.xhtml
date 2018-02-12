@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+<h:body>
+	<p:dialog id="idDlgAlteracaoEmbEncontrada" widgetVar="dlgAlteracaoEmbEncontrada" closable="true" draggable="false" resizable="false" modal="false" appendTo="@(body)"
+		header="Alteração Embalagem Encontrada" responsive="true" position="center">
+		<h:form id="frmAlteracaoEmbEncontrada" enctype="multipart/form-data">
+
+			<p:panelGrid id="pnlAlteracaoEmbEncontrada" columns="1" layout="grid" columnClasses="ui-grid-col-6" styleClass="ui-panelgrid-blank">
+				<p:outputLabel value="#{bundle.cadastroBLEmbalagemEncontrada}"  />
+				<p:autoComplete id="acSelecionar" value="#{cadastroBLConsultaBean.embalagemEncontradaSelecionado}" var="item" itemLabel="#{item.descricao}"
+					converter="cadastroEspecieConverter" completeMethod="#{cadastroBLConsultaBean.listaCadastroEspecie}" emptyMessage="Nenhum registro encontrado"
+					itemValue="#{item}" minQueryLength="2"  >
+					<p:column>
+						<h:outputText value="#{item.abreviacao}" />
+					</p:column>
+					<p:column>
+						<h:outputText value="#{item.descricao}" />
+					</p:column>
+				</p:autoComplete>
+
+			</p:panelGrid>
+
+			<p:separator />
+
+			<p:panelGrid id="pnlAlteracaoFechar" columns="2" layout="grid" columnClasses="ui-grid-col-6,ui-grid-col-6" styleClass="ui-panelgrid-blank">
+				<p:commandButton id="idSalvarAlteracaoEmbEncontrada" icon="fa fa-check" value="#{bundle.salvar}"  action="#{cadastroBLConsultaBean.salvarAlteracao()}"
+					update=":frmListarPrincipal:tabItensConsultaBL:tbListarEntidade">
+					<p:tooltip for="idSalvarAlteracaoEmbEncontrada" value="#{bundle.salvar}" showEffect="clip" hideEffect="explode" />
+				</p:commandButton>
+
+				<p:commandButton value="Fechar" onclick="PF('dlgAlteracaoEmbEncontrada').hide();" icon="fa fa-times-circle">
+					<p:resetInput target="pnlAlteracao" />
+				</p:commandButton>
+			</p:panelGrid>
+		</h:form>
+	</p:dialog>
+
+</h:body>
+</html>

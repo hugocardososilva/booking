@@ -24,27 +24,21 @@ public class JSFMessageUtil {
 	}
 
 	public static void adicionarMensagemErro(String mensagem) {
-		setKeepMessages();
 		FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, mensagem, mensagem);
 		FacesContext contexto = FacesContext.getCurrentInstance();
 		contexto.addMessage(null, msg);
 	}
 
 	public static void adicionarMensagemSucesso(String mensagem) {
-		setKeepMessages();
 		FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, mensagem, mensagem);
 		FacesContext contexto = FacesContext.getCurrentInstance();
 		contexto.addMessage(null, msg);
 	}
 
 	public static void adicionarMensagemAlerta(String mensagem) {
-		setKeepMessages();
 		FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, mensagem, mensagem);
 		FacesContext contexto = FacesContext.getCurrentInstance();
 		contexto.addMessage(null, msg);
 	}
-	public static void setKeepMessages() {
-		FacesContext.getCurrentInstance().getExternalContext().getFlash()
-		.setKeepMessages(true);
-	}
+
 }

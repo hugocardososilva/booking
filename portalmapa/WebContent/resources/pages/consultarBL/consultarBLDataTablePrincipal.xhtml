@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" xmlns:cc="http://java.sun.com/jsf/composite"
+	xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:composite="http://java.sun.com/jsf/composite">
+
+<!-- INTERFACE -->
+<composite:interface>
+</composite:interface>
+
+<!-- IMPLEMENTATION -->
+<composite:implementation>
+	<p:dataTable id="tbListaTodosContainers" value="#{cadastroBLConsultaBean.listaBLFiscal(item)}" var="itemExpansion" rowKey="#{itemExpansion.id}"
+		reflow="true" emptyMessage="Carga solta" styleClass="borderless" rowIndexVar="rowIdx"  >
+
+		<p:column id="setaExp" style="width:0" />
+
+		<p:column id="idDescricaoBLExp" width="245">
+			<h:outputText value="#{itemExpansion.cadastroBL.descricaoBL}" />
+		</p:column>
+
+		<p:column id="idStatusExp" width="119">
+			<h:outputText value="#{itemExpansion.statusBLEnum.descricao}" />
+		</p:column>
+		<p:column id="idDescricaoContainerExp" width="180">
+			<h:outputText value="#{itemExpansion.numeroContanier}" />
+		</p:column>
+
+		<p:column id="idPaisOrigemExp" width="90">
+			<h:outputText value="#{itemExpansion.cadastroBL.paisOrigem.descricaoPais}" />
+		</p:column>
+
+		<p:column id="idPaisProcedenciaExp" width="100">
+			<h:outputText value="#{itemExpansion.cadastroBL.paisProcedencia.descricaoPais}" />
+		</p:column>
+
+		<p:column id="idTipoEmbalagemExp" width="100">
+			<h:outputText value="#{itemExpansion.cadastroBL.tipoEmbalagemEspecie.descricao}" />
+		</p:column>
+
+		<p:column id="idTipoEmbalagemEncontradaExp" width="180">
+			<!-- 			<h:outputText value="#{itemExpansion.cadastroBL.tipoEmbalagemEncontrada.descricao}"  /> -->
+		</p:column>
+
+		<p:column id="idDescricaoMercadoriaExp" width="380">
+			<h:outputText value="#{itemExpansion.cadastroBL.descricaoMercadoria}" />
+
+			<p:commandButton icon="fa fa-ellipsis-h" oncomplete="PF('dlgAlteracao').show();" title="Incluir Descrição" disabled="#{cadastroBLConsultaBean.userFiscalNaoAltera(itemExpansion)}"
+				action="#{cadastroBLConsultaBean.instanciarBLAlteracao(itemExpansion)}" update=":idDlgAlteracao" style="float:right" />
+		</p:column>
+
+		<p:column id="idRiscoExp">
+		</p:column>
+
+		<p:column id="idNcmDescExp" width="265">
+			<h:outputText value="#{itemExpansion.cadastroBL.ncm.descricaoNcm}" />
+		</p:column>
+
+		<p:column id="idInspecaoExp" width="52">
+			<p:selectBooleanCheckbox value="#{itemExpansion.inspecaoControle}" disabled="#{cadastroBLConsultaBean.validarUsuarioDespachante(null, itemExpansion)}">
+				<p:ajax listener="#{cadastroBLConsultaBean.controlarInspecaoContainer(itemExpansion)}"
+					update="tbListaTodosContainers :frmListarPrincipal:tabItensConsultaBL:tbListarEntidade" />
+			</p:selectBooleanCheckbox>
+		</p:column>
+
+		<p:column id="idLiberadoExp" width="52">
+			<p:selectBooleanCheckbox id="expLiberado" value="#{itemExpansion.liberadoControle}" disabled="#{cadastroBLConsultaBean.validarInformacaoLiberado(itemExpansion, null)}" >
+				<p:ajax listener="#{cadastroBLConsultaBean.controlarLiberadoContainer(itemExpansion)}"
+					update="tbListaTodosContainers :frmListarPrincipal:tabItensConsultaBL:tbListarEntidade" />
+				<p:tooltip for="expLiberado" value="#{cadastroBLConsultaBean.tollTipLiberado(itemExpansion, null)}" />
+			</p:selectBooleanCheckbox>
+		</p:column>
+
+		<p:column headerText="#{bundle.anexo}" exportable="false" width="50" />
+
+		<p:column headerText="Modalidade" width="50" />
+
+		<p:column id="idProdAnuenciaExp" width="20">
+		</p:column>
+
+		<p:column id="idUltimoUsuarioExp" width="135" visible="true">
+			<h:outputText value="#{cadastroBLConsultaBean.retornaUltimoUsuario(itemExpansion)}" />
+		</p:column>
+
+		<p:column id="idImportadorExp" headerText="#{bundle.importador}" width="115" toggleable="true" visible="false"/>
+		
+	</p:dataTable>
+</composite:implementation>
+
+</html>

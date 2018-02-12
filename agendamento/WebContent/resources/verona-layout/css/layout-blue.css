@@ -985,14 +985,14 @@ body {
         .layout-wrapper .topbar #menu-button.menu-button-active span:before {
           content: ""; }
   .layout-wrapper .topbar .logo {
-    width: 110px;
+    width: 70px;
     display: inline-block;
     vertical-align: middle;
     margin : 15px;
      }
   .layout-wrapper .topbar .app-name {
     display: inline-block;
-    font-size: 28px;
+    font-size: 14px;
     vertical-align: middle;
     color: #ffffff;
     margin-left: 8px;
@@ -1410,7 +1410,18 @@ body {
               display: none;
               padding-left: 0; }
   .layout-wrapper.layout-menu-horizontal .layout-content {
-    padding-top: 160px; } }
+    padding-top: 160px;
+    
+     }
+     .app-name{
+     font-size: 20px!important;
+     }
+     
+      }
 @media (max-width: 640px) {
   .layout-wrapper .topbar #user-display span {
-    display: none; } }
+    display: none; }
+    .app-name{
+    	font-size: 10px!important;
+    }
+     }

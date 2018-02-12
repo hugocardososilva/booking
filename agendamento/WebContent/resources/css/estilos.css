@@ -53,3 +53,19 @@ body .ui-datatable .ui-datatable-data > tr td{
 	padding: 5px;
 	border-radius: 5px;
 }
+body .ui-widget-header{
+	border: none;
+}
+.ui-panelgrid .ui-panelgrid-cell {
+		border: none !important;
+}
+
+body .border-header thead th{
+	border-color: #2d353c;
+}
+.ui-datatable .ui-column-filter{
+	width: 90%!important;
+}
+.ui-filter-column .hasDatepicker{
+	width: 90%!important;
+}

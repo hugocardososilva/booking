@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" template="/templates/modeloSistema.xhtml"
+	xmlns:consultarBL="http://java.sun.com/jsf/composite/pages/consultarBL"
+                xmlns:diaLogGenerico="http://java.sun.com/jsf/composite/pages/dialogGeneric">
+
+	<ui:define name="menu">
+		<ui:include src="/includes/menuPrincipal.xhtml" />
+	</ui:define>
+
+	<ui:define name="conteudo">
+		<h:form id="frmListarPrincipal">
+			<p:panelGrid id="panelTitulo" columns="3" layout="grid" columnClasses="ui-grid-col-5,ui-grid-col-6,,ui-grid-col-3"
+				styleClass="ui-panelgrid-blank">
+
+				<p:panelGrid id="panelTitulo_images" columns="5" layout="grid"
+					columnClasses="ui-grid-col-2,ui-grid-col-3,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2" styleClass="ui-panelgrid-blank" style="text-align: left">
+
+					<p:commandButton id="expandir" icon="#{cadastroBLConsultaBean.controlarImagem}" action="#{cadastroBLConsultaBean.expandirDados()}"
+						update=":frmListarPrincipal:tabItensConsultaBL:tbListarEntidade expandir" style="float:left">
+					</p:commandButton>
+
+					<h:graphicImage library="images" name="dtaAereoAmarelo.png" />
+					<h:graphicImage library="images" name="dtcLaranja.png" />
+
+					<h:graphicImage library="images" name="dtaMicAzul.png" />
+					<h:graphicImage library="images" name="dtaMaritimoVerde.png" />
+				</p:panelGrid>
+
+				<p:panelGrid id="panelTitulo_texto" columns="1" layout="grid" columnClasses="ui-grid-col-12" styleClass="ui-panelgrid-blank"
+					style="text-align: left">
+					<h:outputText value="#{bundle.consultaTela}" styleClass="estiloTituloTela" />
+				</p:panelGrid>
+
+				<p:commandButton id="atualizaInspLib" icon="fa fa-hand-o-right" value="Enviar" action="#{cadastroBLConsultaBean.envioModificaoMapa()}"
+					title="Envio" update=":frmListarPrincipal:tabItensConsultaBL:tbListarEntidade" style="float:right"
+					disabled="#{cadastroBLConsultaBean.userMB.user.acessoMapaConsulta}" rendered="#{!cadastroBLConsultaBean.userMB.user.admin}">
+					<p:tooltip for="atualizaInspLib" value="Envio..." showEffect="clip" hideEffect="explode" />
+					<p:confirm header="Envio" message="Confirma o envio dos Itens Selecionados?" icon="ui-icon-alert" />
+				</p:commandButton>
+			</p:panelGrid>
+
+			<p:growl id="message" showDetail="true" />
+
+			<consultarBL:consultarBLFormPrincipal id="tabItensConsultaBL" />
+
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+				<p:commandButton value="#{bundle.sim}" type="button" styleClass="ui-confirmdialog-yes" icon="fa fa-check" />
+				<p:commandButton value="#{bundle.nao}" type="button" styleClass="ui-confirmdialog-no" icon="fa fa-times-circle" />
+			</p:confirmDialog>
+		</h:form>
+
+		<ui:include src="/pages/publico/consultas/consultarBLAnexos.xhtml" />
+		<ui:include src="/pages/publico/consultas/consultarBLRisco.xhtml" />
+		<ui:include src="/pages/publico/consultas/consultarBLAlteracao.xhtml" />
+		<ui:include src="/pages/publico/consultas/consultarBLAlteracaoEmbalagem.xhtml" />
+		<ui:include src="/pages/publico/consultas/consultarBLDescMercadoria.xhtml" />
+		<ui:include src="/pages/publico/consultas/dialogConsultarBLLog.xhtml" />
+		<diaLogGenerico:dialogNcmLista bean="#{cadastroBLConsultaBean}" id="listaNCM" />
+		
+	</ui:define>
+</ui:composition>

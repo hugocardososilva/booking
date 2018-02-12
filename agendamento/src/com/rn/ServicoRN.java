@@ -33,6 +33,12 @@ public class ServicoRN {
 		return servico;
 	}
 	
+	public boolean verificarOutroServico() {
+		getDAO().beginTransaction();
+		boolean flag = getDAO().verificarOutroServico();
+		getDAO().closeTransaction();
+		return flag;
+	}
 	
 
 }

@@ -72,7 +72,7 @@
 
 		<diaLogGenerico:dadosBLEdicaoAlteracao bean="#{consultaProcessosBean}" />
 
-		<p:panelGrid id="panelBL_032" columns="1" layout="grid" columnClasses="ui-grid-col-6" styleClass="ui-panelgrid-blank"
+		<p:panelGrid id="panelBL_032" columns="1" layout="grid" columnClasses="ui-grid-col-6" styleClass="ui-panelgrid-blank border-header"
 			rendered="#{consultaProcessosBean.controlarDados}">
 			<p:dataTable id="tbListaTodosContanier" value="#{consultaProcessosBean.listaBLContanier}" var="item" reflow="true" emptyMessage="Nenhum registro encontrado."
 				editable="#{consultaProcessosBean.userMB.user.clif || consultaProcessosBean.userMB.user.admin}" >

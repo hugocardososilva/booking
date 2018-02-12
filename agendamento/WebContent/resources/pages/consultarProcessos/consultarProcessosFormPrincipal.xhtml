@@ -13,19 +13,26 @@
 <!-- IMPLEMENTATION -->
 <composite:implementation>
 
-	<p:dataTable id="tbListarEntidade" value="#{consultaProcessosBean.lazyModel}" var="item" emptyMessage="#{bundle.noRecords}" paginator="true"
-		rows="10" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-		currentPageReportTemplate="Total de {totalRecords} registros - Página: {currentPage} de {totalPages} " rowsPerPageTemplate="10,20,30,40,50"
-		lazy="true" paginatorPosition="bottom" reflow="true">
+			
+			
+			<p:outputPanel id="idHeader" style="text-align: left; padding-left:10px; display:none;">
+				<p:remoteCommand name="filtroTable" actionListener="#{consultaProcessosBean.filtroTabela()}" process="@this filtroGeral" update="tbListarEntidade" />
+				<p:inputText size="70" id="filtroGeral" placeholder="Pesquisar..." value="#{consultaProcessosBean.filtroGeral}"
+					onkeypress="if (event.keyCode == 13) {filtroTable(); return false; }" />
+				<p:commandButton id="btFiltroTabela" icon="fa fa-search" action="#{consultaProcessosBean.filtroTabela()}" update="tbListarEntidade"
+					title="#{bundle.pesquisar}"  />
 
-		<f:facet name="header">
-			<p:selectOneMenu id="tipoModal" value="#{consultaProcessosBean.tipoModalSelecionadoEnum}" style="float:left;width:15%;">
-				<f:selectItem id="selecao_1" itemLabel="Todos Documentos" itemValue="#{null}" />
+			</p:outputPanel>
+		
+	<p:toolbar>
+	<f:facet name="left">
+		<p:selectOneMenu id="tipoModal"   value="#{consultaProcessosBean.tipoModalSelecionadoEnum}" style="float:left;width:250px;">
+				<f:selectItem  id="selecao_1" itemLabel="Todos Documentos" itemValue="#{null}" />
 				<f:selectItems id="selecao_2" value="#{consultaProcessosBean.todosTipoModalEnum}" var="tipo" itemValue="#{tipo}" itemLabel="#{tipo.descricao}" />
 
 				<p:ajax event="change" listener="#{consultaProcessosBean.filtroTabela()}" process="@this filtroGeral tipoModal" update="tbListarEntidade" />
 			</p:selectOneMenu>
-
+			
 			<p:selectOneMenu id="lclSelecionado" value="#{consultaProcessosBean.lclSelecionado}" style="float:left;width:15%;"
 				converter="cadastroLCLContainerConverter"
 				rendered="#{consultaProcessosBean.userMB.user.admin || consultaProcessosBean.userMB.user.clif || consultaProcessosBean.userMB.user.utilizarFiltroLCL}">
@@ -34,36 +41,56 @@
 
 				<p:ajax event="change" listener="#{consultaProcessosBean.filtroTabela()}" process="@this filtroGeral lclSelecionado" update="tbListarEntidade" />
 			</p:selectOneMenu>
-
-			<p:outputPanel id="idHeader" style="text-align: left;">
-				<p:remoteCommand name="filtroTable" actionListener="#{consultaProcessosBean.filtroTabela()}" process="@this filtroGeral" update="tbListarEntidade" />
-				<p:inputText id="filtroGeral" placeholder="Pesquisar..." value="#{consultaProcessosBean.filtroGeral}"
-					onkeypress="if (event.keyCode == 13) {filtroTable(); return false; }" />
-				<p:commandButton id="btFiltroTabela" icon="fa fa-search" action="#{consultaProcessosBean.filtroTabela()}" update="tbListarEntidade"
-					title="#{bundle.pesquisar}" />
-
-			</p:outputPanel>
+		
+	
+	</f:facet>
+	  <f:facet name="right">
+	<p:commandButton ajax="false" value="Exportar">
+				 <p:dataExporter type="xls" target="tbListarEntidade"  encoding="UTF-8" fileName="dataexportprocessos" />
+			</p:commandButton>
+			 <p:commandButton id="toggler" type="button" value="Colunas" style="text-align:right; display:none;" icon="ui-icon-calculator" />
+        <p:columnToggler datasource="tbListarEntidade" trigger="toggler"   />
 		</f:facet>
-		<p:column  style="width:40px">
+	</p:toolbar>
+
+	<p:dataTable widgetVar="tbListarEntidade" id="tbListarEntidade" value="#{consultaProcessosBean.lazyModel}" var="item" emptyMessage="#{bundle.noRecords}" paginator="true"
+		rows="10" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+		currentPageReportTemplate="Total de {totalRecords} registros - Página: {currentPage} de {totalPages} " rowsPerPageTemplate="10,20,30,40,50"
+		lazy="true" paginatorPosition="bottom" reflow="true">
+
+		<f:facet name="header">
+		
+			
+		</f:facet>
+		<p:column exportable="false" toggleable="false"  style="width:40px">
 			<p:rowToggler  />
 		</p:column>
-		<p:column id="columEditar" sortBy="${item.id}" headerText="#{bundle.editar}" width="40">
+	
+		<p:column exportable="true" filterBy="#{item.numeroATI}" id="columNroATI" sortBy="#{item.numeroATI}" headerText="#{bundle.cadastroNrpATI}" width="100">
+			
 			<p:commandLink id="btnEditar" actionListener="#{consultaProcessosBean.editarEntidadeEdicaoBL(item)}" ajax="false">
-				<h:outputText value="#{item.id}"/>
+			<h:outputText value="#{item.numeroATI}" />
 			</p:commandLink>
 		</p:column>
+			
+			
 
-		<p:column id="columnDataCadastro" sortBy="#{item.dataCadastro}" headerText="#{bundle.cadastroBLData}">
+		<p:column exportable="true" filterBy="#{item.dataCadastro}" id="columnDataCadastro" sortBy="#{item.dataCadastro}" headerText="#{bundle.cadastroBLData}" width="130">
+			<f:facet name="filter">
+	    <p:calendar  pattern="dd/MM/yyyy">
+	        <p:ajax event="dateSelect"  oncomplete="PF('tbListarEntidade').filter()" />
+	    </p:calendar>
+	</f:facet>
 			<h:outputText value="#{item.dataCadastro}">
-				<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+				<f:convertDateTime pattern="dd/MM/yyyy" />
 			</h:outputText>
 		</p:column>
 
-		<p:column id="columNroATI" sortBy="#{item.numeroATI}" headerText="#{bundle.cadastroNrpATI}">
-			<h:outputText value="#{item.numeroATI}" />
+		<p:column filterBy="#{item.importador.razaoSocial}" filterMatchMode="contains" exportable="true" id="columnImportador" sortBy="#{item.importador.razaoSocial}" headerText="Importador">
+			<h:outputText value="#{item.importador.razaoSocial}" />
 		</p:column>
 
-		<p:column id="columnAVIO" sortBy="#{item.programacaoNavio.navio}" headerText="#{bundle.cadastroBLNavio}">
+		<p:column exportable="true"  filterBy="#{item.programacaoNavio.navio}" id="columnAVIO" sortBy="#{item.programacaoNavio.navio}" headerText="#{bundle.cadastroBLNavio}">
 			<h:outputText value="#{item.programacaoNavio.navio}" />
 		</p:column>
 		<p:column id="anexos" headerText="Anexos" style="width:60px" exportable="false">
@@ -72,24 +99,23 @@
 			</p:commandButton>
 		</p:column>
 		
-		<p:column headerText="Status" style="width:60px">
-				<p:commandButton rendered="#{item.cadastroBL.statusBLEnum.codigo eq 0 }" type="button" icon="ui-icon-check" style="width:30px" styleClass="green-btn raised-btn rounded-btn" />
-				<p:commandButton rendered="#{item.cadastroBL.statusBLEnum.codigo eq 1}" type="button" icon="ui-icon-notice" style="width:30px" styleClass="orange-btn raised-btn rounded-btn " />
-			
-				<p:commandButton rendered="#{item.cadastroBL.statusBLEnum.codigo eq 2 }" type="button" icon="ui-icon-check" style="width:30px" styleClass="green-btn raised-btn rounded-btn" />
-			
-				<p:commandButton rendered="#{item.cadastroBL.statusBLEnum.codigo eq 3}" icon="ui-icon-notice" type="button" style="width:30px" styleClass="orange-btn raised-btn rounded-btn " />
-			
-				<p:commandButton rendered="#{item.cadastroBL.statusBLEnum.codigo eq 4 }" type="button" icon="ui-icon-check" style="width:30px" styleClass="green-btn raised-btn rounded-btn" />
-			
+		<p:column exportable="true" filterBy="#{item.cadastroBL.statusBLEnum}" headerText="Status" width="200">
+		<f:facet name="filter">
+                <p:selectOneMenu onchange="PF('tbListarEntidade').filter()" >
+                    <f:selectItem itemLabel="Todos" itemValue="#{null}" noSelectionOption="true" />
+                    <f:selectItems value="#{consultaProcessosBean.statusBLEnum}" var="status" itemLabel="#{status.descricaoAgendamento}" itemValue="#{status.codigo}" />
+                </p:selectOneMenu>
+            </f:facet>
+			<h:outputText value="#{item.cadastroBL.statusBLEnum.descricaoAgendamento}"/>
 			
 		</p:column>
 		
 		
 		
+		
 		<p:rowExpansion>
 		
-		 <p:panelGrid  columns="2" columnClasses="label,value" style="width:600px">
+		 <p:panelGrid  columns="2" columnClasses="label,value" styleClass="no-border" style="width:600px">
 		
 			
 			<h:outputText styleClass="label-right" value="#{bundle.cadastroBLViagem}:"/>
@@ -111,10 +137,16 @@
 			
 			<h:outputText styleClass="label-right" value="Status Clif:"/>
 			<h:outputText value="#{item.statusAtiLclFclEnum.descricao}" />
-	
+	</p:panelGrid>
+	 <p:panelGrid  columns="3" columnClasses="label,value" style="width:600px">
 			<h:outputText styleClass="label-right" value="Status Mapa:"/>
-			<h:outputText value="#{item.cadastroBL.statusBLEnum.descricaoAgendamento}" />
 			
+			<p:commandButton id="btContainer" icon="fa fa-search" oncomplete="PF('dlgStatusContainer').show();"
+				action="#{consultaProcessosBean.instanciarStatusContainer(item)}" title="Status" style="float:right;"
+				update=":dialogStatusContainer:frmStatusContainer :dialogStatusContainer:frmStatusContainer:tbListaDados" />
+				<h:outputText value="#{item.cadastroBL.statusBLEnum.descricaoAgendamento}" />
+	</p:panelGrid>
+	<p:panelGrid  columns="4" columnClasses="label,value" style="width:600px">	
 			<h:outputText styleClass="label-right" value="Deferimento Mapa:"/>
 			<h:outputText value="#{item.deferimentoSimNao}" />
 			

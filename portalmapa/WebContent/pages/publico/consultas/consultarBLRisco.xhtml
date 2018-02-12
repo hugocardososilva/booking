@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+<h:body>
+	<p:dialog id="idDlgRisco" widgetVar="dlgRisco" closable="true" draggable="false" resizable="false" modal="false" appendTo="@(body)"
+		header="Risco Fitossanitário" responsive="true" position="center">
+		<h:form id="frmRisco" enctype="multipart/form-data">
+
+			<p:panelGrid id="pnlRisco" columns="4" layout="grid" columnClasses="ui-grid-col-2,ui-grid-col-3,ui-grid-col-4,ui-grid-col-1"
+				styleClass="ui-panelgrid-blank">
+				<h:outputLabel value="#{bundle.cadastroBL}" />
+				<h:outputText value="#{cadastroBLConsultaBean.entidade.descricaoBL}" />
+
+				<p:selectOneMenu id="riscoSelecionado" value="#{cadastroBLConsultaBean.riscosSelecionadoEnum}" style="width:80%"
+					styleClass="estendido alinhadoEsquerda">
+					<f:selectItem itemLabel="Selecione um risco fitossanitário" itemValue="#{null}" />
+					<f:selectItems value="#{cadastroBLConsultaBean.todosRiscosEnum}" var="tipo" itemValue="#{tipo}" itemLabel="#{tipo.descricao}" />
+				</p:selectOneMenu>
+
+				<p:commandButton id="idAddRisco" icon="fa fa-plus" action="#{cadastroBLConsultaBean.incluirRisco()}"
+					update="frmRisco:tbListaTodosRiscos riscoSelecionado ">
+					<p:tooltip for="idAddRisco" value="#{bundle.incluir}" showEffect="clip" hideEffect="explode" />
+				</p:commandButton>
+			</p:panelGrid>
+
+			<p:panelGrid id="pnlRiscoTable" columns="1" layout="grid" columnClasses="ui-grid-col-12" styleClass="ui-panelgrid-blank">
+				<p:dataTable id="tbListaTodosRiscos" value="#{cadastroBLConsultaBean.listaTodosRiscos}" var="item" reflow="true"
+					emptyMessage="Nenhum registro encontrado.">
+
+					<p:column id="idImportador" headerText="#{bundle.importador}" width="80">
+						<h:outputText value="#{item.cadastroBL.importador.cnpj}" />
+					</p:column>
+
+					<p:column id="idNCM" headerText="#{bundle.cadastroBLNCM}" width="80">
+						<h:outputText value="#{item.cadastroBL.ncm.ncmCodigo}" />
+					</p:column>
+
+					<p:column id="idPaisOrigem" headerText="#{bundle.cadastroBLPaisOrigem}" width="80">
+						<h:outputText value="#{item.cadastroBL.paisOrigem.abreviacaoPais}" />
+					</p:column>
+
+					<p:column id="idRisco" headerText="#{bundle.cadastroBLRiscoFitossanitario}" width="80">
+						<h:outputText value="#{item.riscoFitossanitarioEnum.descricao}" />
+					</p:column>
+
+					<p:column id="idCorColuna" width="1" style="#{cadastroBLConsultaBean.pintarColuna(item)}" />
+
+					<p:column id="idData" headerText="#{bundle.data}" width="150">
+						<h:outputText value="#{item.dataCadastro}" />
+					</p:column>
+
+					<p:column id="idUsuario" headerText="#{bundle.usuario}" width="80">
+						<h:outputText value="#{item.user.email}" />
+					</p:column>
+				</p:dataTable>
+			</p:panelGrid>
+
+			<p:separator />
+
+			<p:panelGrid id="pnlRiscoFechar" columns="1" layout="grid" columnClasses="ui-grid-col-4" styleClass="ui-panelgrid-blank">
+				<p:commandButton value="Fechar" icon="fa fa-times-circle" action="#{cadastroBLConsultaBean.fecharRisco()}"/>
+			</p:panelGrid>
+		</h:form>
+	</p:dialog>
+
+</h:body>
+</html>

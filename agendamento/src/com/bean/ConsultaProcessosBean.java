@@ -3,6 +3,7 @@ package com.bean;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -32,6 +33,8 @@ import org.primefaces.model.StreamedContent;
 import com.entidade.CadastroDTCDTA;
 import com.entidade.UserComissariaUsuarios;
 import com.enums.TipoPendenciaDocumentalEmailEnum;
+import com.lazy.NewLazyDataModel;
+
 import com.rn.CadastroDTCDTARN;
 import com.rn.UserComissariaUsuariosRN;
 import com.util.JSFMessageUtil;
@@ -65,7 +68,7 @@ import seguranca.com.enums.TipomodalEnum;
 
 @ViewScoped
 @ManagedBean
-public class ConsultaProcessosBean extends CadastroDtcDtaComumBean implements IGenericBean {
+public class ConsultaProcessosBean extends CadastroDtcDtaComumBean implements IGenericBean, Serializable {
 	@SuppressWarnings("unused")
 	private static final long serialVersionUID = 1L;
 	@ManagedProperty(value = UserMB.INJECTION_NAME)
@@ -79,6 +82,11 @@ public class ConsultaProcessosBean extends CadastroDtcDtaComumBean implements IG
 	private boolean habilitarBotaoEnvioMapa = false;
 	private boolean habilitarDeferimento = true;
 	private int utilizarEnvioEmailRetiraSegregacao = 0;
+	
+	
+	private StatusBLEnum statusBLEnum;
+	
+	
 
 	private boolean mostrarCampo = true;
 	private boolean mostrarCampoAssunto = false;
@@ -130,6 +138,8 @@ public class ConsultaProcessosBean extends CadastroDtcDtaComumBean implements IG
 	private UserFacade userRN;
 	private TipomodalEnum tipoModalSelecionadoEnum;
 	private List<TipomodalEnum> todosTipoModalEnum;
+	
+	private List<CadastroDTCDTA> entidadeFiltrodadas;
 
 	private CadastroBLContanierLCLRN getLclRN() {
 		if (lclRN == null) {
@@ -237,7 +247,7 @@ public class ConsultaProcessosBean extends CadastroDtcDtaComumBean implements IG
 				}
 			}
 
-			lazyModel = new AbstractLazyDataModel<CadastroDTCDTA>(CadastroDTCDTA.sql, CadastroDTCDTA.sqlCount,
+			lazyModel = new NewLazyDataModel<CadastroDTCDTA>(getCamposTabelaPrincipal(),CadastroDTCDTA.sql, CadastroDTCDTA.sqlCount,
 					getWhereSQL(), null);
 		}
 
@@ -1483,5 +1493,31 @@ public class ConsultaProcessosBean extends CadastroDtcDtaComumBean implements IG
 	public void setLclSelecionado(CadastroBLContanierLCL lclSelecionado) {
 		this.lclSelecionado = lclSelecionado;
 	}
+
+	public List<CadastroDTCDTA> getEntidadeFiltrodadas() {
+	
+		return entidadeFiltrodadas;
+	}
+
+	public void setEntidadeFiltrodadas(List<CadastroDTCDTA> entidadeFiltrodadas) {
+		this.entidadeFiltrodadas = entidadeFiltrodadas;
+	}
+
+	public StatusBLEnum[] getStatusBLEnum() {
+		return statusBLEnum.values();
+	}
+
+		
+	public Map<String, String> getCamposTabelaPrincipal() {
+		Map<String, String> campos= new HashMap<String, String>();
+		campos.put("dataCadastro", "Date");
+		campos.put("numeroATI", "String");
+		campos.put("importador.razaoSocial", "String");
+		campos.put("programacaoNavio.navio", "String");
+		campos.put("cadastroBL.statusBLEnum", "int");
+		return campos;
+	}
+	
+	
 
 }

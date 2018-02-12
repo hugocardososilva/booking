@@ -180,6 +180,16 @@ public class Solicitacao implements Serializable {
 		return false;
 	}
 
+	public void addHistorico(Historico historico) {
+		this.historico.add(historico);
+	}
+	
+	public void addAnexo(AnexosSolicitacao anexosSolicitacao) {
+		this.anexos.add(anexosSolicitacao);
+	}
+	public void removeAnexo(AnexosSolicitacao anexosSolicitacao) {
+		this.anexos.remove(anexosSolicitacao);
+	}
 	
 
 

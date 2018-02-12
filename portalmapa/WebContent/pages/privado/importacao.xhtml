@@ -1,0 +1,310 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/modeloSistema.xhtml">
+
+	<ui:define name="menu">
+		<ui:include src="/includes/menuPrincipal.xhtml" />
+	</ui:define>
+
+	<ui:define name="conteudo">
+		<h:form id="frmItemListagem">
+			<p:panel id="pnlConsulta"
+			         style="background: #4297d;"
+				     header="Consulta - Importação">
+				<h:panelGrid id="pnlgConsulta" 
+				             columns="4" 
+				             cellpadding="3">
+
+					<p:outputLabel for="txtPeriodoIni" 
+					               value="De:" />
+					<p:calendar id="txtPeriodoIni" 
+					            pattern="dd/MM/yyyy"
+						        value="#{MBItem.dataini}" 
+						        showOn="button"
+						        locale="pt_BR" 
+						        maxlength="10" 
+						        size="13">
+					</p:calendar>
+
+					<p:outputLabel for="txtPeriodoFim" 
+					               value="Até:" />
+					<p:calendar id="txtPeriodoFim" 
+					            pattern="dd/MM/yyyy"
+						        value="#{MBItem.datafim}" 
+						        showOn="button"
+						        locale="pt_BR" 
+						        maxlength="10" 
+						        size="13">
+					</p:calendar>
+					<p:outputLabel for="txtConhecimento" 
+					               value="BL:" />
+					<p:inputText id="txtConhecimento" 
+					             value="#{MBItem.conhecimento}"
+						         size="17" 
+						         maxlength="30" />
+
+					<p:outputLabel value="" />
+					<p:outputLabel value="" />
+
+					<p:outputLabel for="txtStatus" 
+					               value="Status:" />
+					<p:selectOneMenu id="txtStatus" 
+					                 value="#{MBItem.status}"
+						             style="width:100%;">
+						<f:selectItem itemLabel="Inspeção"  
+						              itemValue="I" />
+						<f:selectItem itemLabel="Liberado"  
+						              itemValue="L" />
+						<f:selectItem itemLabel="Pendentes" 
+						              itemValue="P"/>
+						<f:selectItem itemLabel="Todos"     
+						              itemValue="T" />
+					</p:selectOneMenu>
+
+				</h:panelGrid>
+
+				<h:panelGrid columns="3">
+
+					<p:commandButton value="Pesquisar" 
+					                 icon="ui-icon-search"
+						             actionListener="#{MBItem.pesquisar}" 
+						             update="@form" />
+
+					<p:commandButton value="Limpar Pesquisa"
+						             icon="ui-icon-circle-close" 
+						             actionListener="#{MBItem.limpar}"
+						             update="@form" />
+
+					<p:commandButton value="Processar" 
+					                 icon="ui-icon-gear"
+						             actionListener="#{MBItem.processar}" 
+						             update="@form"
+						             disabled="#{MBItem.disabled('Processar')}" />
+				</h:panelGrid>
+			</p:panel>
+			
+			<h:commandLink id="excel">
+           		<p:graphicImage library="images" 
+                                name="excel.png" 
+                                rendered="#{!empty MBItem.itens}"
+                                width="30"/>
+                <p:dataExporter type="xls" 
+                                target="tblItem" 
+                                fileName="Importacao" />
+            </h:commandLink>
+            		
+           	<h:commandLink id="pdf">
+            	<p:graphicImage library="images" 
+                                name="pdf.png" 
+                                rendered="#{!empty MBItem.itens}"
+                                width="30"/>
+                <p:dataExporter type="pdf" 
+                                target="tblItem" 
+                                fileName="Importacao"
+                                preProcessor="#{MBItem.preProcessPDF}" />
+            </h:commandLink>
+            	
+			<p:dataTable id="tblItem" 
+			             widgetVar="tabelaItem"
+				         emptyMessage="Nenhum registro encontrado." 
+				         value="#{MBItem.itens}"
+				         var="item" 
+				         paginator="true" 
+				         rows="100" 
+				         rowsPerPageTemplate="20,50,100"
+				         rowKey="" 
+				         selectionMode="single"
+				         style="margin-bottom:20px"
+				         rowStyleClass="#{item.consolidado == 'SIM' ? 'consolidado' : null}
+				                        #{item.conhec_nome == 'AWB' ? 'awb' : null}">
+
+				<p:column headerText="dent_id" 
+				          sortBy="#{item.dent_id}"
+					      rendered="false"
+					      exportable="false">
+					<h:outputText value="#{item.dent_id}" />
+				</p:column>
+
+				<p:column headerText="litem_numero" 
+				          sortBy="#{item.litem_numero}"
+					      rendered="false"
+					      exportable="false">
+					<h:outputText value="#{item.litem_numero}" />
+				</p:column>
+
+				<p:column sortBy="#{item.lote_conhec}">
+				    
+				    <f:facet name="header">
+				    	<h:outputText value="BL" />
+				    </f:facet>
+				    
+					<h:outputText value="#{item.lote_conhec}" />
+				</p:column>
+
+				<p:column sortBy="#{item.cnt_id}">
+				    
+				    <f:facet name="header">
+				    	<h:outputText value="Container" />
+				    </f:facet>
+				    
+					<h:outputText value="#{item.cnt_id}" />
+				</p:column>
+
+				<p:column sortBy="#{item.cnt_tipo}">
+				
+					<f:facet name="header">
+				    	<h:outputText value="Tipo" />
+				    </f:facet>
+				    
+					<h:outputText value="#{item.cnt_tipo}" />
+				</p:column>
+
+				<p:column sortBy="#{item.pais_nome}">	
+				
+				    <f:facet name="header">
+				    	<h:outputText value="País Orig" />
+				    </f:facet>
+				    				
+					<h:outputText value="#{item.pais_nome}" />
+				</p:column>
+
+				<p:column sortBy="#{item.esp_descricao}">
+				
+				    <f:facet name="header">
+				    	<h:outputText value="Tipo Embalagem" />
+				    </f:facet>
+				    
+					<h:outputText value="#{item.esp_descricao}" />
+				</p:column>
+
+				<p:column sortBy="#{item.ncm_descricao}">
+				    
+				    <f:facet name="header">
+				    	<h:outputText value="Descrição do NCM" />
+				    </f:facet>
+				    
+					<h:outputText value="#{item.ncm_descricao}" />
+				</p:column>
+
+				<p:column sortBy="#{item.litem_descricao}">
+				    
+				    <f:facet name="header">
+				    	<h:outputText value="Descrição da Mercadoria" />
+				    </f:facet>
+				    
+					<h:outputText value="#{item.litem_descricao}" />
+				</p:column>
+
+				<p:column headerText="Inspeção" exportable="false">
+					<p:selectBooleanCheckbox value="#{item.inspecao}" disabled="#{MBItem.disabled('Inspecao')}">
+						<p:ajax	listener="#{MBItem.salvarInspecao(item)}" />
+					</p:selectBooleanCheckbox>
+				</p:column>
+
+				<p:column headerText="Liberado" exportable="false">
+					<p:selectBooleanCheckbox value="#{item.liberado}" disabled="#{MBItem.disabled('Liberado')}" >
+						<p:ajax	listener="#{MBItem.salvarInspecao(item)}" />
+					</p:selectBooleanCheckbox>
+				</p:column>
+				
+				<p:column headerText="Anexo"
+				          exportable="false">
+					<p:commandButton icon="ui-icon-link"
+									 oncomplete="PF('dlgAnexosImportacao').show();"
+									 update=":frmAnexosImportacao:pnlAnexosImportacaoCabecalho 
+									         :frmAnexosImportacao:pnlAnexosImportacao"
+									 action="#{MBItem.pesquisarAnexo}" >
+						<f:setPropertyActionListener value="#{item}" 
+						                             target="#{MBItem.item}"/>
+					</p:commandButton>
+				</p:column>
+				
+				<f:facet name="footer">  
+            		Total de registros: <h:outputText value="#{MBItem.contador}" /> 
+        		</f:facet>
+
+			</p:dataTable>
+		</h:form>
+		
+		<p:dialog widgetVar="dlgAnexosImportacao"
+				  closable="false"
+				  draggable="false"
+				  resizable="false"
+				  modal="true"
+				  appendTo="@(body)"
+				  header="Anexos"
+				  height="480"
+				  width="450"
+				  style="opacity: 1 !important;
+				         height: 480px !important; 
+			             width: 450px !important;">
+			<h:form id="frmAnexosImportacao"
+			        enctype="multipart/form-data">
+			    
+				<h:panelGrid id="pnlAnexosImportacaoCabecalho" 
+				             columns="2"
+				             cellspacing="10">
+				             
+				    <h:outputLabel value="BL:" />
+				    <h:outputText value="#{MBItem.item.lote_conhec}"/>
+				    
+				    <h:outputLabel value="Container:" />
+				    <h:outputText value="#{MBItem.item.cnt_id}"/>   
+				    
+				</h:panelGrid>
+				
+				<h:panelGrid id="pnlAnexosImportacao" 
+				             columns="1">
+				    
+				    <p:fileUpload label="Escolher arquivo (formato pdf até 3MB)"
+					              mode="advanced"
+					              dragDropSupport="false"
+					              sizeLimit="3000000"
+					              invalidSizeMessage="Tamanho máximo permitido: 3MB"
+					              allowTypes="/(\.|\/)(pdf)$/"
+					              invalidFileMessage="Extensão de arquivo permitida: PDF."
+					              fileUploadListener="#{MBItem.upload}"
+					              auto="true"
+					              update=":frmAnexosImportacao:pnlAnexosImportacao"
+					              style="height: 150px; 
+					                     width: 425px;"/>					              
+					<p:growl id="messages" 
+					         showDetail="true" />
+					         
+					<p:dataTable id="tblAnexosImportacao" 
+			                     widgetVar="tabelaAnexosImportacao"
+				                 emptyMessage="Nenhum registro encontrado." 
+				                 value="#{MBItem.anexos}"
+				                 var="anexo"
+				                 rows="03"
+				                 paginator="true"  
+				                 style="margin-bottom:20px">
+				         
+						<p:column headerText="Arquivo"> 
+							<p:commandLink value="#{anexo.tavmc_path}"
+							               actionListener="#{MBItem.download}"
+							               ajax="false">
+							    <f:attribute name="anexoSelecionado" value="#{anexo}"/>
+								<p:fileDownload value="#{MBItem.pdf}"/>
+							</p:commandLink>
+						</p:column>
+					</p:dataTable>     
+				
+				</h:panelGrid>             
+				
+				<h:panelGrid columns="1">		         
+					<p:commandButton value="Fechar"
+					                 process="@this"
+					                 onclick="PF('dlgAnexosImportacao').hide();">
+						<p:resetInput target="pnlAnexosImportacao"/>
+					</p:commandButton>	               
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
+		
+	</ui:define>
+</ui:composition>

@@ -1,6 +1,7 @@
 package com.bean;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -30,7 +31,11 @@ import seguranca.com.enums.TipoLoginEnum;
 
 @RequestScoped
 @ManagedBean
-public class LoginMB extends AbstractMB {
+public class LoginMB extends AbstractMB implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	public static final String PAGINA_PRINCIPAL = JSFUtil.getCaminhoAplicacaoPath()
 			+ "/faces/pages/privado/principal.xhtml";
 	public static final String PAGINA_LOGIN = JSFUtil.getCaminhoAplicacaoPath() + "/";

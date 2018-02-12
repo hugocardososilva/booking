@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+<h:body>
+	<p:dialog id="idDlgBLIncluir" widgetVar="dlgBLIncluir" closable="true" draggable="false" resizable="false" modal="false" appendTo="@(body)"
+		header="Incluir" responsive="true" position="center">
+		<h:form id="frmBLIncluir" enctype="multipart/form-data">
+
+			<p:panelGrid id="pnlIncluir" columns="1" layout="grid" columnClasses="ui-grid-col-12" styleClass="ui-panelgrid-blank">
+				<p:outputLabel id="labelRazaoSocial" value="#{bundle.importadorRazazaoSocial}" />
+				<p:inputText id="inpRazaoSocial" value="#{cadastroBLBean.razaoSocial}" style="width:100%" />
+
+				<p:outputLabel id="labelCnpj" value="#{bundle.importadorCNPJ}" />
+				<p:inputMask id="inpCnpj" value="#{cadastroBLBean.cnpj}" style="width:100%" mask="99.999.999/9999-99" />
+			</p:panelGrid>
+
+			<p:separator />
+
+			<p:panelGrid id="pnlBLIncluirFechar" columns="2" layout="grid" columnClasses="ui-grid-col-6,ui-grid-col-6" styleClass="ui-panelgrid-blank">
+				<p:commandButton id="idSalvarBLIncluir" icon="fa fa-check" value="#{bundle.salvar}"  action="#{cadastroBLBean.salvarImportadorComissaria()}" >
+					<p:tooltip for="idSalvarBLIncluir" value="#{bundle.salvar}" showEffect="clip" hideEffect="explode" />
+				</p:commandButton>
+
+				<p:commandButton value="Fechar" onclick="PF('dlgBLIncluir').hide();" icon="fa fa-times-circle">
+					<p:resetInput target="pnlIncluir" />
+				</p:commandButton>
+			</p:panelGrid>
+		</h:form>
+	</p:dialog>
+
+</h:body>
+</html>

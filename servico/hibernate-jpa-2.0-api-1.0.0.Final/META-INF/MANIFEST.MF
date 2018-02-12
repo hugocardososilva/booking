@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Archiver-Version: Plexus Archiver
+Created-By: Apache Maven
+Build-Jdk: 1.5.0_19
+Built-By: hibernate.org
+Implementation-Title: JPA API
+Implementation-Vendor: hibernate.org
+Implementation-Version: 1.0.0.Final
+Specification-Title: Java Persistence API, Version 2.0
+Specification-Vendor: Sun Microsystems, Inc.
+Specification-Version: 1.0.0.Final
+

@@ -1,0 +1,44 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+<h:body>
+	<p:dialog id="idDlgAnexosImportacao" widgetVar="dlgAnexosImportacao" closable="false" draggable="false" resizable="false" modal="true"
+		appendTo="@(body)" header="Anexos" height="480" width="450" style="opacity: 1 !important; height: 480px !important; width: 450px !important;" responsive="true" >
+		<h:form id="frmAnexosImportacao" enctype="multipart/form-data">
+			<h:panelGrid id="pnlAnexosImportacaoCabecalho" columns="2" cellspacing="10">
+
+				<h:outputLabel value="BL:" />
+				<h:outputText value="#{cadastroBLConsultaBean.entidade.descricaoBL}" />
+			</h:panelGrid>
+
+			<h:panelGrid id="pnlAnexosImportacao" columns="1">
+
+				<p:fileUpload label="Escolher arquivo (formato pdf até 3MB)" mode="advanced" dragDropSupport="false" sizeLimit="3000000"
+					invalidSizeMessage="Tamanho máximo permitido: 3MB" allowTypes="/(\.|\/)(pdf)$/" invalidFileMessage="ExtensÃ£o de arquivo permitida: PDF."
+					fileUploadListener="#{cadastroBLConsultaBean.upload}" auto="true" style="height: 150px; width: 425px;"
+					update="tblAnexosImportacao :frmListarPrincipal:tabItensConsultaBL:tbListarEntidade" />
+				<p:growl id="messages" showDetail="true" />
+
+				<p:dataTable id="tblAnexosImportacao" emptyMessage="Nenhum registro encontrado." value="#{cadastroBLConsultaBean.listaBLTodosAnexos}"
+					var="anexo" rows="03" paginator="true" style="margin-bottom:20px">
+
+					<p:column headerText="Arquivo">
+						<p:commandLink value="#{anexo.caminhoAnexo}" actionListener="#{cadastroBLConsultaBean.download}" ajax="false">
+							<f:attribute name="anexoSelecionado" value="#{anexo}" />
+							<p:fileDownload value="#{cadastroBLConsultaBean.pdf}" />
+						</p:commandLink>
+					</p:column>
+				</p:dataTable>
+
+			</h:panelGrid>
+
+			<h:panelGrid columns="1">
+				<p:commandButton value="Fechar" onclick="PF('dlgAnexosImportacao').hide();" >
+					<p:resetInput target="pnlAnexosImportacao" />
+				</p:commandButton>
+			</h:panelGrid>
+		</h:form>
+	</p:dialog>
+
+</h:body>
+</html>

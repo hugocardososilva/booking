@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+<h:body>
+	<p:dialog id="idDlgLog" widgetVar="dlgLogBL" closable="true" draggable="false" resizable="false" modal="false" appendTo="@(body)" header="Log - Alteração"
+		responsive="true" position="center">
+		<h:form id="frmLog" enctype="multipart/form-data">
+			<p:panelGrid id="pnlLogTable" columns="1" layout="grid" columnClasses="ui-grid-col-12" styleClass="ui-panelgrid-blank">
+
+					<h:outputText value="#{bundle.usuarioDataEnvioMapa}" />
+				<h:outputText value="#{cadastroBLConsultaBean.dataEnvioMapaLOG}">
+					<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+				</h:outputText>
+
+				<p:dataTable id="tbListaTodosRiscos" value="#{cadastroBLConsultaBean.listaLogAuditoria(item)}" var="item" reflow="true"
+					emptyMessage="Nenhum registro encontrado.">
+
+					<p:column id="idDescricaoBLExp" headerText="Data alteração" width="50">
+						<f:facet name="header">
+							<h:outputText value="#{bundle.usuarioDataAlteracao}" />
+						</f:facet>
+						<h:outputText value="#{item.logDataAlteracao}">
+							<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+						</h:outputText>
+					</p:column>
+
+					<p:column id="idStatusExp" headerText="Usuario" width="50">
+						<f:facet name="header">
+							<h:outputText value="#{bundle.usuarioNome}" />
+						</f:facet>
+						<h:outputText value="#{item.logNomeUsuario}" />
+					</p:column>
+
+					<p:column id="idInspecaoLog" headerText="#{bundle.cadastroBLInspecao}" width="10">
+						<f:facet name="header">
+							<h:outputText value="#{bundle.cadastroBLInspecao}" />
+						</f:facet>
+						<p:selectBooleanCheckbox value="#{item.inspecao}" disabled="true" />
+					</p:column>
+
+					<p:column id="idLiberadoLog" headerText="#{bundle.cadastroBLLiberado}" width="10">
+						<f:facet name="header">
+							<h:outputText value="#{bundle.cadastroBLLiberado}" />
+						</f:facet>
+						<p:selectBooleanCheckbox value="#{item.liberado}" disabled="true" />
+					</p:column>
+
+					<p:column id="idNroContainerLog" headerText="#{bundle.cadastroBLContainer}" width="10">
+						<f:facet name="header">
+							<h:outputText value="#{bundle.cadastroBLContainer}" />
+						</f:facet>
+						<h:outputText value="#{item.numeroContainer}" disabled="true" />
+					</p:column>
+
+				</p:dataTable>
+			</p:panelGrid>
+
+			<p:separator />
+
+			<p:panelGrid id="pnlRiscoFechar" columns="1" layout="grid" columnClasses="ui-grid-col-4" styleClass="ui-panelgrid-blank">
+				<p:commandButton value="Fechar" icon="fa fa-times-circle" action="#{cadastroBLConsultaBean.fecharLog()}">
+				</p:commandButton>
+			</p:panelGrid>
+		</h:form>
+	</p:dialog>
+
+</h:body>
+</html>

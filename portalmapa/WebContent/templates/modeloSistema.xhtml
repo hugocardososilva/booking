@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<link rel="shortcut icon" href="iconERP.png" type="images/x-icon" />
+
+
+
+	<title>Portal MAPA</title>
+	<h:outputStylesheet library="css" name="estilos.css" />
+	<h:outputScript library="js" name="scripts.js" />
+	<h:outputScript library="js" name="calendar.js" />
+	
+</h:head>
+<h:body>
+
+	<p:growl id="msgGlobal" life="5000" />
+
+	<p:idleMonitor timeout="#{loginMB.timeout()}" >
+		<p:ajax event="idle" listener="#{loginMB.efetuarLogout()}" />
+	</p:idleMonitor>	
+
+	<p:layout fullPage="true">
+		<p:layoutUnit id="layoutNort" position="north" resizable="false" closable="false" collapsible="false" styleClass="menucor" >
+
+			<ui:insert name="menu"  />
+
+		</p:layoutUnit>
+
+
+<!-- 		<p:layoutUnit header="MENU" position="west" resizable="false" closable="false" collapsible="false" > -->
+<!-- 		</p:layoutUnit> -->
+
+		<p:layoutUnit position="center" resizable="true" closable="true" collapsible="true" style="visibility: hidden" styleClass="body_teste,menucor"  >
+			<ui:insert name="conteudo"  />
+			
+<!-- 			<h:graphicImage id="imagePrincipal" library="images" name="imagemPrincipal.png" style=" opacity: 1 !important; -->
+<!-- /* 			                 height: 100% !important; */ -->
+<!-- 			                 width: 100% !important;" /> -->
+			
+			<p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+
+			<p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="true" header="Processando"
+				appendTo="@(body)" height="30" width="248"
+				style="opacity: 1 !important;
+			                 height: 30px !important;
+			                 width: 248px !important;">
+				<h:graphicImage library="images" name="processando.gif" />
+			</p:dialog>
+
+		</p:layoutUnit>
+
+	</p:layout>
+</h:body>
+</html>

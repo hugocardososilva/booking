@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" xmlns:cc="http://java.sun.com/jsf/composite"
+	xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:composite="http://java.sun.com/jsf/composite">
+
+<!-- INTERFACE -->
+<composite:interface>
+</composite:interface>
+
+<!-- IMPLEMENTATION -->
+<composite:implementation>
+	<p:tabView>
+		<p:tab title="Log Inspeção / Liberado">
+			<p:panelGrid id="panelBL_032" columns="1" layout="grid" columnClasses="ui-grid-col-6" styleClass="ui-panelgrid-blank">
+
+				<h:dataTable id="tbListaTodosContainers" value="#{cadastroBLLogAlteracaoBean.listaLogAuditoriaContainer(item)}" var="itemExpansion"
+					reflow="false" emptyMessage="Nenhum registro encontrado." style="width:100%">
+
+					<h:column id="idDescricaoBLExp" headerText="Data alteração" width="50">
+						<f:facet name="header">
+							<h:outputText value="#{bundle.usuarioDataAlteracao}" />
+						</f:facet>
+						<h:outputText value="#{itemExpansion.logDataAlteracao}">
+							<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+						</h:outputText>
+
+					</h:column>
+
+					<h:column id="idStatusExp" headerText="Usuario" width="50">
+						<f:facet name="header">
+							<h:outputText value="#{bundle.usuarioNome}" />
+						</f:facet>
+						<h:outputText value="#{itemExpansion.logNomeUsuario}" />
+					</h:column>
+
+					<h:column id="idInspecaoLog" headerText="#{bundle.cadastroBLInspecao}" width="10">
+						<f:facet name="header">
+							<h:outputText value="#{bundle.cadastroBLInspecao}" />
+						</f:facet>
+						<p:selectBooleanCheckbox value="#{itemExpansion.inspecao}" disabled="true" />
+					</h:column>
+
+					<h:column id="idLiberadoLog" headerText="#{bundle.cadastroBLLiberado}" width="10">
+						<f:facet name="header">
+							<h:outputText value="#{bundle.cadastroBLLiberado}" />
+						</f:facet>
+						<p:selectBooleanCheckbox value="#{itemExpansion.liberado}" disabled="true" />
+					</h:column>
+
+					<h:column id="idNroContainerLog" headerText="#{bundle.cadastroBLContainer}" width="10">
+						<f:facet name="header">
+							<h:outputText value="#{bundle.cadastroBLContainer}" />
+						</f:facet>
+						<h:outputText value="#{itemExpansion.numeroContainer}" disabled="true" />
+					</h:column>
+				</h:dataTable>
+			</p:panelGrid>
+		</p:tab>
+
+		<p:tab title="Log Risco ">
+			<h:dataTable id="tbListaTodosRisco" value="#{cadastroBLLogAlteracaoBean.listaRisco(item)}" var="itemExpansion" rowKey="#{itemExpansion.id}"
+				reflow="false" emptyMessage="Nenhum registro encontrado." style="width:100%">
+
+				<h:column id="idRiscoLog" headerText="Data alteração" width="50">
+					<f:facet name="header">
+						<h:outputText value="#{bundle.usuarioDataAlteracao}" />
+					</f:facet>
+					<h:outputText value="#{itemExpansion.dataCadastro}">
+						<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+					</h:outputText>
+				</h:column>
+
+				<h:column id="idRiscoLog_1" headerText="Usuario" width="50">
+					<f:facet name="header">
+						<h:outputText value="#{bundle.usuarioNome}" />
+					</f:facet>
+					<h:outputText value="#{itemExpansion.user.email}" />
+				</h:column>
+
+				<h:column id="idRiscoLog_2" headerText="Cpf1" width="50">
+					<f:facet name="header">
+						<h:outputText value="#{bundle.usuarioCPF}" />
+					</f:facet>
+					<h:outputText value="#{itemExpansion.user.cpf}" />
+				</h:column>
+
+				<h:column id="idRiscoLog_3" headerText="#{bundle.cadastroBLInspecao}" width="10">
+					<f:facet name="header">
+						<h:outputText value="#{bundle.usuarioRisco}" />
+					</f:facet>
+					<h:outputText value="#{itemExpansion.riscoFitossanitarioEnum.descricao}" />
+				</h:column>
+
+			</h:dataTable>
+		</p:tab>
+
+		<p:tab title="Log - Embalagem encontrada ">
+			<h:dataTable id="tbListaTodosDescricoes" value="#{cadastroBLLogAlteracaoBean.listaDescricaoMercadoria(item)}" var="itemExpansion"
+				rowKey="#{itemExpansion.id}" reflow="false" emptyMessage="Nenhum registro encontrado." style="width:100%">
+
+				<h:column id="idDescricaoLog" headerText="Data alteração" width="50">
+					<f:facet name="header">
+						<h:outputText value="#{bundle.usuarioDataAlteracao}" />
+					</f:facet>
+					<h:outputText value="#{itemExpansion.dataCadastro}">
+						<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+					</h:outputText>
+				</h:column>
+
+				<h:column id="idDescricaoLog_1" headerText="Usuario" width="50">
+					<f:facet name="header">
+						<h:outputText value="#{bundle.usuarioNome}" />
+					</f:facet>
+					<h:outputText value="#{itemExpansion.user.email}" />
+				</h:column>
+
+				<h:column id="idRiscoLog_2" headerText="Cpf1" width="50">
+					<f:facet name="header">
+						<h:outputText value="#{bundle.usuarioCPF}" />
+					</f:facet>
+					<h:outputText value="#{itemExpansion.user.cpf}" />
+				</h:column>
+
+				<h:column id="idRiscoLog_3" headerText="#{bundle.cadastroBLInspecao}" width="10">
+					<f:facet name="header">
+						<h:outputText value="#{bundle.cadastroBLEmbalagemEncontrada}" />
+					</f:facet>
+					<h:outputText value="#{itemExpansion.descricaoMercadoria}" />
+				</h:column>
+
+			</h:dataTable>
+		</p:tab>
+
+		<p:tab title="Log - Anexos / Descrição mercadoria">
+			<h:dataTable id="tbListaAnexos" value="#{cadastroBLLogAlteracaoBean.listaLogAnexoDescMercadoria(item)}" var="itemExpansion"
+				rowKey="#{itemExpansion.id}" reflow="false" emptyMessage="Nenhum registro encontrado." style="width:100%">
+
+				<h:column id="idDescricaoLog_9" headerText="Data alteração" width="50">
+					<f:facet name="header">
+						<h:outputText value="#{bundle.usuarioDataAlteracao}" />
+					</f:facet>
+					<h:outputText value="#{itemExpansion.dataAlteracao}">
+						<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+					</h:outputText>
+
+				</h:column>
+
+				<h:column id="idDescricaoLog_7" headerText="Usuario" width="50">
+					<f:facet name="header">
+						<h:outputText value="#{bundle.usuarioNome}" />
+					</f:facet>
+					<h:outputText value="#{itemExpansion.user.email}" />
+				</h:column>
+
+				<h:column id="idRiscoLog_4" headerText="Cpf1" width="50">
+					<f:facet name="header">
+						<h:outputText value="#{bundle.usuarioCPF}" />
+					</f:facet>
+					<h:outputText value="#{itemExpansion.user.cpf}" />
+				</h:column>
+
+				<h:column id="idRiscoLog_5" headerText="#{bundle.cadastroBLAnexo}" width="10">
+					<f:facet name="header">
+						<h:outputText value="#{bundle.cadastroBLAnexo}" />
+					</f:facet>
+					<p:selectBooleanCheckbox value="#{itemExpansion.anexo}" disabled="true" />
+				</h:column>
+
+				<h:column id="idRiscoLog_6" headerText="#{bundle.cadastroBLDescricaoMercadoria}" width="10">
+					<f:facet name="header">
+						<h:outputText value="#{bundle.cadastroBLDescricaoMercadoria}" />
+					</f:facet>
+					<p:selectBooleanCheckbox value="#{itemExpansion.descricaoMercadoria}" disabled="true" />
+				</h:column>
+
+			</h:dataTable>
+		</p:tab>
+	</p:tabView>
+</composite:implementation>
+
+</html>

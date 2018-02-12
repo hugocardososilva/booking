@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" xmlns:cc="http://java.sun.com/jsf/composite"
+	xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:composite="http://java.sun.com/jsf/composite">
+
+<!-- INTERFACE -->
+<composite:interface>
+</composite:interface>
+
+<!-- IMPLEMENTATION -->
+<composite:implementation>
+
+	<p:panelGrid id="painelSelect" columns="1" layout="grid" columnClasses="ui-grid-col-12" styleClass="ui-panelgrid-blank">
+		<p:panelGrid id="painel_1" columns="1" layout="grid" columnClasses="ui-grid-col-6" styleClass="ui-panelgrid-blank">
+			<p:outputLabel id="labelNome" value="#{bundle.comissarioNome}" />
+		</p:panelGrid>
+		<p:panelGrid id="painel_2" columns="1" layout="grid" columnClasses="ui-grid-col-6" styleClass="ui-panelgrid-blank">
+			<p:inputText id="inpNome" value="#{cadastroComissarioBean.entidade.nome}" style="width:100%" />
+		</p:panelGrid>
+
+		<p:panelGrid id="painel_3" columns="1" layout="grid" columnClasses="ui-grid-col-6" styleClass="ui-panelgrid-blank">
+			<p:outputLabel value="#{bundle.comissarioTipo}" />
+		</p:panelGrid>
+		<p:panelGrid id="painel_4" columns="1" layout="grid" columnClasses="ui-grid-col-6" styleClass="ui-panelgrid-blank">
+			<p:selectOneMenu id="tipoPessoaFisJuridic" value="#{cadastroComissarioBean.entidade.tipoPessoaEnum}" style="width:50%"
+				styleClass="estendido alinhadoEsquerda">
+				<f:selectItems value="#{cadastroComissarioBean.todasTipoPessoaFisicaJuridicaEnum}" var="tipo" itemValue="#{tipo}" itemLabel="#{tipo.descricao}" />
+
+				<p:ajax event="change" listener="#{cadastroComissarioBean.alterarMasCara()}" update="inpCPF" />
+
+			</p:selectOneMenu>
+		</p:panelGrid>
+
+		<p:panelGrid id="painel_5" columns="1" layout="grid" columnClasses="ui-grid-col-6" styleClass="ui-panelgrid-blank">
+			<p:outputLabel id="labelCPF" value="#{bundle.comissarioCPF}" />
+		</p:panelGrid>
+		<p:panelGrid id="painel_6" columns="1" layout="grid" columnClasses="ui-grid-col-6" styleClass="ui-panelgrid-blank">
+			<p:inputMask id="inpCPF" value="#{cadastroComissarioBean.entidade.cpf}" mask="#{cadastroComissarioBean.mascaraCnpjCpf}" />
+		</p:panelGrid>
+	</p:panelGrid>
+
+	<p:separator />
+	<p:panelGrid id="painelSelect1" columns="2" layout="grid" columnClasses="ui-grid-col-1,ui-grid-col-1" styleClass="ui-panelgrid-blank">
+		<p:commandButton id="idSalvar" icon="fa fa-save" value="#{bundle.salvar}" action="#{cadastroComissarioBean.salvarEntidade()}"
+			update=":frmPrincipal" />
+
+		<p:commandButton id="cancelarVoltar" icon="fa fa-rotate-left" value="#{bundle.voltar}" action="#{cadastroComissarioBean.voltarPgPrincipal()}"
+			update=":frmPrincipal" />
+	</p:panelGrid>
+
+</composite:implementation>
+
+</html>

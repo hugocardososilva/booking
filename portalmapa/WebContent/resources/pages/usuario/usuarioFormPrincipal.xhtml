@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" xmlns:cc="http://java.sun.com/jsf/composite"
+	xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:composite="http://java.sun.com/jsf/composite">
+
+<!-- INTERFACE -->
+<composite:interface>
+</composite:interface>
+
+<!-- IMPLEMENTATION -->
+<composite:implementation>
+
+	<p:commandButton id="idNovoUsuario" icon="fa fa-plus" value="#{bundle.novo}" action="#{userCadastroBean.redirecionarCadastarUsuario()}"
+		update=":frmPrincipalUsuarios :frmPrincipalUsuarios:frmCadastrarUsuario:cadFormUsuario:panelCad" />
+
+	<p:dataTable id="tbListaUsuarios" value="#{userCadastroBean.lazyModel}" var="item" emptyMessage="#{bundle.noRecords}" paginator="true" rows="10"
+		paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+		rowsPerPageTemplate="10,20" lazy="true" paginatorPosition="bottom" reflow="true">
+
+		<f:facet name="header">
+			<p:outputPanel style="text-align: left;">
+				<p:remoteCommand name="filtroTable" actionListener="#{userCadastroBean.filtroTabela()}" process="@this filtroGeral" update="tbListaUsuarios" />
+				<p:inputText id="filtroGeral" placeholder="Pesquisar..." value="#{userCadastroBean.filtroGeral}"
+					onkeypress="if (event.keyCode == 13) {filtroTable(); return false; }" />
+				<p:commandButton id="btFiltroTabela" icon="fa fa-search" action="#{userCadastroBean.filtroTabela()}" update="tbListaUsuarios"
+					title="#{bundle.pesquisar}" />
+
+			</p:outputPanel>
+		</f:facet>
+
+		<p:column id="idEmail" headerText="#{bundle.usuarioEmail}" width="40">
+			<h:outputText value="#{item.email}" />
+		</p:column>
+
+		<p:column id="idNome" headerText="#{bundle.usuarioNome}" width="40">
+			<h:outputText value="#{item.name}" />
+		</p:column>
+
+		<p:column id="idCPF" headerText="#{bundle.usuarioCPF}" width="40">
+			<h:outputText value="#{item.cpf}" />
+		</p:column>
+
+		<p:column id="colunaADM" width="150">
+			<f:facet name="header">
+				<h:outputText value="#{bundle.usuarioAdminUser}" />
+			</f:facet>
+
+			<h:outputText value="#{item.role.descricao}" />
+		</p:column>
+
+		<p:column id="columEditar" headerText="#{bundle.update}" width="10">
+			<p:commandButton id="btnEditar" actionListener="#{userCadastroBean.editarUsuario(item)}" ajax="false" icon="fa fa-pencil">
+				<p:tooltip for="btnEditar" value="Editar usuario" showEffect="clip" hideEffect="explode" />
+			</p:commandButton>
+		</p:column>
+
+		<p:column id="columRemover" headerText="#{bundle.delete}" width="10">
+			<p:commandButton id="btnRemover" action="#{userCadastroBean.remover(item)}" update="tbListaUsuarios" icon="fa fa-trash-o" style="color: red">
+				<p:tooltip for="btnRemover" value="Excluir usuario" showEffect="clip" hideEffect="explode" />
+				<p:confirm header="Excluir" message="Deseja excluir este item ?" icon="ui-icon-alert" />
+			</p:commandButton>
+		</p:column>
+
+<!-- 		<p:column id="id" headerText="Id" width="10"> -->
+<!-- 			<h:outputText value="#{item.id}" /> -->
+<!-- 		</p:column> -->
+	</p:dataTable>
+
+</composite:implementation>
+
+</html>

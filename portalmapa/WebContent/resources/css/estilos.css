@@ -1,0 +1,113 @@
+@CHARSET "ISO-8859-1";
+
+
+.ui-layout-north {
+	z-index: 20 !important;
+	overflow: visible !important;
+	text-align: center;
+}
+
+.ui-layout-center {
+	visibility: hidden !important;
+	background:#e8eff2 ;
+
+}
+
+.ui-datatable .ui-datatable-header {
+	background:#e8eff2 ;
+}
+
+.ui-layout-south {
+	text-align: center;
+}
+
+.ui-widget-header {
+	font-weight: normal;
+}
+
+.ui-layout-unit .ui-layout-unit-content {
+	background:#e8eff2 !important;
+}
+
+.ui-layout-north .ui-layout-unit-content {
+	overflow: visible !important;
+	background:#e8eff2 !important;
+}
+
+.ui-widget, .ui-widget .ui-widget {
+	font-size: 12px !important;
+}
+
+input {
+	text-transform: uppercase !important;
+	background-color: white !important;
+	height: 22px !important;
+}
+
+.ui-dialog {
+	left: 50% !important;
+	margin: -200px 0 0 -172px !important;
+	position: center !important;
+	top: 50% !important;
+}
+
+.dlgLogin .ui-widget-header {
+	background: none !important;
+}
+
+.consolidado {
+	background-color: #FFFF99 !important;
+	background-image: none;
+}
+
+.awb {
+	background-color: #FFFF99 !important;
+	background-image: none;
+}
+
+.esconderBorda {
+	background: none !important;
+	border: 0 none !important;
+}
+
+.ui-datatable tbody td {
+    border-color: inherit;
+    text-align: center;
+    background: #e8eff2;
+}
+
+/* REMOVE A BORDA DOS DATA TABLE VERSÃO FUNCIONA SOMENTE PRIMEFACES 5.3 OU 6.0 */
+.ui-datatable.borderless thead th, .ui-datatable.borderless tbody,
+	.ui-datatable.borderless tbody tr, .ui-datatable.borderless tbody td {
+	background: none !important;
+	border: 0 none !important;
+}
+
+/* REMOVE A BORDA DOS PANEL VERSÃO FUNCIONA SOMENTE PRIMEFACES 5.3 OU 6.0 */
+.ui-panelgrid.ui-panelgrid-blank .ui-panelgrid-content.ui-widget-content,
+	.ui-panelgrid.ui-panelgrid-blank .ui-panelgrid-header.ui-widget-header,
+	.ui-panelgrid.ui-panelgrid-blank .ui-panelgrid-footer.ui-widget-header,
+	.ui-panelgrid.ui-panelgrid-blank .ui-panelgrid-header>tr.ui-widget-header,
+	.ui-panelgrid.ui-panelgrid-blank tbody>tr.ui-widget-content,
+	.ui-panelgrid.ui-panelgrid-blank tbody>tr.ui-widget-content>td.ui-panelgrid-cell,
+	.ui-panelgrid.ui-panelgrid-blank .ui-panelgrid-footer>tr.ui-widget-footer
+	{
+	background: none !important;
+	border: 0 none !important;
+}
+
+.ui-widget .ui-button {
+	background: none;
+	background-color: none;
+	border: 1px solid #0288D1;
+	color: #0288D1;
+}
+
+.ui-button-text-icon-left .ui-button-text {
+	padding: .3em 1em .3em 2.1em;
+}
+
+.estiloTituloTela {
+	color:#0288D1;
+	font-size: 18px;
+}

@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" xmlns:cc="http://java.sun.com/jsf/composite"
+	xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:composite="http://java.sun.com/jsf/composite"
+	xmlns:consultarBL="http://java.sun.com/jsf/composite/pages/consultarBL">
+
+<!-- INTERFACE -->
+<composite:interface>
+</composite:interface>
+
+<!-- IMPLEMENTATION -->
+<composite:implementation>
+
+
+	<p:dataTable id="tbListarEntidade" value="#{cadastroBLConsultaBean.lazyModel}" var="item" emptyMessage="#{bundle.noRecords}" paginator="true"
+		rows="50" scrollHeight="450" draggableColumns="true" rowKey="#{item.id}" rowIndexVar="rowIdx"
+		paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+		rowsPerPageTemplate="50,60,70" lazy="true" paginatorPosition="bottom" reflow="true" expandedRow="#{cadastroBLConsultaBean.expandirDados}"
+		scrollable="true">
+
+		<p:column style="width:10px" toggleable="false">
+			<p:rowToggler />
+		</p:column>
+
+		<f:facet name="header">
+			<p:selectOneMenu id="tipoStatus" value="#{cadastroBLConsultaBean.statusSelecionadoEnum}" style="float:left;width:13%">
+				<f:selectItem itemLabel="Selecione um Status para filtro" itemValue="#{null}" />
+				<f:selectItems value="#{cadastroBLConsultaBean.todosStatusEnum}" var="tipo" itemValue="#{tipo}" itemLabel="#{tipo.descricao}" />
+
+				<p:ajax event="change" listener="#{cadastroBLConsultaBean.filtroTabela()}" process="@this filtroGeral tipoStatus" update="tbListarEntidade" />
+			</p:selectOneMenu>
+
+			<p:selectOneMenu id="tipoModal" value="#{cadastroBLConsultaBean.tipoModalSelecionadoEnum}" style="float:left;width:10%;margin-left: 20px;">
+				<f:selectItem id="selecao_1" itemLabel="Selecione uma Cor" itemValue="#{null}" />
+				<f:selectItems id="selecao_2" value="#{cadastroBLConsultaBean.todosTipoModalEnum}" var="tipo" itemValue="#{tipo}" itemLabel="#{tipo.descricao}" />
+
+				<p:ajax event="change" listener="#{cadastroBLConsultaBean.filtroTabela()}" process="@this filtroGeral tipoModal" update="tbListarEntidade" />
+			</p:selectOneMenu>
+
+			<p:remoteCommand name="filtroTable" actionListener="#{cadastroBLConsultaBean.filtroTabela()}" process="@this filtroGeral tipoStatus"
+				update="tbListarEntidade" />
+
+			<p:column style="float:left">
+				<p:inputText id="filtroGeral" placeholder="Pesquisar..." value="#{cadastroBLConsultaBean.filtroGeral}"
+					onkeypress="if (event.keyCode == 13) {filtroTable(); return false; }" style="margin-left: -250px;" />
+			</p:column>
+
+			<p:commandButton id="btFiltroTabela" icon="fa fa-search" action="#{cadastroBLConsultaBean.filtroTabela()}" update="tbListarEntidade"
+				title="#{bundle.pesquisar}" />
+
+			<p:commandButton id="toggler" value="Colunas" style="float:right" />
+			<p:columnToggler datasource="tbListarEntidade" trigger="toggler" />
+		</f:facet>
+
+		<p:column id="idDescricaoBL" headerText="#{bundle.cadastroBL}"
+			style="width:240px;background-color: #{item.tipoModalEnum.codigo==2 ? '#FFFF00' : item.tipoModalEnum.codigo==1 ? '#00FF7F' : item.tipoModalEnum.codigo==0 ? '#ff7f27' : item.tipoModalEnum.codigo==3 ? '#3f48cc' : '#e8eff2'}">
+			<h:outputText value="#{item.descricaoBL}" />
+		</p:column>
+
+		<p:column id="idStatus" headerText="#{bundle.cadastroBLStatus}" width="115">
+			<h:outputText value="#{item.statusBLEnum.descricao}" />
+		</p:column>
+
+		<p:column id="idDescricaoContainerItem" headerText="#{bundle.cadastroBLContainer}"
+			style="width:117px;background-color: #{item.modalidadeBLEnum.codigo==1 ? '#FF0000' : '#e8eff2'}">
+			<h:outputText value="#{item.modalidadeBLEnum.codigo==1 ? 'LCL' : ''}" />
+		</p:column>
+
+		<p:column id="idPaisOrigem" headerText="#{bundle.cadastroBLPaisOrigem}" width="95">
+			<h:outputText value="#{item.paisOrigem.descricaoPais}" rendered="#{item.listaCadastroBLContanier.size() == 0}" />
+		</p:column>
+
+		<p:column id="idPaisProcedencia" headerText="#{bundle.cadastroBLPaisProcedencia}" width="96">
+			<h:outputText value="#{item.paisProcedencia.descricaoPais}" rendered="#{item.listaCadastroBLContanier.size() == 0}" />
+		</p:column>
+
+		<p:column id="idTipoEmbalagem" headerText="#{bundle.cadastroBLEmbalagem}" width="100">
+			<h:outputText value="#{item.tipoEmbalagemEspecie.descricao}" rendered="#{item.listaCadastroBLContanier.size() == 0}" />
+		</p:column>
+
+		<p:column id="idTipoEmbalagemEncontrada" headerText="#{bundle.cadastroBLEmbalagemEncontrada}" width="180">
+			<h:outputText id="textoEmbEncontrada" value="#{cadastroBLConsultaBean.retornaUltimaDescricaoMercadoria(item)}" />
+
+			<p:commandButton id="btEmbEncontrada" icon="fa fa-ellipsis-h" oncomplete="PF('dlgDescMercadoria').show();" style="float:right"
+				action="#{cadastroBLConsultaBean.instanciarBLDescMercadoria(item, rowIdx)}" update=":idDlgDescMercadoria"
+				disabled="#{cadastroBLConsultaBean.validarEmbalagemEncontrada(item)}" title="Incluir embalagem" />
+
+		</p:column>
+
+		<p:column id="idDescricaoMercadoria" headerText="#{bundle.cadastroBLDescricaoMercadoria}" width="380">
+			<h:outputText value="#{item.descricaoMercadoria}" rendered="#{item.listaCadastroBLContanier.size() == 0}" />
+		</p:column>
+
+		<p:column id="idRisco" headerText="#{bundle.cadastroBLRiscoFitossanitario}" width="120">
+			<h:outputText id="textoRisco" value="#{cadastroBLConsultaBean.retornaUltimoRegistro(item)}"
+				style="#{cadastroBLConsultaBean.pintarTextoUltimaAlteracao(item)}" />
+
+			<p:commandButton id="btRisco" icon="fa fa-medkit" oncomplete="PF('dlgRisco').show();"
+				action="#{cadastroBLConsultaBean.instanciarBLRisco(item, rowIdx)}" update=":idDlgRisco"
+				style="float:right;#{cadastroBLConsultaBean.pintarBotaoUltimaAlteracao(item)}"
+				disabled="#{cadastroBLConsultaBean.validarRiscoBloqueio(item, null)}" title="Incluir Risco" />
+		</p:column>
+
+		<p:column id="idNcmDesc" headerText="#{bundle.cadastroBLNCM}" width="280">
+			<h:outputText value="#{item.ncm.descricaoNcm}" rendered="#{item.listaCadastroBLContanier.size() == 0}" />
+
+			<p:commandButton id="btNcmLista" icon="fa fa-search" oncomplete="PF('dlgNcmLista').show();" action="#{cadastroBLConsultaBean.carregarNCM(item)}"
+				update=":listaNCM:frmNcmlista:tbListaDados" title="Ncm Lista" style="float:right" />
+		</p:column>
+
+		<p:column id="idInspecao" headerText="#{bundle.cadastroBLInspecao}" width="48">
+			<p:selectBooleanCheckbox value="#{item.inspecaoControle}" disabled="#{cadastroBLConsultaBean.validarUsuarioDespachante(item, null)}">
+				<p:ajax listener="#{cadastroBLConsultaBean.controlarInspecaoBL(item)}" update="tbListarEntidade tabColunasPrincipal:tbListaTodosContainers" />
+			</p:selectBooleanCheckbox>
+		</p:column>
+
+		<p:column id="idLiberado" headerText="#{bundle.cadastroBLLiberado}" width="48">
+			<p:selectBooleanCheckbox id="prinLiberado" value="#{item.liberadoControle}"
+				disabled="#{cadastroBLConsultaBean.validarInformacaoLiberado(null, item)}">
+				<p:ajax listener="#{cadastroBLConsultaBean.controlarLiberadoBL(item)}" update="tbListarEntidade tabColunasPrincipal:tbListaTodosContainers" />
+				<p:tooltip for="prinLiberado" value="#{cadastroBLConsultaBean.tollTipLiberado(null, item)}" />
+			</p:selectBooleanCheckbox>
+		</p:column>
+
+		<p:column headerText="#{bundle.anexo}" exportable="false" width="35">
+			<p:commandButton icon="fa fa-tags" oncomplete="PF('dlgAnexosImportacao').show();" action="#{cadastroBLConsultaBean.instanciarBLAnexos(item)}"
+				update=":idDlgAnexosImportacao" title="Incluir anexo" />
+		</p:column>
+
+		<p:column id="modalidade" headerText="Modalidade" width="55">
+			<h:outputText value="#{item.modalidadeBLEnum.descricao}" />
+		</p:column>
+
+		<p:column id="idProdAnuencia" headerText="Prod. Anuência" width="55">
+			<h:outputText value="#{cadastroBLConsultaBean.anuenciaMapaSimNao(item)}"  />
+		</p:column>
+
+		<p:column id="idUltimoUsuario" headerText="#{bundle.usuarioLog}" width="130" toggleable="false" visible="true">
+			<p:commandButton icon="fa fa-search" oncomplete="PF('dlgLogBL').show();" action="#{cadastroBLConsultaBean.instanciarBLLog(item)}"
+				update=":idDlgLog :frmLog:tbListaTodosRiscos" title="Localizar Log" />
+		</p:column>
+
+		<p:column id="idImportador" headerText="#{bundle.importador}" width="115" toggleable="true" visible="false">
+			<h:outputText value="#{item.importador.razaoSocial}" />
+		</p:column>
+
+		<!-- 		<p:column id="id" headerText="Id" width="10"> -->
+		<!-- 			<h:outputText value="#{item.id}" /> -->
+		<!-- 		</p:column> -->
+
+		<p:rowExpansion>
+			<consultarBL:consultarBLDataTablePrincipal id="tabColunasPrincipal" />
+		</p:rowExpansion>
+	</p:dataTable>
+
+</composite:implementation>
+
+</html>

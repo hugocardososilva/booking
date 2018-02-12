@@ -1,5 +1,6 @@
 package com.bean;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -23,7 +24,7 @@ import seguranca.com.enums.TelasEntidadesEnum;
 
 @SessionScoped
 @ManagedBean(name = "userMB")
-public class UserMB extends AbstractMB implements IGenericBean {
+public class UserMB extends AbstractMB implements IGenericBean, Serializable {
 	public static final String INJECTION_NAME = "#{userMB}";
 
 	private String nomeTela;

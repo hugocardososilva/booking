@@ -16,7 +16,7 @@ import org.hibernate.annotations.ForeignKey;
 import org.hibernate.envers.Audited;
 
 @Entity
-@Table(name="MENSAGEM_SOLICITACAO")
+@Table(name="ANEXO_SOLICITACAO")
 @Audited
 public class AnexosSolicitacao implements Serializable{
 

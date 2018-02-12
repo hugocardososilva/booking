@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" template="/templates/modeloSistema.xhtml"
+	xmlns:usuario="http://java.sun.com/jsf/composite/pages/usuario">
+
+	<ui:define name="menu">
+		<ui:include src="/includes/menuPrincipal.xhtml" />
+	</ui:define>
+
+	<ui:define name="conteudo">
+		<h:form id="frmPrincipalUsuarios">
+			<p:panelGrid id="panelTitulo" columns="1" layout="grid" columnClasses="ui-grid-col-12" styleClass="ui-panelgrid-blank" style="text-align: center">
+				<h:outputText value="#{bundle.usuarioTela}" styleClass="estiloTituloTela" />
+			</p:panelGrid>
+
+			<h:form id="frmListarUsuarios" rendered="#{userCadastroBean.controlarFormListar}">
+				<p:growl id="message" showDetail="true" />
+
+				<usuario:usuarioFormPrincipal id="cadUsuario" />
+			</h:form>
+
+			<h:form id="frmCadastrarUsuario" rendered="#{userCadastroBean.controlarFormCadastrarUsr}">
+				<usuario:usuarioFormCadastro id="cadFormUsuario" />
+			</h:form>
+
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+				<p:commandButton value="#{bundle.sim}" type="button" styleClass="ui-confirmdialog-yes" icon="fa fa-check" />
+				<p:commandButton value="#{bundle.nao}" type="button" styleClass="ui-confirmdialog-no" icon="fa fa-times-circle" />
+			</p:confirmDialog>
+
+		</h:form>
+	</ui:define>
+</ui:composition>

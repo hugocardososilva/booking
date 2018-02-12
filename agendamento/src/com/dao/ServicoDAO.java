@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.NoResultException;
+import javax.persistence.TypedQuery;
+
 import com.entidade.Servico;
 
 import conexao.com.dao.GenericDAO;
@@ -26,6 +29,15 @@ public class ServicoDAO extends GenericDAO<Servico> {
 		return super.retornaResultadoListaObjeto(Servico.sql_pesquisa_autocomplete, param, false);
 	}
 	
+	public boolean verificarOutroServico() {
+		TypedQuery<Servico> q = em.createQuery(Servico.sql+ " where s.unMedidaJanela eq :un", Servico.class);
+		q.setParameter("un", "O".charAt(0));
+		try {
+			return true;
+		} catch (NoResultException e) {
+			return false;
+		}
+	}
 	
 	
 	
