@@ -1,4 +1,4 @@
-
+	
 .footer{
 	 position: relative;
   right: 0;
@@ -68,4 +68,13 @@ body .border-header thead th{
 }
 .ui-filter-column .hasDatepicker{
 	width: 90%!important;
+}
+body .border-header thead th{
+	border-color: #000;
+}
+body .ui-tabs.ui-tabs-top .ui-tabs-nav li{
+	border: 1px solid #000;
+}
+body .ui-tabs.ui-tabs-top .ui-tabs-nav li.ui-state-active a{
+	background: #ccc;
 }

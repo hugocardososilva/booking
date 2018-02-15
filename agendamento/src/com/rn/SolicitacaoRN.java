@@ -5,6 +5,9 @@ import java.util.Date;
 
 import org.primefaces.model.DefaultScheduleEvent;
 
+import com.dao.AnexoSolicitacaoDAO;
+import com.dao.HistoricoDAO;
+import com.dao.MensagemDAO;
 import com.dao.ServicoJanelaAtendimentoDAO;
 import com.dao.SolicitacaoDAO;
 import com.dao.SolicitacaoServicoDAO;
@@ -32,6 +35,8 @@ public class SolicitacaoRN implements Serializable {
 		
 		return null;
 	}
+	
+	public 
 	
 	
 	

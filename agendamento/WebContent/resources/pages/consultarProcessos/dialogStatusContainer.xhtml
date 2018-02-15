@@ -6,7 +6,7 @@
 </cc:interface>
 
 <cc:implementation>
-	<p:dialog id="idStatusContainer" widgetVar="dlgStatusContainer"   width="300" height="300" draggable="false" resizable="false" modal="true" appendTo="@(body)"
+	<p:dialog id="idStatusContainer" widgetVar="dlgStatusContainer"   width="500" height="500" draggable="false" resizable="false" modal="true" appendTo="@(body)"
 		header="Status Mapa - Container" >
 		<h:form id="frmStatusContainer" enctype="multipart/form-data">
 
@@ -16,22 +16,22 @@
 			</h:outputText>
 
 			<p:panelGrid id="pnlTable" columns="1" layout="grid" columnClasses="ui-grid-col-12" styleClass="ui-panelgrid-blank">
-				<p:dataTable id="tbListaDados" value="#{consultaProcessosBean.listaBLContanier}" var="item" reflow="true" emptyMessage="Nenhum registro encontrado.">
-					<p:column id="idNroContainerLog" headerText="#{bundle.cadastroBLContainer}" width="10">
+				<p:dataTable id="tbListaDados" value="#{consultaProcessosBean.listaBLContanier}" var="item" reflow="true" styleClass="border-header" emptyMessage="Nenhum registro encontrado.">
+					<p:column id="idNroContainerLog" headerText="#{bundle.cadastroBLContainer}" width="200">
 						<f:facet name="header">
 							<h:outputText value="#{bundle.cadastroBLContainer}" />
 						</f:facet>
 						<h:outputText value="#{item.numeroContanier}" disabled="true" />
 					</p:column>
 
-					<p:column id="idInspecaoLog" headerText="#{bundle.cadastroBLInspecao}" width="10">
+					<p:column id="idInspecaoLog" headerText="#{bundle.cadastroBLInspecao}" width="50">
 						<f:facet name="header">
 							<h:outputText value="#{bundle.cadastroBLInspecao}" />
 						</f:facet>
 						<p:selectBooleanCheckbox value="#{item.inspecao}" disabled="true" />
 					</p:column>
 
-					<p:column id="idLiberadoLog" headerText="#{bundle.cadastroBLLiberado}" width="10">
+					<p:column id="idLiberadoLog" headerText="#{bundle.cadastroBLLiberado}" width="50">
 						<f:facet name="header">
 							<h:outputText value="#{bundle.cadastroBLLiberado}" />
 						</f:facet>

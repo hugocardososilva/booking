@@ -85,6 +85,7 @@ public class ConsultaProcessosBean extends CadastroDtcDtaComumBean implements IG
 	
 	
 	private StatusBLEnum statusBLEnum;
+	private StatusAtiLclFclEnum statusAtiLclFclEnum;
 	
 	
 
@@ -953,6 +954,11 @@ public class ConsultaProcessosBean extends CadastroDtcDtaComumBean implements IG
 			JSFMessageUtil.adicionarMensagemErro(e.getMessage());
 		}
 	}
+	
+
+	public StatusAtiLclFclEnum[] getStatusAtiLclFclEnum() {
+		return statusAtiLclFclEnum.values();
+	}
 
 	public boolean esconderColuna(CadastroBLAnexos item) {
 		boolean valor = true;
@@ -1515,6 +1521,7 @@ public class ConsultaProcessosBean extends CadastroDtcDtaComumBean implements IG
 		campos.put("importador.razaoSocial", "String");
 		campos.put("programacaoNavio.navio", "String");
 		campos.put("cadastroBL.statusBLEnum", "int");
+		campos.put("statusAtiLclFclEnum", "int");
 		return campos;
 	}
 	

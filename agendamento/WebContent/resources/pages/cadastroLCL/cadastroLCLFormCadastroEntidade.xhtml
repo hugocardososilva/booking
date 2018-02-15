@@ -74,7 +74,7 @@
 
 				<p:commandButton id="blMaster" value="Visualizar" type="button" icon="#{bundle.iconLupaLocalizar}" />
 				<p:overlayPanel id="blMasterPanel" for="blMaster" hideEffect="fade">
-					<p:dataTable id="dataTableListaLCL" var="item" value="#{cadastroLCLBean.listaLCLMemoria}" rows="5">
+					<p:dataTable id="dataTableListaLCL" styleClass="border-header" var="item" value="#{cadastroLCLBean.listaLCLMemoria}" rows="5">
 						<p:column headerText="#{bundle.cadastroBLMasterNroMaster}" width="95">
 							<h:outputText value="#{item.numeroBLMaster}" />
 						</p:column>
@@ -431,7 +431,7 @@
 					<f:selectItems value="#{cadastroLCLBean.listaLCLMemoria}" var="itemLCL" itemValue="#{itemLCL}" itemLabel="#{itemLCL.numeroContanier}" />
 				</p:selectOneMenu>
 
-				<p:commandButton id="cbVincularLCL" icon="fa fa-plus" process="@this panelLCL lclSelecionado" action="#{cadastroLCLBean.vincularLCL()}"
+				<p:commandButton id="cbVincularLCL" styleClass="border-header" icon="fa fa-plus" process="@this panelLCL lclSelecionado" action="#{cadastroLCLBean.vincularLCL()}"
 					update="dataTableListaLCLsVinculados">
 					<p:tooltip for="cbVincularLCL" value="Vincular LCL" />
 				</p:commandButton>
@@ -483,7 +483,7 @@
 		<p:separator />
 
 		<p:panelGrid id="panelLCL_listaBLs" columns="1" layout="grid" columnClasses="ui-grid-col-12" styleClass="ui-panelgrid-blank">
-			<p:dataTable id="tbListaTodosContanier" value="#{cadastroLCLBean.listaBL}" var="item" reflow="true" emptyMessage="Nenhum registro encontrado.">
+			<p:dataTable id="tbListaTodosContanier" styleClass="border-header" value="#{cadastroLCLBean.listaBL}" var="item" reflow="true" emptyMessage="Nenhum registro encontrado.">
 
 				<p:column id="idNroContainer" headerText="#{bundle.cadastroBL}" width="80">
 					<h:outputText value="#{item.descricaoBL}" />

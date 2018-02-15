@@ -1,6 +1,10 @@
 package conexao.com.dao;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+
 
 import seguranca.com.entidade.CadastroBLContanier;
 
@@ -40,4 +44,9 @@ public class CadastroBLContainerDAO extends GenericDAO<CadastroBLContanier> {
 	public int executaQtdeRegistrosLiberado(String sql, Map<String, Object> parametersCampoValor) {
 		return super.executaSqlCountRegistros(sql, parametersCampoValor, false);
 	}
+//	public List<CadastroBLContanier> pesquisaAutoCompletePorUser(String pesquisa){
+//		Map<String, Object> param= new HashMap<String, Object>();
+//		param.put(CadastroBLContanier.CAMPO_NUMEROCONTANIER, "%"+pesquisa+"%");
+//		return super.retornaResultadoListaObjeto(Servico.sql_pesquisa_autocomplete, param, false);
+//	}
 }

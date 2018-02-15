@@ -98,8 +98,17 @@
 				<p:tooltip for="btnAnexos" value="#{bundle.anexo}" showEffect="clip" hideEffect="explode" />
 			</p:commandButton>
 		</p:column>
-		
-		<p:column exportable="true" filterBy="#{item.cadastroBL.statusBLEnum}" headerText="Status" width="200">
+			<p:column exportable="true" filterBy="#{item.statusAtiLclFclEnum}" headerText="Status Clif" width="200">
+		<f:facet name="filter">
+                <p:selectOneMenu onchange="PF('tbListarEntidade').filter()" >
+                    <f:selectItem itemLabel="Todos" itemValue="#{null}" noSelectionOption="true" />
+                    <f:selectItems value="#{consultaProcessosBean.statusAtiLclFclEnum}" var="status" itemLabel="#{status.descricao}" itemValue="#{status.codigo}" />
+                </p:selectOneMenu>
+            </f:facet>
+			<h:outputText value="#{item.statusAtiLclFclEnum.descricao}"/>
+			
+		</p:column>
+		<p:column exportable="true" filterBy="#{item.cadastroBL.statusBLEnum}" headerText="Status Mapa" width="200">
 		<f:facet name="filter">
                 <p:selectOneMenu onchange="PF('tbListarEntidade').filter()" >
                     <f:selectItem itemLabel="Todos" itemValue="#{null}" noSelectionOption="true" />
@@ -109,6 +118,7 @@
 			<h:outputText value="#{item.cadastroBL.statusBLEnum.descricaoAgendamento}"/>
 			
 		</p:column>
+	
 		
 		
 		

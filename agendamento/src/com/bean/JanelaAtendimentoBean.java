@@ -90,7 +90,7 @@ public class JanelaAtendimentoBean extends AbstractMB implements IGenericBean,Se
 	}
 	public void novaEntidade() {
 		//metodo que cria uma nova entidade quando o usuário escolher a data de adicao
-		System.out.println("nova entidade com data : " + dataNovoCadastro);
+		//System.out.println("nova entidade com data : " + dataNovoCadastro);
 		entidadeJanelaAtendimento = new JanelaAtendimento();
 		entidadeJanelaAtendimento.setData(dataNovoCadastro);
 		

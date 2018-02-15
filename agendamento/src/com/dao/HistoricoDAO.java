@@ -1,4 +1,4 @@
-package com.rn;
+package com.dao;
 
 import com.entidade.Historico;
 

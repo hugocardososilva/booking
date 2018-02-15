@@ -41,6 +41,8 @@ public class Solicitacao implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	public static final String sql= "select s from Solicitacao s";
+	public static final String sqlCount = "select COUNT(s) from Solicitacao s";
 	@Id
 	@SequenceGenerator(name= "SEQ_SOLICITACAO_ID", sequenceName= "SEQ_SOLICITACAO_ID")
 	@GeneratedValue(strategy = GenerationType.AUTO, generator= "SEQ_SOLICITACAO_ID")
@@ -68,6 +70,9 @@ public class Solicitacao implements Serializable {
 	private StatusSolicitacao statusSolicitacao;
 	
 	@OneToMany(fetch= FetchType.LAZY, mappedBy= "solicitacao", cascade = CascadeType.ALL, orphanRemoval= true)
+	private List<SolicitacaoServico> solicitacaoServicos;
+	
+	@OneToMany(fetch= FetchType.LAZY, mappedBy= "solicitacao", cascade = CascadeType.ALL, orphanRemoval= true)
 	private List<AnexosSolicitacao> anexos;
 	
 	@OneToMany(fetch= FetchType.LAZY, mappedBy= "solicitacao", cascade = CascadeType.ALL, orphanRemoval= true)
@@ -81,6 +86,7 @@ public class Solicitacao implements Serializable {
 	public Solicitacao() {
 		// TODO Auto-generated constructor stub
 	}
+	
 
 	public int getId() {
 		return id;
@@ -165,6 +171,15 @@ public class Solicitacao implements Serializable {
 		this.historico = historico;
 	}
 	
+	
+	public List<SolicitacaoServico> getSolicitacaoServicos() {
+		return solicitacaoServicos;
+	}
+
+	public void setSolicitacaoServicos(List<SolicitacaoServico> solicitacaoServicos) {
+		this.solicitacaoServicos = solicitacaoServicos;
+	}
+
 	@Override
 	public int hashCode() {
 		return id;
@@ -179,6 +194,9 @@ public class Solicitacao implements Serializable {
 
 		return false;
 	}
+	public Integer qntServicos() {
+		return this.solicitacaoServicos.size();
+	}
 
 	public void addHistorico(Historico historico) {
 		this.historico.add(historico);
@@ -190,6 +208,13 @@ public class Solicitacao implements Serializable {
 	public void removeAnexo(AnexosSolicitacao anexosSolicitacao) {
 		this.anexos.remove(anexosSolicitacao);
 	}
+	public void addSolicitacaoServico(SolicitacaoServico solicitacaoServico) {
+		this.solicitacaoServicos.add(solicitacaoServico);
+	}
+	public void removeSolicitacaoServico(SolicitacaoServico solicitacaoServico) {
+		this.solicitacaoServicos.remove(solicitacaoServico);
+	}
+	
 	
 
 
