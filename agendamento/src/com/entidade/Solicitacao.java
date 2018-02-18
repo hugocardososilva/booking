@@ -63,8 +63,7 @@ public class Solicitacao implements Serializable {
 	@Column(name="ID_ULTIMO_RESPONSAVEL")
 	private Integer ultResponsavel;
 	
-	@Enumerated(EnumType.STRING)
-	private StatusServicos statusServicos;
+	
 	
 	@Enumerated(EnumType.STRING)
 	private StatusSolicitacao statusSolicitacao;
@@ -128,13 +127,7 @@ public class Solicitacao implements Serializable {
 		this.ultResponsavel = ultResponsavel;
 	}
 
-	public StatusServicos getStatusServicos() {
-		return statusServicos;
-	}
-
-	public void setStatusServicos(StatusServicos statusServicos) {
-		this.statusServicos = statusServicos;
-	}
+	
 
 	public StatusSolicitacao getStatusSolicitacao() {
 		return statusSolicitacao;

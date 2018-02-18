@@ -79,8 +79,7 @@ public class SolicitacaoLazyDataModel extends LazyDataModel<Solicitacao> {
 			
 			
 			if(!filtros.isEmpty()) {
-				consulta.append(" where ");
-				consultaCount.append(" where ");
+				
 				for(Map.Entry<String, Object> entry : filtros.entrySet()) {
 					if(entry.getKey().equals("filtrosDataCadastro")) {
 						
@@ -105,8 +104,17 @@ public class SolicitacaoLazyDataModel extends LazyDataModel<Solicitacao> {
 						
 					}
 				}
+				if(consultaStatusServico == null) {
+					consulta.append(" where ");
+					consultaCount.append(" where ");
+				}else{	
+					consulta.append(consultaStatusServico.toString());				
+					consultaCount.append(consultaStatusServico.toString());
+				}
 				if(consultaDataCadastro != null ) {
+					consulta.append(" and ");
 					consulta.append(consultaDataCadastro.toString());
+					consultaCount.append(" and ");
 					consultaCount.append(consultaDataCadastro.toString());
 				}
 				if(consultaDataSolicitacao != null) {
@@ -116,24 +124,21 @@ public class SolicitacaoLazyDataModel extends LazyDataModel<Solicitacao> {
 					consultaCount.append(consultaDataSolicitacao.toString());				
 					
 				}
-				if(consultaStatusServico != null) {
-					consulta.append(" and ");
-					consulta.append(consultaStatusServico.toString());
-					consultaCount.append(" and ");
-					consultaCount.append(consultaStatusServico.toString());
-				}
-				if(consultaStatusSolicitacao != null) {
-					consulta.append(" and ");
-					consulta.append(consultaStatusSolicitacao.toString());
-					consultaCount.append(" and ");
-					consultaCount.append(consultaStatusSolicitacao.toString());
-				}
+				
+				
+				
 				if(consultaCliente != null) {
 					consulta.append(" and ");
 					consulta.append(consultaCliente.toString());
 					consultaCount.append(" and ");
 					consultaCount.append(consultaCliente.toString());
 				}
+			}
+			if(consultaStatusSolicitacao != null) {
+				consulta.append(" and ");
+				consulta.append(consultaStatusSolicitacao.toString());
+				consultaCount.append(" and ");
+				consultaCount.append(consultaStatusSolicitacao.toString());
 			}
 			if(sortField != null && !sortField.isEmpty()) {
 				consulta.append(" order by ");
@@ -171,7 +176,7 @@ public class SolicitacaoLazyDataModel extends LazyDataModel<Solicitacao> {
 		Date dataFim = (Date)entry.get("dataCadastroFim");
 		consultaDataCadastro = new StringBuilder();
 		consultaDataCadastro.append(" (");
-		consultaDataCadastro.append("dataCadastro");
+		consultaDataCadastro.append("s.dataCadastro");
 		consultaDataCadastro.append(" ");
 		consultaDataCadastro.append("between");
 		consultaDataCadastro.append(" ");
@@ -192,7 +197,7 @@ public class SolicitacaoLazyDataModel extends LazyDataModel<Solicitacao> {
 		Date dataFim = (Date)entry.get("dataSolicitacaoFim");
 		consultaDataSolicitacao = new StringBuilder();
 		consultaDataSolicitacao.append(" (");
-		consultaDataSolicitacao.append("dataCadastro");
+		consultaDataSolicitacao.append("s.dataCadastro");
 		consultaDataSolicitacao.append(" ");
 		consultaDataSolicitacao.append("between");
 		consultaDataSolicitacao.append(" ");
@@ -209,15 +214,15 @@ public class SolicitacaoLazyDataModel extends LazyDataModel<Solicitacao> {
 	}
 	public void inserirConsultaFiltroStatusServicos(List<Integer> entry) {
 		consultaStatusServico = new StringBuilder();
-		consultaStatusServico.append(" (");
-		consultaStatusServico.append("statusSolicitacao");
-		consultaStatusServico.append(" ");
-		consultaStatusServico.append(" in ");
-		consultaStatusServico.append(" (");
-		Iterator<Integer> it = entry.iterator();
-			
+		consultaStatusServico.append(" join ");
+		consultaStatusServico.append("s.solicitacaoServicos as ss ");
+		consultaStatusServico.append(" where ");
+		consultaStatusServico.append(" ss.statusServicos ");
+		consultaStatusServico.append(" in(");
+		Iterator it = entry.iterator();
+		
 		while(it.hasNext()) {
-			int item = (int)it.next();
+			String item = (String)it.next();
 			consultaStatusServico.append(item);
 				if(it.hasNext()) consultaStatusServico.append(",");
 		}
@@ -227,17 +232,20 @@ public class SolicitacaoLazyDataModel extends LazyDataModel<Solicitacao> {
 	public void inserirConsultaFiltroStatusSolicitacao(List<Integer> entry) {
 		consultaStatusSolicitacao = new StringBuilder();
 		consultaStatusSolicitacao.append(" (");
-		consultaStatusSolicitacao.append("statusSolicitacao");
+		
+		consultaStatusSolicitacao.append("s.statusSolicitacao");
 		consultaStatusSolicitacao.append(" ");
 		consultaStatusSolicitacao.append(" in ");
 		consultaStatusSolicitacao.append(" (");
-		Iterator<Integer> it = entry.iterator();
+		Iterator it = entry.iterator();
+		
 		
 		while(it.hasNext()) {
-			int item = (int)it.next();
-			consultaStatusSolicitacao.append(item);
+			String item = (String)it.next();
+			consultaStatusSolicitacao.append(item.toString());
 				if(it.hasNext()) consultaStatusSolicitacao.append(",");
 		}
+		consultaStatusSolicitacao.append(") ");
 		consultaStatusSolicitacao.append(") ");
 		
 		
@@ -245,7 +253,7 @@ public class SolicitacaoLazyDataModel extends LazyDataModel<Solicitacao> {
 	public void inserirConsultaFiltroCliente(int id) {
 		consultaCliente = new StringBuilder();
 		consultaCliente.append(" (");
-		consultaCliente.append("cliente.id");
+		consultaCliente.append("s.cliente.id");
 		consultaCliente.append(" ");
 		consultaCliente.append(" = ");
 		consultaCliente.append(id);

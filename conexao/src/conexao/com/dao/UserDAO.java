@@ -53,4 +53,5 @@ public class UserDAO extends GenericDAO<User> {
 		
 		return (User) super.retornaResultadoObjeto(User.FILTRO_USUARIO_SENHA, parameters);
 	}
+	
 }

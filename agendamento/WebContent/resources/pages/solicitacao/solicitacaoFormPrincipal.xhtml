@@ -18,60 +18,68 @@
 
 <!-- IMPLEMENTATION -->
 <composite:implementation>
-	<p:fieldset legend="Data do Cadastro" style="margin-bottom:20px">
+<p:toolbar>
+	<f:facet name="left">
+		
+	 	<p:commandButton id="idBtnNocaSolicitacao" icon="fa fa-plus"
+		value="Nova Solicitacao" styleClass="green-btn" action="#{solicitacaoBean.novaSolicitacao}" update="@all" />
+		
+	</f:facet>
+	
+</p:toolbar>
+<p:spacer width="0" height="50"/>
+	<p:fieldset  legend="Data do Cadastro" >
 
 		<p:outputLabel for="idDataCadastroInicio" value="De:" />
 		<p:calendar id="idDataCadastroInicio"
 			value="#{solicitacaoBean.dataCadastroInicio}" showOn="button" />
-		<p:spacer width="50"/>
+		<p:spacer height="0" width="50"/>
 		
 		<p:outputLabel for="idFiltroTermino" value="Até:" />		
 		<p:calendar id="idFiltroTermino"
-			value="#{solicitacaoBean.dataFiltroFim}" showOn="button" />
+			value="#{solicitacaoBean.dataCadastroFim}" showOn="button" />
 		<br/>
-		<p:spacer height="30"/>
+	
 	
 	</p:fieldset>
-	<p:fieldset legend="Data da Solicitação" style="margin-bottom:20px">
+	<p:fieldset legend="Data da Solicitação">
 
 		<p:outputLabel for="idDataSolicitacaoInicio" value="De:" />
 		<p:calendar id="idDataSolicitacaoInicio"
 			value="#{solicitacaoBean.dataSolicitacaoInicio}" showOn="button" />
-		<p:spacer width="50"/>
+		<p:spacer height="0" width="50"/>
 		
-		<p:outputLabel for="idDataSolicitacaoTermino" value="Até" />		
+		<p:outputLabel for="idDataSolicitacaoTermino" value="Até:" />		
 		<p:calendar id="idDataSolicitacaoTermino"
 			value="#{solicitacaoBean.dataSolicitacaoFim}" showOn="button" />
 		<br/>
-		<p:spacer height="30"/>
+		
 		
 	</p:fieldset>
-	<p:fieldset legend="Cliente" style="margin-bottom:20px">
+	<p:fieldset legend="Cliente">
 
 			<p:panelGrid columns="1" styleClass="form-group ui-panelgrid-blank"
 				layout="grid">
 				
-				<p:autoComplete id="dd" dropdown="true" size="100"
-					value="#{solicitacaoBean.cliente}" var="item"
-					itemLabel="#{item}" itemValue="#{item}" 
+				<p:autoComplete id="dd" dropdown="true" size="70"  scrollHeight="100"
+					value="#{solicitacaoBean.cliente}" var="item" 
+					itemLabel="#{item.name}" itemValue="#{item}" converter="clienteConverter"
 					
-					completeMethod="#{janelaAtendimentoBean.pesquisaServico}">
-					<p:ajax event="itemSelect"
-						listener="#{solicitacaoBean.filtrarCliente}"
-						 />
+					completeMethod="#{solicitacaoBean.pesquisaCliente}">
+					
 				</p:autoComplete>
 			</p:panelGrid>
 	</p:fieldset>
 	
-	<p:fieldset legend="Status das Solicitações" style="margin-bottom:20px">
-	 	<p:selectManyButton value="#{solicitacaoBean.filtroStatus}">
+	<p:fieldset legend="Status das Solicitações" >
+	 	<p:selectManyButton value="#{solicitacaoBean.filtroStatusSolicitacao}">
 		 	<f:selectItems value="#{solicitacaoBean.statusSolicitacao}" var="status" 
 		 	itemLabel="#{status.descricao}" itemValue="#{status.codigo}" />
 		 </p:selectManyButton>
 	</p:fieldset>
-	<p:fieldset legend="Status dos Servicos" style="margin-bottom:20px">
-	 	<p:selectManyButton value="#{solicitacaoBean.filtroStatus}">
-		 	<f:selectItems value="#{solicitacaoBean.statusSolicitacao}" var="status" 
+	<p:fieldset legend="Status dos Servicos">
+	 	<p:selectManyButton value="#{solicitacaoBean.filtroStatusServicos}">
+		 	<f:selectItems value="#{solicitacaoBean.statusServicos}" var="status" 
 		 	itemLabel="#{status.descricao}" itemValue="#{status.codigo}" />
 		 </p:selectManyButton>
 	</p:fieldset>
@@ -82,103 +90,87 @@
 	
 	
 	<p:toolbar>
-			<f:facet name="left">
-	 
-	<p:commandButton id="idBtnFiltrar" icon="fa fa-search"
-		value="Filtrar"
-		onclick="PF('dlgProgNovoDia').show();"  />
+	<f:facet name="left">
+		<p:commandButton id="idBtnFiltrar" icon="fa fa-search"
+		value="Filtrar" action="#{solicitacaoBean.filtros}" update="#{p:component('tbListarEntidade')}" />
+	 	<p:spacer width="10" height="0"/>
+	 	<p:commandButton id="idBtnLimpar" icon="fa fa-eraser" 
+		value="Limpar" styleClass="orange-btn"  >
+			<p:ajax resetValues="true" update="#{p:component('frmListarPrincipal')}"/>
+		</p:commandButton>
+	 	
+				
 	 
 	</f:facet>
 	</p:toolbar>
 	
-	<p:fieldset id="programacoes" legend="Programações" style="margin-bottom:20px">
+	<p:fieldset id="idFsSolicitacoes" legend="Solicitações" style="margin-bottom:20px">
 		<p:panel id="panelListarEntidade" styleClass="esconderBorda">
-			<p:dataTable id="tbListarEntidade"
-				value="#{solicitacaoBean.janelas}" var="item"
-				emptyMessage="#{bundle.noRecords}" paginator="true" rows="31"
+			<p:dataTable id="tbListarEntidade" value="#{solicitacaoBean.lazyModel}" var="item"
+				emptyMessage="#{bundle.noRecords}" paginator="true" rows="10"
 				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 				currentPageReportTemplate="Total de {totalRecords} registros - Página: {currentPage} de {totalPages} "
-				rowsPerPageTemplate="10,20,30,40,50" 
-				paginatorPosition="bottom" reflow="true">
+				rowsPerPageTemplate="10,20,30,40,50" paginatorPosition="bottom" lazy="true"
+				reflow="true">
 
 
+				<p:column id="idClienteCol" headerText="Cliente" sortBy="#{item.cliente.id}" width="150" >
+					<h:outputText value="#{item.cliente.id} - {item.cliente.name}"/>
+				</p:column>
+				
+				
 
-				<p:column id="idDia" headerText="Dia" sortBy="#{item.data}" width="100">
-					<p:commandLink id="btnEditar"
-						action="#{solicitacaoBean.editarEntidade}" update="@all">
-						
+				<p:column id="idSolicitacaoIdCol" headerText="Solicitacao" sortBy="#{item.id}"
+					width="100">
+					<p:commandLink id="btnEditar" action="#{solicitacaoBean.editarEntidade}" update="@all">
+
 						<f:setPropertyActionListener value="#{item}"
-							target="#{solicitacaoBean.entidadeJanelaAtendimento}" />
-						<h:outputText value="#{item.data}" >
-							<f:convertDateTime locale="pt,BR" pattern="dd/MM/yyyy"/>
-						</h:outputText>
+							target="#{solicitacaoBean.solicitacao}" />
+						<h:outputText value="#{item.id}"/>							
+						
 					</p:commandLink>
 				</p:column>
-				<p:column id="idInicio" sortBy="#{item.inicioDia}"  headerText="Início">
-					<h:outputText value="#{item.inicioDia}" />
-				</p:column>
-				<p:column id="idTermino" sortBy="#{item.terminoDia}" headerText="Termino">
-					<h:outputText value="#{item.terminoDia}" />
-				</p:column>
-				<p:column id="idClonar" headerText="Clonar" width="100">
-				<p:commandLink id="btnClonar"
-						onclick="PF('dlgClonarNovoDia').show();">
-						
-						<f:setPropertyActionListener value="#{item}"
-							target="#{solicitacaoBean.entidadeJanelaAtendimento}" />
-					<h:outputText value="Clonar" />
-				</p:commandLink>
-				</p:column>
-				<p:column id="idExcluir" headerText="Excluir" width="100">
-				<p:commandLink id="btnExcluirEntidadeJanela"
-						action="#{solicitacaoBean.excluirEntidade}" update="@all">
-				<f:setPropertyActionListener value="#{item}"
-							target="#{solicitacaoBean.entidadeJanelaAtendimento}" />
-					<p:confirm header="Confirmar Exclusão" message="Tem certeza que deseja excluir o registro?" 
-						icon="ui-icon-alert" />
 				
-					<h:outputText value="Excluir" />
-				</p:commandLink>
+				<p:column id="idDataCadastro" sortBy="#{item.dataCadastro}"
+					headerText="Dt. de Cadastro">
+					<h:outputText value="#{item.dataCadastro}" >
+						<f:convertDateTime locale="pt,BR" pattern="dd/MM/yyyy"/>
+					</h:outputText>
 				</p:column>
-
-
-
+				
+				<p:column id="idDataSolicitacao" sortBy="#{item.dataSolicitacao}"
+					headerText="Dt. de Solicitação">
+					<h:outputText value="#{item.dataSolicitacao}" >
+						<f:convertDateTime locale="pt,BR" pattern="dd/MM/yyyy"/>
+					</h:outputText>
+				</p:column>
+				
+				<p:column id="idATIcol" headerText="ATI" width="60">
+					<h:outputText value="*" />
+				</p:column>
+				
+				<p:column id="idBLcol" headerText="BL" width="60">
+					<h:outputText value="*" />
+				</p:column>
+				
+				<p:column id="idStatus" sortBy="#{item.statusSolicitacao}"
+					headerText="Status Serviços">
+					<h:outputText value="#{item.statusSolicitacao.descricao}" />
+				</p:column>
+				
+				<p:column id="idUltResp" sortBy="#{item.ultResponsavel}"
+					headerText="Ult. Resposável">
+					<h:outputText value="#{item.ultResponsavel}" />
+				</p:column>
+				
+				
+				
 
 
 			</p:dataTable>
 		</p:panel>
 	</p:fieldset>
-	<h:form>
-	<p:dialog header="Programar novo dia"  widgetVar="dlgProgNovoDia" modal="true" resizable="false">
-       
-        <p:panelGrid columns="2" >
-           
-            <p:calendar id="idProgNovoDiaData" value="#{solicitacaoBean.dataNovoCadastro}" showOn="button" />
- 
-            
- 
-            <f:facet name="footer">
-                <p:commandButton value="Salvar" process="@form" update="frmListarPrincipal, frmCadastrarEntidade" action="#{solicitacaoBean.novaEntidade}"
-                       oncomplete="PF('dlgProgNovoDia').hide();" />
-            </f:facet>  
-        </p:panelGrid>
-    </p:dialog>
-    </h:form>
-    <h:form>
-    <p:dialog header="Clonar para" widgetVar="dlgClonarNovoDia" modal="true" resizable="false">
-        <h:panelGrid columns="1" cellpadding="5">
-           
-            <p:calendar id="idClonarNovoDiaData" value="#{solicitacaoBean.dataNovoCadastro}" showOn="button"/>
- 
-            
- 
-            <f:facet name="footer">
-                <p:commandButton value="Salvar" process="@form" update="frmListarPrincipal, frmCadastrarEntidade" action="#{solicitacaoBean.clonarEntidade}"
-                                 oncomplete="PF('dlgClonarNovoDia').hide();" />
-            </f:facet>  
-        </h:panelGrid>
-    </p:dialog>
-	</h:form>
+	
 	
 	
 </composite:implementation>

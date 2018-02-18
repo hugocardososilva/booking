@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml"
-	xmlns:atendimento="http://java.sun.com/jsf/composite/pages/janelaAtendimento" >
+	xmlns:solicitacao="http://java.sun.com/jsf/composite/pages/solicitacao" >
 
 	
 
@@ -11,18 +11,18 @@
 		
 		<h:form id="frmListarPrincipal" styleClass="body_teste">
 			<p:panelGrid id="panelTitulo" columns="1" layout="grid" columnClasses="ui-grid-col-12" styleClass="ui-panelgrid-blank">
-				<h1><h:outputText value="Solicitações de Servicos" styleClass="estiloTituloTela" /></h1>
+				<h1><h:outputText value="Solicitações de Serviços" styleClass="estiloTituloTela" /></h1>
 			</p:panelGrid>
 			<p:separator />
 
 			<p:panel id="panellistarJanela" visible="#{solicitacaoBean.controlarFormListar}" styleClass="esconderBorda ">
-				<atendimento:janelaAtendimentoFormPrincipal id="JaSerPrincpalEntidade"/>
+				<solicitacao:solicitacaoFormPrincipal id="SolicitacaoPrincpalEntidade"/>
 			</p:panel>
 		</h:form>
 
 		<h:form id="frmCadastrarEntidade" styleClass="pure-form pure-form-stacked">
 			<p:panel id="panelCadastrarEntidade" rendered="#{solicitacaoBean.controlarFormCadastrar}" styleClass="esconderBorda">
-				<atendimento:janelaAtendimentoFormCadastroEntidade id="jaServCadEntidade" />
+				<solicitacao:solicitacaoFormCadastroEntidade id="SolicitacaoServCadEntidade" />
 			</p:panel>
 		</h:form>
 

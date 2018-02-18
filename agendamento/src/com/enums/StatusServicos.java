@@ -1,7 +1,7 @@
 package com.enums;
 
 public enum StatusServicos {
-	CRIA_OS_SARA(0,"Cria OS SARA"),
+	CRIA_OS_SARA(0,"Gerar OS SARA"),
 	OS_GERADA(1, "OS Gerada"),
 	OS_INICIADA(2, "Os iniciada"),
 	FINALIZADO(3, "Finalizado");

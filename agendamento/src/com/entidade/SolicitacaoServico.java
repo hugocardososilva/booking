@@ -3,6 +3,8 @@ package com.entidade;
 import java.io.Serializable;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,6 +15,8 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.ForeignKey;
 import org.hibernate.envers.Audited;
+
+import com.enums.StatusServicos;
 
 import seguranca.com.entidade.CadastroBLContanier;
 
@@ -47,6 +51,9 @@ public class SolicitacaoServico implements Serializable{
 	@JoinColumn(name="SOLICITACAO_ID", insertable= true, updatable= true, nullable = false)
 	@ForeignKey(name="FK_SOLICITACAO_ID")
 	private Solicitacao solicitacao;
+	
+	@Enumerated(EnumType.STRING)
+	private StatusServicos statusServicos;
 	
 	
 	public SolicitacaoServico() {
@@ -101,6 +108,13 @@ public class SolicitacaoServico implements Serializable{
 
 	public void setSolicitacao(Solicitacao solicitacao) {
 		this.solicitacao = solicitacao;
+	}
+	public StatusServicos getStatusServicos() {
+		return statusServicos;
+	}
+
+	public void setStatusServicos(StatusServicos statusServicos) {
+		this.statusServicos = statusServicos;
 	}
 	
 

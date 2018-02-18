@@ -1,6 +1,7 @@
 package com.bean;
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -28,20 +29,23 @@ import com.entidade.Solicitacao;
 import com.entidade.SolicitacaoServico;
 import com.enums.StatusServicos;
 import com.enums.StatusSolicitacao;
+import com.lazy.SolicitacaoLazyDataModel;
 import com.rn.SolicitacaoRN;
 import com.util.JSFMessageUtil;
 
-import conexao.com.util.JSFUtil;
+import conexao.com.bean.AbstractMB;
+import conexao.com.util.IGenericBean;
+
 import seguranca.com.entidade.CadastroBLContanier;
 import seguranca.com.entidade.User;
 
 @ViewScoped
 @ManagedBean
-public class SolicitacaoBean {
+public class SolicitacaoBean extends AbstractMB implements Serializable {
 	@SuppressWarnings("unused")
 	private static final long serialVersionUID = 1L;
 	
-	private LazyDataModel<JanelaAtendimento> lazyModel;
+	private LazyDataModel<Solicitacao> lazyModel;
 	
 	@ManagedProperty(value = UserMB.INJECTION_NAME)
 	private UserMB userMB;
@@ -95,10 +99,21 @@ public class SolicitacaoBean {
 	
 	@PostConstruct
 	public void init() {
-	
+		setControlarFormCadastrar(false);
+		setControlarFormEditar(false);
+		setControlarFormListar(true);
+		filtros();
 		
 	}
+	public void editarEntidade() {
+		setControlarFormCadastrar(true);
+		setControlarFormEditar(true);
+		setControlarFormListar(false);
+	}
 	public void filtros() {
+		try {
+			
+		
 		if(dataCadastroInicio!=null || dataCadastroFim != null ) {
 			if(dataCadastroInicio.after(dataCadastroFim)) {
 				JSFMessageUtil.adicionarMensagemErro(" A data 'De:' não pode ser mais que a data 'Até:' ");
@@ -109,7 +124,7 @@ public class SolicitacaoBean {
 				filtrosDataCadastro.put("dataCadastroFim", dataCadastroFim);
 				getFiltros().put("filtrosDataCadastro", filtrosDataCadastro);
 			}
-			
+		}	
 			if(dataSolicitacaoInicio != null || dataSolicitacaoFim != null) {
 				if(dataSolicitacaoInicio.after(dataSolicitacaoFim)) {
 					JSFMessageUtil.adicionarMensagemErro(" A data 'De:' não pode ser mais que a data 'Até:' ");
@@ -133,6 +148,9 @@ public class SolicitacaoBean {
 				getFiltros().put("cliente", cliente.getId());
 			}
 			
+		
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 	
@@ -169,16 +187,28 @@ public class SolicitacaoBean {
 		
 	}
 	
+	public List<User> pesquisaCliente(String pesquisa){
+		List<User> list = new ArrayList<>();
+		try {
+			list = getRn().pesquisarUsuarioAutoCompletePorCliente(pesquisa);
+		} catch (Exception e) {
+			e.printStackTrace();
+			JSFMessageUtil.adicionarMensagemErro("Aconteceu um problema ao carregar a lista de clientes.");
+		}
+		return list;
+	}
+	
 	
 	
 	public Servico getServico() {
 		if(servico== null) servico = new Servico();
 		return servico;
 	}
-	public LazyDataModel<JanelaAtendimento> getLazyModel() {
+	public LazyDataModel<Solicitacao> getLazyModel() {
+		if(lazyModel == null) lazyModel = new SolicitacaoLazyDataModel(getFiltros());
 		return lazyModel;
 	}
-	public void setLazyModel(LazyDataModel<JanelaAtendimento> lazyModel) {
+	public void setLazyModel(LazyDataModel<Solicitacao> lazyModel) {
 		this.lazyModel = lazyModel;
 	}
 	public boolean isControlarFormListar() {
@@ -212,36 +242,42 @@ public class SolicitacaoBean {
 		this.containers = containers;
 	}
 	public List<Servico> getServicos() {
+		if(servicos == null) servicos = new ArrayList<>();
 		return servicos;
 	}
 	public void setServicos(List<Servico> servicos) {
 		this.servicos = servicos;
 	}
 	public Solicitacao getSolicitacao() {
+		if(solicitacao == null) solicitacao = new Solicitacao();
 		return solicitacao;
 	}
 	public void setSolicitacao(Solicitacao solicitacao) {
 		this.solicitacao = solicitacao;
 	}
 	public SolicitacaoServico getSolicitacaoServico() {
+		if(solicitacaoServico == null) solicitacaoServico = new SolicitacaoServico();
 		return solicitacaoServico;
 	}
 	public void setSolicitacaoServico(SolicitacaoServico solicitacaoServico) {
 		this.solicitacaoServico = solicitacaoServico;
 	}
 	public AnexosSolicitacao getAnexosSolicitacao() {
+		if(anexosSolicitacao == null) anexosSolicitacao = new AnexosSolicitacao();
 		return anexosSolicitacao;
 	}
 	public void setAnexosSolicitacao(AnexosSolicitacao anexosSolicitacao) {
 		this.anexosSolicitacao = anexosSolicitacao;
 	}
 	public Historico getHistorico() {
+		if(historico == null) historico = new Historico();
 		return historico;
 	}
 	public void setHistorico(Historico historico) {
 		this.historico = historico;
 	}
 	public Mensagem getMensagem() {
+		if(mensagem == null) mensagem = new Mensagem();
 		return mensagem;
 	}
 	public void setMensagem(Mensagem mensagem) {
@@ -265,12 +301,7 @@ public class SolicitacaoBean {
 	public void setClientes(List<User> clientes) {
 		this.clientes = clientes;
 	}
-	public ScheduleModel getLazyEventServicoJanela() {
-		return lazyEventServicoJanela;
-	}
-	public void setLazyEventServicoJanela(ScheduleModel lazyEventServicoJanela) {
-		this.lazyEventServicoJanela = lazyEventServicoJanela;
-	}
+	
 	public List<ServicoJanelaAtendimento> getServicoJanelaAtendimentos() {
 		return servicoJanelaAtendimentos;
 	}
@@ -278,6 +309,7 @@ public class SolicitacaoBean {
 		this.servicoJanelaAtendimentos = servicoJanelaAtendimentos;
 	}
 	public SolicitacaoRN getRn() {
+		if(rn==null) rn = new SolicitacaoRN();
 		return rn;
 	}
 	public void setRn(SolicitacaoRN rn) {
@@ -308,7 +340,7 @@ public class SolicitacaoBean {
 		this.dataSolicitacaoFim = dataSolicitacaoFim;
 	}
 	public Map<String, Object> getFiltros() {
-		if(filtros == null) new HashMap<String, Object>();
+		if(filtros == null) filtros = new HashMap<String, Object>();
 		return filtros;
 	}
 	public void setFiltros(Map<String, Object> filtros) {
@@ -328,14 +360,14 @@ public class SolicitacaoBean {
 	public void setFiltroStatusServicos(List<Integer> filtroStatusServicos) {
 		this.filtroStatusServicos = filtroStatusServicos;
 	}
-	public StatusSolicitacao getStatusSolicitacao() {
-		return statusSolicitacao;
+	public StatusSolicitacao[] getStatusSolicitacao() {
+		return statusSolicitacao.values();
 	}
 	public void setStatusSolicitacao(StatusSolicitacao statusSolicitacao) {
 		this.statusSolicitacao = statusSolicitacao;
 	}
-	public StatusServicos getStatusServicos() {
-		return statusServicos;
+	public StatusServicos[] getStatusServicos() {
+		return statusServicos.values();
 	}
 	public void setStatusServicos(StatusServicos statusServicos) {
 		this.statusServicos = statusServicos;
@@ -343,10 +375,13 @@ public class SolicitacaoBean {
 	public UserMB getUserMB() {
 		return userMB;
 	}
+	
+	public void setUserMB(UserMB userMB) {
+		this.userMB = userMB;
+	}
 	public void setServico(Servico servico) {
 		this.servico = servico;
 	}
-	
-	
+
 	
 }

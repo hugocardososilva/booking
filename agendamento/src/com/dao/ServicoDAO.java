@@ -33,6 +33,7 @@ public class ServicoDAO extends GenericDAO<Servico> {
 		TypedQuery<Servico> q = em.createQuery(Servico.sql+ " where s.unMedidaJanela eq :un", Servico.class);
 		q.setParameter("un", "O".charAt(0));
 		try {
+			q.getFirstResult();
 			return true;
 		} catch (NoResultException e) {
 			return false;
