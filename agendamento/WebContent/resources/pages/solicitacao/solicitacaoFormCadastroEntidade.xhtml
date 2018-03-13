@@ -18,148 +18,242 @@
 <!-- IMPLEMENTATION -->
 <composite:implementation>
 	<div class="card card-w-title">
-		<h3>Agendamento - Janela de Atendimento</h3>
-		<h4>
-			Dia de Atendimento:
-			<h:outputText
-				value="#{janelaAtendimentoBean.entidadeJanelaAtendimento.data}">
-				<f:convertDateTime locale="pt,BR" pattern="dd/MM/yyyy">
-				</f:convertDateTime>
-			</h:outputText>
-		</h4>
+		<h3>Cadastro de Soliciatação de serviço - Nova Solicitação</h3>
+		
 
 
 
 
-		<p:fieldset legend="Serviço" style="margin-bottom:20px">
+		<p:fieldset legend="Dados" style="margin-bottom:20px">
+			
+			<p:panelGrid columns="2" style="width:400px;" columnClasses="label, value" styleClass="no-border form-group ui-panelgrid-blank"
+				layout="grid">
+				<h:outputText value="ATI:"  />
+				<h:outputText value="#{solicitacaoBean.solicitacao.numeroATI}"/>
+				
+				<h:outputText value="BL:"/>
+				<p:inputText value="#{solicitacaoBean.solicitacao.codigoBL}"/>
+				
+				<h:outputText value="Container:"/>
+				<p><c:forEach var="item" items="#{solicitacaoBean.solicitacao.solicitacaoServicos}">
+					#{item.container.numeroContainer},
+				</c:forEach> </p>
+			</p:panelGrid>	
+			<p:panelGrid columns="2" style="width:400px;" columnClasses="label, value" styleClass="no-border form-group ui-panelgrid-blank">
+				<h:outputText value="Solicitação"/>
+				<h:outputText value="#{solicitacaoBean.solicitacao.id}"/>
+			</p:panelGrid>
+
+		</p:fieldset>
+
+		<p:fieldset legend="Adicionar Serviço"	style="margin-bottom:20px">
 
 			<p:panelGrid columns="1" styleClass="form-group ui-panelgrid-blank"
-				layout="grid">
-				<p:outputLabel value="Serviço" for="dd" />
-				<p:autoComplete id="dd" dropdown="true" size="100"
-					value="#{janelaAtendimentoBean.servico}" var="item"
+			layout="grid">
+			<p:outputLabel value="Código do Container:" for="cc" />
+			<p:autoComplete id="cc" dropdown="true" size="100" converter="containerConverter"
+				value="#{solicitacaoBean.container}" var="item"
+				itemLabel="#{item}" itemValue="#{item}" 
+				update="#{p:component('panelContainerSelecionado')}"
+				completeMethod="#{solicitacaoBean.pesquisaContainers}">
+				<p:ajax event="itemSelect"
+					listener="#{solicitacaoBean.adicionarContainer}"
+					update="#{p:component('panelContainerSelecionado')}" />
+			</p:autoComplete>
+			</p:panelGrid>
+			<p:panelGrid columns="1" layout="grid" id="panelContainerSelecionado" styleClass="form-group ui-panelgrid-blank">
+			<p:dataTable value="#{solicitacaoBean.containersSelecionados}" var="item" reflow="true">
+			<p:column headerText="Container">
+				<h:outputText value="#{item.numeroContanier}"/>
+			</p:column>
+			<p:column>
+				<p:commandLink id="btnExcluirContainer" value="Remover" update="@form" action="#{solicitacaoBean.removerContainer}">
+					<f:setPropertyActionListener value="#{item}"
+							target="#{solicitacaoBean.container}" />
+					<p:confirm header="Confirmar Exclusão" message="Tem certeza que deseja excluir o registro?" 
+						icon="ui-icon-alert" />
+				</p:commandLink>
+			 </p:column>
+			
+			</p:dataTable>
+			
+		
+			</p:panelGrid>
+			<p:panelGrid columns="1" layout="grid" styleClass="form-group ui-panelgrid-blank">
+			<p:outputLabel for="acSolicitacaoServico" value="Serviço"/>
+			<p:autoComplete id="acSolicitacaoServico" dropdown="true" size="100"
+					value="#{solicitacaoBean.servico}" var="item"
 					itemLabel="#{item}" itemValue="#{item}"
-					update="#{p:component('panelCapacidade')}"
-					completeMethod="#{janelaAtendimentoBean.pesquisaServico}">
+					update="#{p:component('descOutro')}"
+					completeMethod="#{solicitacaoBean.pesquisaServico}">
 					<p:ajax event="itemSelect"
-						listener="#{janelaAtendimentoBean.changeSelectServicos}"
-						update="#{p:component('panelCapacidade')}" />
+						listener="#{solicitacaoBean.selecionarServico}"
+						update="#{p:component('descOutro')}" />
 				</p:autoComplete>
+			<p:outputLabel for="descOutro" rendered="#{solicitacaoBean.outroServico}" value="Descrição - (*Outros)"/>
+			<p:inputText id="descOutro" rendered="#{solicitacaoBean.outroServico}" required="true" requiredMessage="O preenchimento do campo é obrigatório." value="#{solicitacaoBean.descricaoOutros}"></p:inputText>
 			</p:panelGrid>
-
-
-
-			<p:fieldset legend="Período de Atendimento"
-				style="margin-bottom:20px">
-
-				<p:outputLabel for="idInicioServico" value="Início:" />
-				<p:calendar id="idInicioServico"
-					value="#{janelaAtendimentoBean.servicoJanelaAtendimento.inicio}"
-					pattern="HH:mm" timeOnly="true" showOn="button" />
-
-				<p:spacer width="50" />
-
-				<p:outputLabel for="idFimServico" value="Término:" />
-				<p:calendar id="idFimServico"
-					value="#{janelaAtendimentoBean.servicoJanelaAtendimento.fim}"
-					pattern="HH:mm" timeOnly="true" showOn="button" />
-
-			</p:fieldset>
-			<p:panelGrid id="panelCapacidade" columns="1"
-				styleClass="form-group ui-panelgrid-blank" layout="grid">
-
-				<p:outputLabel for="idCapacidadeHora" value="Capacidade por Hora:"
-					rendered="#{janelaAtendimentoBean.servico.unMedidaJanela eq 'H'.charAt(0)}" />
-				<p:calendar id="idCapacidadeHora"
-					value="#{janelaAtendimentoBean.servicoJanelaAtendimento.capacidadeHora}"
-					rendered="#{janelaAtendimentoBean.servico.unMedidaJanela eq 'H'.charAt(0)}"
-					pattern="HH:mm" timeOnly="true" showOn="button" required="true" />
-
-				<p:outputLabel for="idCapacidadeDia" value="Capacidade por Dia:"
-					rendered="#{janelaAtendimentoBean.servico.unMedidaJanela eq 'D'.charAt(0)}" />
-				<p:inputNumber id="idCapacidadeDia"
-					value="#{janelaAtendimentoBean.servicoJanelaAtendimento.capacidadeDia}"
-					rendered="#{janelaAtendimentoBean.servico.unMedidaJanela eq 'D'.charAt(0)}"
-					required="true" />
+			<p:panelGrid columns="1" layout="grid" styleClass="form-group ui-panelgrid-blank">
+			<p:outputLabel for="dtSolicitacao" value="Data Solicitacao"/>
 			</p:panelGrid>
-
-			<p:toolbar>
+			<p:panelGrid columns="2" styleClass="form-group ui-panelgrid-blank">
+			<p:calendar id="dtSolicitacao" value="#{solicitacaoBean.dataSolicitacao}" disabled="true" pattern="dd/MM/yyyy"/>
+			<p:commandButton icon="fa fa-calendar-plus" update="#{p:component('dtSolicitacao')}"
+				onclick="PF('dlgServJanelaAtend').show();" actionListener="#{solicitacaoBean.carregarEventosServicoJanela}">
+			</p:commandButton>
+			</p:panelGrid>
+			
+				<p:toolbar>
 				<f:facet name="left">
-					<p:commandButton value="Salvar" ajax="true" update="@all"
+					<p:commandButton value="Adicionar" ajax="true" update="@form"
 						icon="#{bundle.iconSalvar}" id="btSalvar"
-						action="#{janelaAtendimentoBean.incluirServicoJanelaAtendimento}" />
+						action="#{solicitacaoBean.adicionarSolicitacaoServico}" />
 
 
 					<p:spacer width="20" />
-					<p:commandButton value="Voltar" ajax="false" update="@all"
+					<p:commandButton value="Limpar" update="@form"
 						icon="fa fa-undo" styleClass="orange-btn" id="btVoltar"
-						action="#{janelaAtendimentoBean.voltarParaListagem}" />
+						action="#{solicitacaoBean.limparSolicitacaoServico}" />
 				</f:facet>
 			</p:toolbar>
+			</p:fieldset>
+			<p:dialog id="idDlgServJanelaAtend" widgetVar="dlgServJanelaAtend" modal="true">
+			<p:schedule value="#{solicitacaoBean.lazyEventServicoJanela}"></p:schedule>
+			
+			</p:dialog>
 
-		</p:fieldset>
-		<p:dataTable var="item"
-			value="#{janelaAtendimentoBean.entidadeJanelaAtendimento.servicoJanelaAtendimentos}"
-			style="margin-bottom:40px">
-
-			<p:column headerText="Servico" sortBy="#{item.servico.nome}">
-				<h:outputText value="#{item.servico.nome}" />
-			</p:column>
-			<p:column headerText="Início" sortBy="#{item.inicio}" width="50">
-				<h:outputText value="#{item.inicio}">
-					<f:convertDateTime locale="pt,BR" pattern="HH:mm" />
+			
+			<p:fieldset legend="Serviços Selecionados">
+			<p:dataTable id="tblServicosSelecionados" emptyMessage="Nenhum registro encontrado." value="#{solicitacaoBean.solicitacao.solicitacaoServicos}" var="item" 
+				 style="margin-bottom:20px">
+				<p:column headerText="Container">
+					<h:outputText value="#{item.container.numeroContanier}"/>
+				</p:column>				 
+				<p:column headerText="Serviço">
+					<h:outputText rendered="#{item.servico.unMedidaJanela != 'O'.charAt(0) }" value="#{item.servico.id} - #{item.servico.descricao}"/>
+					<h:outputText rendered="#{item.servico.unMedidaJanela eq 'O'.charAt(0) }" value="#{item.servico.id} - #{item.servico.descricao} (#{item.outrosServicos})"/>
+				</p:column>
+				<p:column headerText="Data da Solicitacao" >
+				<h:outputText value="#{item.dataSolicitacao}">
+					<f:convertDateTime pattern="dd/MM/yyyy" />
 				</h:outputText>
 			</p:column>
-			<p:column headerText="Fim" sortBy="#{item.fim}" width="50">
-				<h:outputText value="#{item.fim}">
-					<f:convertDateTime locale="pt,BR" pattern="HH:mm" />
-				</h:outputText>
-			</p:column>
-			<p:column headerText="Capacidade">
-				<h:outputText value="#{item.capacidadeHora}"
-					rendered="#{item.servico.unMedidaJanela eq 'H'.charAt(0)}">
-					<f:convertDateTime locale="pt,BR" pattern="HH:mm" />
-				</h:outputText>
-				<h:outputText value="#{item.capacidadeDia}"
-					rendered="#{item.servico.unMedidaJanela eq 'D'.charAt(0)}" />
-			</p:column>
-			<p:column headerText="Tipo">
-				<h:outputText value="Por Hora"
-					rendered="#{item.servico.unMedidaJanela eq 'H'.charAt(0)}">
-					
-				</h:outputText>
-				<h:outputText value="Por Dia"
-					rendered="#{item.servico.unMedidaJanela eq 'D'.charAt(0)}" />
-			</p:column>
-			<p:column headerText="Capacidade Periodo">
-				<h:outputText value="#{item.capacidadePeriodo}" />
-			</p:column>
-			<p:column headerText="Excluir">
-				<p:commandLink id="btnExcluirServ"
-					action="#{janelaAtendimentoBean.excluirServicoJanelaAtendimento}" update="@all">
+				<p:column headerText="OS">
+					<h:outputText value="#{item.OS}"/>
+				</p:column>	
+				<p:column headerText="Status">
+					<h:outputText value="#{item.statusServicos}"/>
+				</p:column>	
+				
+				<p:column>
+				<p:commandLink id="btnExcluirSolicitacaoServico" value="Remover" update="@form" action="#{solicitacaoBean.removerSolicitacaoServico}">
 					<f:setPropertyActionListener value="#{item}"
-							target="#{janelaAtendimentoBean.servicoJanelaAtendimento}" />
-							<p:confirm header="Confirmar Exclusão" message="Tem certeza que deseja excluir o registro?" 
+							target="#{solicitacaoBean.solicitacaoServico}" />
+					<p:confirm header="Confirmar Exclusão" message="Tem certeza que deseja excluir o registro?" 
 						icon="ui-icon-alert" />
-					<h:outputText value="Excluir" />
 				</p:commandLink>
-			</p:column>
-			<p:column headerText="Duplicar">
-				<p:commandLink id="btnDuplicarServ"
-					action="#{janelaAtendimentoBean.duplicarServicoJanelaAtendimento}" update="@all">
-					<f:setPropertyActionListener value="#{item}"
-							target="#{janelaAtendimentoBean.servicoJanelaAtendimento}" />
-					<h:outputText value="Duplicar" />
-				</p:commandLink>
-			</p:column>
+			 </p:column>
+			
+			</p:dataTable>
+							 
+			</p:fieldset>
+			<p:fieldset legend="Anexos">
+			<h:form id="frmAnexosSolicitacao" enctype="multipart/form-data">
+					<h:panelGrid id="pnlAnexosSolicitacao" columns="1">
+
+						<p:fileUpload label="Escolher arquivo (formato pdf até 3MB)" mode="advanced" dragDropSupport="false" sizeLimit="3000000"
+							invalidSizeMessage="Tamanho máximo permitido: 3MB" allowTypes="/(\.|\/)(pdf)$/" invalidFileMessage="Extensão de arquivo permitida: PDF."
+							fileUploadListener="#{solicitacaoBean.uploadAnexo}" auto="true" update="#{p:component('frmAnexosSolicitacao')}" />
+						
+
+						<p:dataTable id="tblAnexosImportacao" emptyMessage="Nenhum registro encontrado." value="#{solicitacaoBean.solicitacao.anexos}" var="anexo" 
+							 style="margin-bottom:20px">
+
+							<p:column headerText="Arquivo" width="270">
+								<p:commandLink  value="#{anexo.caminhoAnexo}" actionListener="#{solicitacaoBean.download}" ajax="false" process="@this">
+									<f:attribute name="anexoSelecionado" value="#{anexo}" />
+									<p:fileDownload value="#{solicitacaoBean.pdf}" />
+								</p:commandLink>
+							</p:column>
+							<p:column headerText="Descrição" width="270">
+								<h:outputText value="#{anexo.caminhoAnexo}"/>
+								
+							</p:column>
+
+							<p:column id="columRemoverAnexo">
+								<p:commandLink id="btnRemoverAnexo" action="#{solicitacaoBean.removerAnexo}" icon="fa fa-trash-o" style="color: red">
+									<f:setPropertyActionListener value="#{anexo}"
+										target="#{solicitacaoBean.anexo}" />
+									<p:tooltip for="btnRemoverAnexo" value="#{bundle.excluir}" showEffect="clip" hideEffect="explode" />
+									<p:confirm header="Excluir" message="Deseja excluir este item ?" icon="ui-icon-alert" />
+								</p:commandLink>
+							</p:column>
+
+						
+
+						</p:dataTable>
+
+					</h:panelGrid>
+				</h:form>
+			
+			</p:fieldset>
+			<p:fieldset legend="Mensagens">
+			<h:form id="frmMensagemSolicitacao">
+					<h:panelGrid id="pnlMensagemSolicitacao" lang="grid" columns="1">
+
+						<p:inputText value="#{solicitacaoBean.mensagem.titulo}" placeholder="Informe o título da mensagem." size="100"/>
+						<p:inputTextarea cols="100" rows="5" value="#{solicitacaoBean.mensagem.conteudo}" placeholder="Informe neste campo algum detalhe que será importante ao serviço solicitado."></p:inputTextarea>
+						<p:dataTable id="tblmensagens" emptyMessage="Nenhum registro encontrado." value="#{solicitacaoBean.solicitacao.mensagems}" var="item" 
+							 style="margin-bottom:20px">
+
+							<p:column headerText="Data">
+							<h:outputText value="#{item.data}">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputText>
+							</p:column>
+							<p:column headerText="Remetente">
+								<h:outputText value="#{item.usuario.name}"/>
+							</p:column>
+							<p:column>
+						<p:commandLink id="btnVerMEnsagem" value="#{item.titulo}" actionListener="#{solicitacaoBean.visualizarMensagem}" 
+							update="#{p:component('iddlgVerMensagem')}" onclick="PF('dlgVerMensagem').show();">
+								<f:setPropertyActionListener value="#{item}" target="#{solicitacaoBean.mensagem}" />
+						</p:commandLink>
+					 </p:column>
+							
+
+						
+							
+						</p:dataTable>
+							<p:dialog id="iddlgVerMensagem" widgetVar="dlgVerMensagem" modal="true" closable="true" closeOnEscape="true">
+								<p:fieldset legend="Mensagem">
+								<p:panelGrid columns="1">
+								<br/>
+								<h3>Autor: <h:outputText value="#{solicitacaoBean.mensagem.usuario.name}"/></h3>
+								<br/>
+								<br/>
+								<h3>Título: <h:outputText value="#{solicitacaoBean.mensagem.titulo}"/></h3>
+								<br/>
+								<br/>
+								<h4>Mensagem: <h:outputText value="#{solicitacaoBean.mensagem.conteudo}"/></h4>
+								
+								
+								
+								</p:panelGrid>
+								
+								</p:fieldset>
+			
+							</p:dialog>
+
+					</h:panelGrid>
+				</h:form>
+			
+			</p:fieldset>
+			
 
 
-		</p:dataTable>
-
-
-
-
-
+		
+	
 
 	</div>
 

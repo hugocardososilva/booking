@@ -10,10 +10,12 @@ import java.util.StringTokenizer;
 import org.apache.commons.mail.EmailException;
 
 import conexao.com.dao.CadastroBLDAO;
+import conexao.com.dao.CadastroBLRiscoDAO;
 import conexao.com.util.JSFUtil;
 import seguranca.com.entidade.CadastroBL;
 import seguranca.com.entidade.CadastroBLContanier;
 import seguranca.com.entidade.CadastroBLContanierLCL;
+import seguranca.com.entidade.CadastroBLRiscoFitossanitario;
 import seguranca.com.entidade.CadastroBlLogAlteracao;
 import seguranca.com.entidade.User;
 import seguranca.com.enums.Role;
@@ -25,6 +27,7 @@ public class CadastroBLRN {
 	private CadastroBLLogRN logRN;
 	private JSFUtil email;
 	private UserComissarioRN userComissarioRN;
+	private CadastroBLRiscoDAO riscoDAO;
 
 	public CadastroBLDAO getCadastroBLDAO() {
 		if (cadBLDAO == null) {
@@ -107,6 +110,43 @@ public class CadastroBLRN {
 		getCadastroBLDAO().commitAndCloseTransaction();
 		return item;
 	}
+	public CadastroBL adicionarRiscoFitossanitario(CadastroBL item) throws Exception {
+		//TODO pega a ultima bl do importador
+		//TODO copia o risco fitossanitario da ultima bl
+		try {
+		  
+		getRiscoDAO().beginTransaction();
+		CadastroBLRiscoFitossanitario ultRisco = getRiscoDAO().getUltimoRiscoPorNcm(item);
+		
+		
+		
+		if(ultRisco != null) {
+			
+
+		if(!ultRisco.getCadastroBL().getId().equals(item.getId())){
+			
+			CadastroBLRiscoFitossanitario risco = new CadastroBLRiscoFitossanitario();
+			risco.setCadastroBL(item);
+			risco.setDataCadastro(new Date());
+			risco.setUser(ultRisco.getUser());
+			risco.setRiscoFitossanitarioEnum(ultRisco.getRiscoFitossanitarioEnum());
+			item.addRisco(risco);
+			//getRiscoDAO().alterar(risco);
+			//getRiscoDAO().commitAndCloseTransaction();
+			
+			}
+		}else {
+			getRiscoDAO().closeTransaction();
+		}
+		
+		
+		
+		}finally {
+			
+		}
+		return item;
+	
+	}
 
 	public CadastroBL alterar(CadastroBL item, User user) throws Exception {
 		boolean alteradoDescricaoMercadoria = item.isAlteracaoDescricaoMercadoria();
@@ -114,13 +154,16 @@ public class CadastroBLRN {
 		boolean alteradoLiberado = item.isAlteradoLiberado();
 		getCadastroBLDAO().beginTransaction();
 		if (item.getId() == null || item.getId() == 0) {
-			item.setStatusBLEnum(StatusBLEnum.PENDENTE_ANEXO);
+			item.setStatusBLEnum(StatusBLEnum.PENDENTE_ANEXO);			
 			item.setDataCadastro(new Date());
 		}
 		item.setDescricaoBL(item.getDescricaoBL().toUpperCase());
 		if (item.getDescricaoMercadoria() != null) {
 			item.setDescricaoMercadoria(item.getDescricaoMercadoria().toUpperCase());
 		}
+		
+		//DONE adiciona o risco na lista antes de salvar
+		item = adicionarRiscoFitossanitario(item);
 		item = getCadastroBLDAO().alterar(item);
 		getCadastroBLDAO().commit();
 
@@ -145,7 +188,9 @@ public class CadastroBLRN {
 				|| item.getStatusBLEnum() == StatusBLEnum.LIBERADO_E_VISTORIADO
 				|| item.getStatusBLEnum() == StatusBLEnum.LIBERADO_SEM_VISTORIA
 				|| item.getStatusBLEnum() == StatusBLEnum.SEPARADO_PARA_VISTORIA) {
+			
 			enviarEmail(item, Role.CLIENTE);
+			
 		}
 
 		return item;
@@ -259,5 +304,11 @@ public class CadastroBLRN {
 
 		return retorno;
 	}
+
+	public CadastroBLRiscoDAO getRiscoDAO() {
+		if(riscoDAO == null) riscoDAO = new CadastroBLRiscoDAO();
+		return riscoDAO;
+	}
+	
 
 }

@@ -38,4 +38,5 @@ public class ServicoJanelaAtendimentoDAO extends GenericDAO<ServicoJanelaAtendim
 		}
 	}
 
+
 }

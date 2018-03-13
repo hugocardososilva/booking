@@ -112,15 +112,21 @@ public class SolicitacaoLazyDataModel extends LazyDataModel<Solicitacao> {
 					consultaCount.append(consultaStatusServico.toString());
 				}
 				if(consultaDataCadastro != null ) {
-					consulta.append(" and ");
-					consulta.append(consultaDataCadastro.toString());
-					consultaCount.append(" and ");
+					if(consultaStatusServico!= null) {
+						consulta.append(" and ");
+						consultaCount.append(" and ");
+					}
+					
+					consulta.append(consultaDataCadastro.toString());					
 					consultaCount.append(consultaDataCadastro.toString());
 				}
 				if(consultaDataSolicitacao != null) {
-					consulta.append(" and ");
-					consulta.append(consultaDataSolicitacao.toString());
-					consultaCount.append(" and ");
+					if(consultaStatusServico != null && consultaDataCadastro != null) {
+						consulta.append(" and ");
+						consultaCount.append(" and ");
+					}
+					
+					consulta.append(consultaDataSolicitacao.toString());					
 					consultaCount.append(consultaDataSolicitacao.toString());				
 					
 				}
@@ -128,9 +134,13 @@ public class SolicitacaoLazyDataModel extends LazyDataModel<Solicitacao> {
 				
 				
 				if(consultaCliente != null) {
-					consulta.append(" and ");
+					if(consultaStatusServico != null && consultaDataCadastro != null && consultaDataSolicitacao != null) {
+						consulta.append(" and ");
+						consultaCount.append(" and ");
+					}
+				
 					consulta.append(consultaCliente.toString());
-					consultaCount.append(" and ");
+					
 					consultaCount.append(consultaCliente.toString());
 				}
 			}

@@ -11,7 +11,8 @@ public enum TipoAnexosEnum {
 	MAPA_ANEXO(7,"Anexos Mapa", 7),
 	COMPLEMENTARES_ANEXO(8,"Anexos Complementares", 8),
 	ANEXO_LI(9,"LI", 9),
-	FISPQ(10,"FISPQ - Segurança Produtos Químicos", 10);
+	FISPQ(10,"FISPQ - Segurança Produtos Químicos", 10),
+	SOLICITACAO(11,"Anexos de solicitações",11);
 	
 	private int codigo;
 	private String descricao;

@@ -50,10 +50,10 @@
 				action="#{cadastroBLConsultaBean.instanciarBLAlteracao(itemExpansion)}" update=":idDlgAlteracao" style="float:right" />
 		</p:column>
 
-		<p:column id="idRiscoExp">
+		<p:column id="idRiscoExp" >
 		</p:column>
 
-		<p:column id="idNcmDescExp" width="265">
+		<p:column id="idNcmDescExp" width="295">
 			<h:outputText value="#{itemExpansion.cadastroBL.ncm.descricaoNcm}" />
 		</p:column>
 
@@ -76,10 +76,10 @@
 
 		<p:column headerText="Modalidade" width="50" />
 
-		<p:column id="idProdAnuenciaExp" width="20">
+		<p:column id="idProdAnuenciaExp" rendered="false" width="20">
 		</p:column>
 
-		<p:column id="idUltimoUsuarioExp" width="135" visible="true">
+		<p:column id="idUltimoUsuarioExp" width="110" visible="true">
 			<h:outputText value="#{cadastroBLConsultaBean.retornaUltimoUsuario(itemExpansion)}" />
 		</p:column>
 

@@ -55,15 +55,21 @@ public class Solicitacao implements Serializable {
 	@Temporal(TemporalType.DATE)
 	private Date dataSolicitacao;
 	
+	
+	
 	@ManyToOne
 	@JoinColumn(name="ID_USUARIO", nullable = false, insertable = true, updatable = true)
 	@ForeignKey(name="FK_CLIENTE")
 	private User cliente;
 	
-	@Column(name="ID_ULTIMO_RESPONSAVEL")
-	private Integer ultResponsavel;
+	@ManyToOne
+	@JoinColumn(name="ID_ULT_RESPOSAVEL", nullable = false, insertable = true, updatable = true)
+	@ForeignKey(name="FK_ULTIMO_RESPOSAVEL")
+	private User ultResponsavel;
 	
+	private String numeroATI;
 	
+	private String codigoBL;
 	
 	@Enumerated(EnumType.STRING)
 	private StatusSolicitacao statusSolicitacao;
@@ -103,13 +109,7 @@ public class Solicitacao implements Serializable {
 		this.dataCadastro = dataCadastro;
 	}
 
-	public Date getDataSolicitacao() {
-		return dataSolicitacao;
-	}
 
-	public void setDataSolicitacao(Date dataSolicitacao) {
-		this.dataSolicitacao = dataSolicitacao;
-	}
 
 	public User getCliente() {
 		return cliente;
@@ -119,15 +119,35 @@ public class Solicitacao implements Serializable {
 		this.cliente = cliente;
 	}
 
-	public Integer getUltResponsavel() {
+	public User getUltResponsavel() {
 		return ultResponsavel;
 	}
 
-	public void setUltResponsavel(Integer ultResponsavel) {
+	public void setUltResponsavel(User ultResponsavel) {
 		this.ultResponsavel = ultResponsavel;
 	}
-
 	
+	
+
+	public String getNumeroATI() {
+		return numeroATI;
+	}
+
+
+	public void setNumeroATI(String numeroATI) {
+		this.numeroATI = numeroATI;
+	}
+
+
+	public String getCodigoBL() {
+		return codigoBL;
+	}
+
+
+	public void setCodigoBL(String codigoBL) {
+		this.codigoBL = codigoBL;
+	}
+
 
 	public StatusSolicitacao getStatusSolicitacao() {
 		return statusSolicitacao;
@@ -206,6 +226,22 @@ public class Solicitacao implements Serializable {
 	}
 	public void removeSolicitacaoServico(SolicitacaoServico solicitacaoServico) {
 		this.solicitacaoServicos.remove(solicitacaoServico);
+	}
+	public void addMensagem(Mensagem mensagem) {
+		this.mensagems.add(mensagem);
+	}
+	public void removeMensagem(Mensagem mensagem) {
+		this.mensagems.remove(mensagem);
+	}
+
+
+	public Date getDataSolicitacao() {
+		return dataSolicitacao;
+	}
+
+
+	public void setDataSolicitacao(Date dataSolicitacao) {
+		this.dataSolicitacao = dataSolicitacao;
 	}
 	
 	

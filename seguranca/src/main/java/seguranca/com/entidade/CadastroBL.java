@@ -778,5 +778,7 @@ public class CadastroBL implements ICamposComunsBLDtcDta {
 		this.userCadastroDtc = userCadastroDtc;
 	}
 
-	
+	public void addRisco(CadastroBLRiscoFitossanitario risco) {
+		this.getListaBLRisco().add(risco);
+	}
 }

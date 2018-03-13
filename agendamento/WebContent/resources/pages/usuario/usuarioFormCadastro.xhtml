@@ -63,7 +63,7 @@
 	<p:panelGrid id="panelComissario" layout="grid" columns="6" columnClasses="ui-grid-col-3,ui-grid-col-1,ui-grid-col-5,ui-grid-col-3,ui-grid-col-1,ui-grid-col-5"
 		styleClass="ui-panelgrid-blank">
 
-		<p:selectOneMenu id="categoria" value="#{userCadastroBean.cadComissarioSelecionado}" style="width:90%" styleClass="estendido alinhadoEsquerda"
+		<p:selectOneMenu id="categoria" autoWidth="false" value="#{userCadastroBean.cadComissarioSelecionado}" style="width:90%" styleClass="estendido alinhadoEsquerda"
 			converter="cadastroComissarioConverter">
 			<f:selectItem itemLabel="Selecione um comissária" itemValue="#{null}" />
 			<f:selectItems value="#{userCadastroBean.listaTodosComissarios}" var="item" itemValue="#{item}" itemLabel="#{item}" />
@@ -79,7 +79,7 @@
 			<p:tooltip for="idIncluirCom" value="#{bundle.novo}" showEffect="clip" hideEffect="explode" />
 		</p:commandButton>
 
-		<p:selectOneMenu id="importadores" value="#{userCadastroBean.importadorSelecionado}" style="width:90%" styleClass="estendido alinhadoEsquerda"
+		<p:selectOneMenu id="importadores" autoWidth="false" value="#{userCadastroBean.importadorSelecionado}" style="width:90%" styleClass="estendido alinhadoEsquerda"
 			converter="cadastroImportadorConverter">
 			<f:selectItem itemLabel="Selecione um importador" itemValue="#{null}" />
 			<f:selectItems value="#{userCadastroBean.listaTodosImportadores}" var="item" itemValue="#{item}" itemLabel="#{item}" />
@@ -97,7 +97,7 @@
 	</p:panelGrid>
 	<p:panelGrid id="panelComissarioTable" layout="grid" columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" styleClass="ui-panelgrid-blank">
 		<p:dataTable id="tbListaTodosComissarios" value="#{userCadastroBean.listaTodosUsuariosComissarios}" var="item" selectionMode="single" rowKey="#{item.id}"
-			reflow="true" style="margin-top: 20px;" emptyMessage="Nenhum registro encontrado." paginator="true" rowsPerPageTemplate="5,10,15" rows="10"
+			reflow="true" style="margin-top: 20px;" styleClass="border-header" emptyMessage="Nenhum registro encontrado." paginator="true" rowsPerPageTemplate="5,10,15" rows="10"
 			paginatorPosition="bottom">
 
 			<p:column id="idComissario" headerText="#{bundle.comissarioCliente}" width="40">
@@ -114,7 +114,7 @@
 		</p:dataTable>
 
 		<p:dataTable id="tbListaTodosImportadores" value="#{userCadastroBean.listaTodosImportadoresPorUsuarios}" var="item" selectionMode="single" rowKey="#{item.id}"
-			reflow="true" style="margin-top: 20px;" emptyMessage="Nenhum registro encontrado." paginator="true" rowsPerPageTemplate="5,10,15" rows="10"
+			reflow="true" style="margin-top: 20px;" styleClass="border-header" emptyMessage="Nenhum registro encontrado." paginator="true" rowsPerPageTemplate="5,10,15" rows="10"
 			paginatorPosition="bottom">
 
 			<p:column id="columImp" headerText="#{bundle.importadorDespachante}" width="40">
@@ -137,7 +137,7 @@
 
 		<p:panelGrid id="panelIncluirPermissoes" layout="grid" columns="6"
 			columnClasses="ui-grid-col-3,ui-grid-col-1,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2" styleClass="ui-panelgrid-blank">
-			<p:selectOneMenu id="tipoPermissao" value="#{userCadastroBean.telasEntidadeSelecionado}" style="width:90%" styleClass="estendido alinhadoEsquerda">
+			<p:selectOneMenu id="tipoPermissao" autoWidth="false" value="#{userCadastroBean.telasEntidadeSelecionado}" style="width:90%" styleClass="estendido alinhadoEsquerda">
 				<f:selectItem itemLabel="Selecione uma permissão" itemValue="#{null}" />
 				<f:selectItems value="#{userCadastroBean.todasTelasEntidadeEnum}" var="tipo" itemValue="#{tipo}" itemLabel="#{tipo.descricao}" />
 			</p:selectOneMenu>
@@ -155,10 +155,10 @@
 		</p:panelGrid>
 
 
-		<p:panelGrid id="panelIncluirNotify" layout="grid" columns="6"
+		<p:panelGrid id="panelIncluirNotify" layout="grid" columns="12"
 			columnClasses="ui-grid-col-3,ui-grid-col-1,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2" styleClass="ui-panelgrid-blank">
 			
-			<p:selectOneMenu id="tipoNotify" value="#{userCadastroBean.responsavelLoteSelecionado}" style="width:90%" styleClass="estendido alinhadoEsquerda"
+			<p:selectOneMenu id="tipoNotify" autoWidth="false"  value="#{userCadastroBean.responsavelLoteSelecionado}" style="width:90%" styleClass="estendido alinhadoEsquerda"
 				converter="cadastroResponsavelLoteConverter">
 
 				<f:selectItem itemLabel="Selecione um notify" itemValue="#{null}" />
@@ -177,7 +177,7 @@
 		</p:panelGrid>
 
 		<p:dataTable id="tbListaTodosPermissoes" value="#{userCadastroBean.listaTodasPermissoes}" var="item" selectionMode="single" rowKey="#{item.id}" reflow="true"
-			style="margin-top: 20px;" emptyMessage="Nenhum registro encontrado.">
+			style="margin-top: 20px;" styleClass="border-header" emptyMessage="Nenhum registro encontrado.">
 
 			<p:column id="idComissario" headerText="#{bundle.permissao}" width="40">
 				<h:outputText value="#{item.telasEntidadesEnum.descricao}" />
@@ -193,7 +193,7 @@
 		</p:dataTable>
 
 		<p:dataTable id="tbListaTodosNotify" value="#{userCadastroBean.listaTodasUserResponsavelLote}" var="item" selectionMode="single" rowKey="#{item.id}"
-			reflow="true" style="margin-top: 20px;" emptyMessage="Nenhum registro encontrado.">
+			reflow="true" style="margin-top: 20px;" styleClass="border-header" emptyMessage="Nenhum registro encontrado.">
 
 			<p:column id="idNotify" headerText="notify" width="40">
 				<h:outputText value="#{item.cadRespLote.razaoSocial}" />

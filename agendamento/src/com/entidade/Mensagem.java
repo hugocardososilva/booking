@@ -39,6 +39,7 @@ public class Mensagem implements Serializable {
 	@Temporal(TemporalType.DATE)
 	private Date data;
 	
+	private String titulo;
 
 	private String conteudo;
 	
@@ -72,6 +73,18 @@ public class Mensagem implements Serializable {
 
 	public Date getData() {
 		return data;
+	}
+	
+
+
+	public String getTitulo() {
+		return titulo;
+	}
+
+
+
+	public void setTitulo(String titulo) {
+		this.titulo = titulo;
 	}
 
 

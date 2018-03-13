@@ -10,6 +10,7 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -18,6 +19,7 @@ import seguranca.com.entidade.User;
 /**
  * Servlet Filter implementation class UserCheckFilter
  */
+@WebFilter("/pages/*")
 public class LoginCheckFilter extends AbstractFilter implements Filter {
 	private static List<String> allowedURIs;
 
@@ -64,6 +66,7 @@ public class LoginCheckFilter extends AbstractFilter implements Filter {
 		User user = (User) session.getAttribute("user");
 
 		if (user == null && !allowedURIs.contains(req.getRequestURI())) {
+	
 			System.out.println(req.getRequestURI());
 			doLogin(request, response, req);
 			return;

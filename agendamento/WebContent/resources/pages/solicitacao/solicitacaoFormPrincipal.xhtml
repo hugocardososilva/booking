@@ -27,7 +27,7 @@
 	</f:facet>
 	
 </p:toolbar>
-<p:spacer width="0" height="50"/>
+<p:spacer width="0" height="25"/>
 	<p:fieldset  legend="Data do Cadastro" >
 
 		<p:outputLabel for="idDataCadastroInicio" value="De:" />
@@ -78,9 +78,9 @@
 		 </p:selectManyButton>
 	</p:fieldset>
 	<p:fieldset legend="Status dos Servicos">
-	 	<p:selectManyButton value="#{solicitacaoBean.filtroStatusServicos}">
+	 	<p:selectManyButton  value="#{solicitacaoBean.filtroStatusServicos}" >
 		 	<f:selectItems value="#{solicitacaoBean.statusServicos}" var="status" 
-		 	itemLabel="#{status.descricao}" itemValue="#{status.codigo}" />
+		 	itemLabel="#{status.descricao}" itemValue="#{status.codigo}"  />
 		 </p:selectManyButton>
 	</p:fieldset>
 	
@@ -115,7 +115,7 @@
 
 
 				<p:column id="idClienteCol" headerText="Cliente" sortBy="#{item.cliente.id}" width="150" >
-					<h:outputText value="#{item.cliente.id} - {item.cliente.name}"/>
+					<h:outputText value="#{item.cliente.id} - #{item.cliente.name}"/>
 				</p:column>
 				
 				
@@ -160,7 +160,7 @@
 				
 				<p:column id="idUltResp" sortBy="#{item.ultResponsavel}"
 					headerText="Ult. Resposável">
-					<h:outputText value="#{item.ultResponsavel}" />
+					<h:outputText value="#{item.ultResponsavel.name}" />
 				</p:column>
 				
 				

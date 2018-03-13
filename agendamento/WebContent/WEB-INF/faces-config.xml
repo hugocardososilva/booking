@@ -10,4 +10,5 @@
 		</resource-bundle>
 		<message-bundle>messageslabel</message-bundle>
 	</application>
+	
 </faces-config>

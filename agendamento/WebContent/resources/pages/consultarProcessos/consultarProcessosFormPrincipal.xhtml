@@ -1,4 +1,3 @@
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
@@ -93,11 +92,7 @@
 		<p:column exportable="true"  filterBy="#{item.programacaoNavio.navio}" id="columnAVIO" sortBy="#{item.programacaoNavio.navio}" headerText="#{bundle.cadastroBLNavio}">
 			<h:outputText value="#{item.programacaoNavio.navio}" />
 		</p:column>
-		<p:column id="anexos" headerText="Anexos" style="width:60px" exportable="false">
-			<p:commandButton id="btnAnexos" actionListener="#{consultaProcessosBean.instanciarEntidadeAnexos(item)}" ajax="false" icon="fa fa-list-ul">
-				<p:tooltip for="btnAnexos" value="#{bundle.anexo}" showEffect="clip" hideEffect="explode" />
-			</p:commandButton>
-		</p:column>
+		
 			<p:column exportable="true" filterBy="#{item.statusAtiLclFclEnum}" headerText="Status Clif" width="200">
 		<f:facet name="filter">
                 <p:selectOneMenu onchange="PF('tbListarEntidade').filter()" >
@@ -119,7 +114,11 @@
 			
 		</p:column>
 	
-		
+		<p:column id="anexos" headerText="Anexos" style="width:60px" exportable="false">
+			<p:commandButton id="btnAnexos" actionListener="#{consultaProcessosBean.instanciarEntidadeAnexos(item)}" ajax="false" icon="fa fa-list-ul">
+				<p:tooltip for="btnAnexos" value="#{bundle.anexo}" showEffect="clip" hideEffect="explode" />
+			</p:commandButton>
+		</p:column>
 		
 		
 		

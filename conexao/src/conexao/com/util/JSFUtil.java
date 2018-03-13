@@ -258,9 +258,13 @@ public class JSFUtil {
 		if (tipo.equals(TipoAnexosEnum.STATUS_ANEXO)) {
 			valor = getPropertyIniConfiguracao("prop.upload.anexos.status_anexo");
 		}
+		if (tipo.equals(TipoAnexosEnum.SOLICITACAO)) {
+			valor = getPropertyIniConfiguracao("prop.upload.anexos.anexo_solicitacao");
+		}
 
 		return valor;
 	}
+	
 
 	public BufferedImage getLogoImage(byte[] imagem) throws IOException {
 		ByteArrayInputStream bais = new ByteArrayInputStream(imagem);

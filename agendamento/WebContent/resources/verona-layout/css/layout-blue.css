@@ -996,7 +996,11 @@ body {
     vertical-align: middle;
     color: #ffffff;
     margin-left: 8px;
-    font-weight: bold; }
+    font-weight: bold; 
+    text-align: center;
+    width: 80%;
+    }
+    
   .layout-wrapper .topbar #user-display {
     display: block;
     float: right;
@@ -1295,7 +1299,7 @@ body {
     .layout-wrapper.layout-menu-horizontal .topbar #menu-button {
       display: none; }
     .layout-wrapper.layout-menu-horizontal .topbar #user-display {
-      margin-top: 0; }
+      margin-top: 20px; }
     .layout-wrapper.layout-menu-horizontal .topbar #topbar-menu {
       top: 56px; }
     .layout-wrapper.layout-menu-horizontal .topbar .layout-menu-wrapper {
@@ -1415,13 +1419,46 @@ body {
      }
      .app-name{
      font-size: 20px!important;
+     width: 80%!important;
      }
+     
      
       }
 @media (max-width: 640px) {
   .layout-wrapper .topbar #user-display span {
     display: none; }
     .app-name{
-    	font-size: 10px!important;
+    	font-size: 13px!important;
+    	 width: 40%!important;
+    	  text-align: left!important;
+    	
     }
+    .layout-wrapper .topbar{
+     height: 100px;
      }
+     }
+     
+ 
+element.style {
+}
+layout-blue.css…ona-layout:993
+.layout-wrapper .topbar .app-name {
+    display: inline-block;
+    font-size: 13px;
+    vertical-align: middle;
+    color: #ffffff;
+    margin-left: 8px;
+    font-weight: bold;
+    text-align: center;
+    width: 80%;
+}
+@media (max-width:1024px) and (min-width:641px){
+	 .app-name{
+     font-size: 13px!important;
+     width: 40%!important;
+      text-align: left!important;
+     }
+     .layout-wrapper .topbar{
+     height: 100px;
+     }
+}

@@ -1,7 +1,9 @@
 package com.entidade;
 
 import java.io.Serializable;
+import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -12,6 +14,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.ForeignKey;
 import org.hibernate.envers.Audited;
@@ -29,6 +33,7 @@ public class SolicitacaoServico implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	public static final String sql ="Select s from SolicitacaoServico s";
 	
 	@Id
 	@SequenceGenerator(name = "SEQ_SOL_SERV_ID", sequenceName = "SEQ_SOL_SERV_ID")
@@ -55,9 +60,24 @@ public class SolicitacaoServico implements Serializable{
 	@Enumerated(EnumType.STRING)
 	private StatusServicos statusServicos;
 	
+	@Temporal(TemporalType.DATE)
+	private Date dataSolicitacao;
+	
+	private String OS;
+	
+	@Column(columnDefinition = "int default 0")
+	private boolean encaixe;
+	
 	
 	public SolicitacaoServico() {
 		// TODO Auto-generated constructor stub
+	}
+	public Date getDataSolicitacao() {
+		return dataSolicitacao;
+	}
+
+	public void setDataSolicitacao(Date dataSolicitacao) {
+		this.dataSolicitacao = dataSolicitacao;
 	}
 
 
@@ -69,8 +89,14 @@ public class SolicitacaoServico implements Serializable{
 	public void setId(Integer id) {
 		this.id = id;
 	}
+	
 
-
+	public String getOS() {
+		return OS;
+	}
+	public void setOS(String oS) {
+		OS = oS;
+	}
 	public String getOutrosServicos() {
 		return outrosServicos;
 	}
@@ -105,7 +131,13 @@ public class SolicitacaoServico implements Serializable{
 		return solicitacao;
 	}
 
-
+	
+	public boolean isEncaixe() {
+		return encaixe;
+	}
+	public void setEncaixe(boolean encaixe) {
+		this.encaixe = encaixe;
+	}
 	public void setSolicitacao(Solicitacao solicitacao) {
 		this.solicitacao = solicitacao;
 	}

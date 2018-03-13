@@ -33,6 +33,8 @@ public class AnexosSolicitacao implements Serializable{
 	
 	private String caminhoAnexo;
 	
+	private String descricao;
+	
 	@ManyToOne
 	@JoinColumn(name ="SOLICITACAO_ID", nullable = true, insertable= true, updatable = true)
 	@ForeignKey(name="FK_SOLICITACAO_ID")
@@ -60,6 +62,15 @@ public class AnexosSolicitacao implements Serializable{
 	public void setSolicitacao(Solicitacao solicitacao) {
 		this.solicitacao = solicitacao;
 	}
+	
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+
 	@Override
 	public int hashCode() {
 		return id;
