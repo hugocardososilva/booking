@@ -1,12 +1,16 @@
 package com.rn;
 
 import java.io.Serializable;
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.hibernate.util.SoftLimitMRUCache;
 import org.joda.time.DateTime;
+import org.joda.time.Days;
 import org.primefaces.model.DefaultScheduleEvent;
 
 import com.dao.AnexoSolicitacaoDAO;
@@ -18,6 +22,7 @@ import com.dao.SolicitacaoServicoDAO;
 import com.dao.UserDAO;
 import com.entidade.AnexosSolicitacao;
 import com.entidade.Historico;
+import com.entidade.Mensagem;
 import com.entidade.Servico;
 import com.entidade.ServicoJanelaAtendimento;
 import com.entidade.Solicitacao;
@@ -57,7 +62,7 @@ public class SolicitacaoRN implements Serializable {
 	public Solicitacao alterar(Solicitacao solicitacao) throws Exception{
 		getDAO().beginTransaction();
 		solicitacao = getDAO().alterar(solicitacao);
-		getDAO().commitAndCloseTransaction();
+		getDAO().commit();
 		return solicitacao;
 	}
 	public Solicitacao alterar(Solicitacao solicitacao, String descricao, User user) throws Exception{
@@ -73,6 +78,7 @@ public class SolicitacaoRN implements Serializable {
 		
 		
 		try {
+			getDAO().beginTransaction();
 			solicitacao.setDataCadastro(new Date());
 			solicitacao.setStatusSolicitacao(StatusSolicitacao.PENDENTE);
 			
@@ -89,9 +95,9 @@ public class SolicitacaoRN implements Serializable {
 						solicitacao.setCliente(user);
 					}
 			
-			getDAO().beginTransaction();
+			
 			getDAO().save(solicitacao);
-			getDAO().commitAndCloseTransaction();
+			getDAO().commitAndCloseTransaction();;
 			
 			solicitacao = localizar(solicitacao.getId());
 			//adicionando o numero da ATI
@@ -101,6 +107,7 @@ public class SolicitacaoRN implements Serializable {
 			
 			
 			solicitacao = alterar(solicitacao);
+			
 			
 			return solicitacao;
 		} catch (Exception e) {
@@ -165,6 +172,39 @@ public class SolicitacaoRN implements Serializable {
 			getFlcDAO().closeTransaction();
 		}
 	}
+	public Solicitacao notificarDemurrage(SolicitacaoServico solicitacaoServico, Solicitacao solicitacao) {
+		int freetime= solicitacaoServico.getContainer().getCadastroBL().getFreeTime();
+		
+		DateTime hoje = new DateTime();
+		DateTime data = new DateTime(solicitacaoServico.getContainer().getCadastroBL().getDataAtracacao());
+		Days diasAteDTA = Days.daysBetween(hoje, data);
+		int dta = diasAteDTA.getDays();
+		Format formatter = new SimpleDateFormat("dd/MM/yyyy");
+	
+		int total = dta+freetime;
+		data.plusDays(freetime);
+		
+	
+		Mensagem mensagem = new Mensagem();
+		mensagem.setTitulo("Serviço - " + solicitacaoServico.getServico().getNome() + " - Observaços");
+		mensagem.setConteudo("O prazo máximo de permanência no do container é de " + total + " dias. Com previsão para " + formatter.format(data.toDate()));
+		
+		solicitacao = addMensagem(solicitacaoServico.getSolicitacao(), solicitacaoServico.getSolicitacao().getUltResponsavel(), mensagem);
+		return solicitacao;
+	}
+	public Solicitacao addMensagem(Solicitacao solicitacao, User user, Mensagem mensagem) {
+		mensagem.setSolicitacao(solicitacao);
+		mensagem.setUsuario(user);
+		mensagem.setData(new Date());
+		solicitacao.addMensagem(mensagem);
+		try {
+			solicitacao = alterar(solicitacao);
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+		}
+		return solicitacao;
+	}
 	
 	public Solicitacao novaSolicitacaoServico(Solicitacao solicitacao, Servico servico, List<CadastroBLContanier> containers) {
 		try {	
@@ -177,7 +217,9 @@ public class SolicitacaoRN implements Serializable {
 				solicitacaoServico.setContainer(container);
 				
 				
-				
+				if(servico.isValidarDemurrage()) {
+					solicitacao = notificarDemurrage(solicitacaoServico, solicitacao);
+				}
 			
 			}
 			solicitacao = alterar(solicitacao, "Nova Solicitação de Serviços", solicitacao.getUltResponsavel());

@@ -32,6 +32,7 @@ public class Servico implements Serializable {
 	private static final long serialVersionUID = 1L;
 	public final static String sql= "select s from Servico s";
 	public final static String CAMPO_NOME= "nome";
+	public final static String sql_pesquisa_autocomplete_solicitacao= "select s from Servico s where s.nome like :nome";
 	public final static String sql_pesquisa_autocomplete= "select s from Servico s where s.nome like :nome AND s.janelaCapacidade = true";
 	public final static String sql_pesquisa_autocompleteSolicitacao= "select s from Servico s where s.nome like :nome";
 	public final static String sqlCount= "select COUNT(s) from Servico s";

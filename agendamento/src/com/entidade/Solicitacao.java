@@ -71,7 +71,7 @@ public class Solicitacao implements Serializable {
 	
 	private String codigoBL;
 	
-	@Enumerated(EnumType.STRING)
+	@Column(name="STATUS_SOLICITACAO", columnDefinition = "int default 0")
 	private StatusSolicitacao statusSolicitacao;
 	
 	@OneToMany(fetch= FetchType.LAZY, mappedBy= "solicitacao", cascade = CascadeType.ALL, orphanRemoval= true)

@@ -36,7 +36,20 @@ public class JanelaAtendimentoRN implements Serializable {
 		if(servicoDAO == null) servicoDAO = new ServicoDAO();
 		return servicoDAO;
 	}
-	
+	public List<Servico> getTodosServicos(String pesquisa) throws Exception{
+		getServicoDAO().beginTransaction();
+		List<Servico> lista = new ArrayList<Servico>();
+		try {
+			lista= getServicoDAO().pesquisaAutoCompleteTodos(pesquisa);
+			
+			
+		} catch (Exception e) {
+			getServicoDAO().rollback();
+			throw new Exception(e.getMessage());
+		}
+		getServicoDAO().closeTransaction();
+		return lista;
+	}
 	public List<Servico> getServicos(String pesquisa) throws Exception{
 		getServicoDAO().beginTransaction();
 		List<Servico> lista = new ArrayList<Servico>();

@@ -19,8 +19,10 @@ public enum TelasEntidadesEnum {
 	GERADOR_ETIQUETAS(13,"Gerador - Etiquetas", "/pages/publico/cadastros/gerarEtiqueta.xhtml", "truck-container_lcl.png", false),
 	DESCARGA_ETIQUETAS(15,"Descarga - Etiquetas", "/pages/publico/cadastros/descargaEtiqueta.xhtml", "truck-container_lcl.png", false),
 	CARGA_ETIQUETAS(14,"Carga - Etiquetas", "/pages/publico/cadastros/cargaEtiqueta.xhtml", "truck-container_lcl.png", false),
-	ETIQUETAS_GERADAS(15,"Etiquetas - Gerdas", "/pages/publico/cadastros/etiquetasGeradas.xhtml", "truck-container_lcl.png", false);
-	
+	ETIQUETAS_GERADAS(15,"Etiquetas - Gerdas", "/pages/publico/cadastros/etiquetasGeradas.xhtml", "truck-container_lcl.png", false),
+	SERVICOS(16,"Solicitação - Serviços", "/pages/publico/cadastros/cadastroServicos.xhtml","add-user.png",true),
+	JANELA_ATENDIMENTO(17,"Janela de Atendimento", "/pages/publico/cadastros/cadastroJanelaAtendimento.xhtml","add-user.png",true),
+	SOLICITACAO(17,"Solicitação - Serviços", "/pages/publico/cadastros/cadastroSolicitacaoServicos.xhtml","add-user.png",true);
 	private int codigo;
 	private String descricao;
 	private String caminhoTela;

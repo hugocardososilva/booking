@@ -38,6 +38,9 @@ public class UserMB extends AbstractMB implements IGenericBean, Serializable {
 	private boolean telaLiberadaUserImportadorNotify;
 	private boolean telaLiberadaDespachanteUsuarios;
 	private boolean usuarioMaster;
+	private boolean telaJanelaAtendimento;
+	private boolean telaServicos;
+	private boolean telaSolicitacaoServicos;
 
 	private int modoEdicao = 0;
 	private LazyDataModel<User> lazyModel = null;
@@ -150,6 +153,31 @@ public class UserMB extends AbstractMB implements IGenericBean, Serializable {
 
 	public String retornaPaginaInicial() {
 		return "/pages/protected/index.xhtml";
+	}
+	
+
+	public boolean isTelaJanelaAtendimento() {
+		return telaJanelaAtendimento;
+	}
+
+	public void setTelaJanelaAtendimento(boolean telaJanelaAtendimento) {
+		this.telaJanelaAtendimento = telaJanelaAtendimento;
+	}
+
+	public boolean isTelaServicos() {
+		return telaServicos;
+	}
+
+	public void setTelaServicos(boolean telaServicos) {
+		this.telaServicos = telaServicos;
+	}
+
+	public boolean isTelaSolicitacaoServicos() {
+		return telaSolicitacaoServicos;
+	}
+
+	public void setTelaSolicitacaoServicos(boolean telaSolicitacaoServicos) {
+		this.telaSolicitacaoServicos = telaSolicitacaoServicos;
 	}
 
 	/**
@@ -282,6 +310,16 @@ public class UserMB extends AbstractMB implements IGenericBean, Serializable {
 					if (item.getTelasEntidadesEnum().equals(TelasEntidadesEnum.DESPACHANTE_USUARIOS)) {
 						setTelaLiberadaDespachanteUsuarios(true);
 					}
+					if(item.getTelasEntidadesEnum().equals(TelasEntidadesEnum.SERVICOS)) {
+						setTelaServicos(true);
+					}
+					if(item.getTelasEntidadesEnum().equals(TelasEntidadesEnum.SOLICITACAO)) {
+						setTelaSolicitacaoServicos(true);
+					}
+					if(item.getTelasEntidadesEnum().equals(TelasEntidadesEnum.JANELA_ATENDIMENTO)) {
+						setTelaSolicitacaoServicos(true);
+					}
+					
 				}
 
 			}
@@ -295,6 +333,9 @@ public class UserMB extends AbstractMB implements IGenericBean, Serializable {
 		setTelaLiberadaProgramacaoNavio(valor);
 		setTelaLiberadaUserImportadorNotify(valor);
 		setTelaLiberadaDespachanteUsuarios(valor);
+		setTelaServicos(valor);
+		setTelaSolicitacaoServicos(valor);
+		setTelaJanelaAtendimento(valor);
 	}
 
 	public boolean isTelaLiberadaFCL() {

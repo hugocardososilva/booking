@@ -88,7 +88,7 @@
 					completeMethod="#{solicitacaoBean.pesquisaServico}">
 					<p:ajax event="itemSelect"
 						listener="#{solicitacaoBean.selecionarServico}"
-						update="#{p:component('descOutro')}" />
+						update="#{p:component('descOutro')} #{p:component('dtSolicitacao')} #{p:component('btnDlgjanela')}" />
 				</p:autoComplete>
 			<p:outputLabel for="descOutro" rendered="#{solicitacaoBean.outroServico}" value="Descrição - (*Outros)"/>
 			<p:inputText id="descOutro" rendered="#{solicitacaoBean.outroServico}" required="true" requiredMessage="O preenchimento do campo é obrigatório." value="#{solicitacaoBean.descricaoOutros}"></p:inputText>
@@ -97,8 +97,8 @@
 			<p:outputLabel for="dtSolicitacao" value="Data Solicitacao"/>
 			</p:panelGrid>
 			<p:panelGrid columns="2" styleClass="form-group ui-panelgrid-blank">
-			<p:calendar id="dtSolicitacao" value="#{solicitacaoBean.dataSolicitacao}" disabled="true" pattern="dd/MM/yyyy"/>
-			<p:commandButton icon="fa fa-calendar-plus" update="#{p:component('dtSolicitacao')}"
+			<p:calendar id="dtSolicitacao" value="#{solicitacaoBean.dataSolicitacao}" disabled="#{solicitacaoBean.servico.janelaCapacidade}" pattern="dd/MM/yyyy"/>
+			<p:commandButton value="Verificar disponibilidade" id="btnDlgjanela" icon="fa fa-calendar"  disabled="#{!solicitacaoBean.servico.janelaCapacidade}" update="#{p:component('dtSolicitacao')}"
 				onclick="PF('dlgServJanelaAtend').show();" actionListener="#{solicitacaoBean.carregarEventosServicoJanela}">
 			</p:commandButton>
 			</p:panelGrid>
@@ -199,10 +199,17 @@
 			</p:fieldset>
 			<p:fieldset legend="Mensagens">
 			<h:form id="frmMensagemSolicitacao">
-					<h:panelGrid id="pnlMensagemSolicitacao" lang="grid" columns="1">
+					<p:panelGrid id="pnlMensagemSolicitacao" layout="grid" columns="1">
 
 						<p:inputText value="#{solicitacaoBean.mensagem.titulo}" placeholder="Informe o título da mensagem." size="100"/>
 						<p:inputTextarea cols="100" rows="5" value="#{solicitacaoBean.mensagem.conteudo}" placeholder="Informe neste campo algum detalhe que será importante ao serviço solicitado."></p:inputTextarea>
+				<p:toolbar>
+				<f:facet name="left">
+					<p:commandButton value="Enviar" ajax="true" update="@form" process="@form"
+						icon="#{bundle.iconSalvar}" id="btSalvar"
+						action="#{solicitacaoBean.adicionarMensagem}" />
+				</f:facet>
+				</p:toolbar>
 						<p:dataTable id="tblmensagens" emptyMessage="Nenhum registro encontrado." value="#{solicitacaoBean.solicitacao.mensagems}" var="item" 
 							 style="margin-bottom:20px">
 
@@ -245,8 +252,39 @@
 			
 							</p:dialog>
 
-					</h:panelGrid>
+					</p:panelGrid>
 				</h:form>
+			
+			</p:fieldset>
+			<p:fieldset legend="Historico" rendered="#{loginMB.userMB.admin}">
+			
+					<p:panelGrid id="pnlMensagemSolicitacao" layout="grid" columns="1">
+
+						
+						<p:dataTable id="tblHistorico" emptyMessage="Nenhum registro encontrado." value="#{solicitacaoBean.solicitacao.historico}" var="item" 
+							 style="margin-bottom:20px">
+
+							<p:column headerText="Data">
+							<h:outputText value="#{item.data}">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputText>
+							</p:column>
+							<p:column headerText="Usuário">
+								<h:outputText value="#{item.usuario.name}"/>
+							</p:column>
+							<p:column headerText="Descrição">
+								<h:outputText value="#{item.descricao}"/>
+							</p:column>
+							
+							
+
+						
+							
+						</p:dataTable>
+						
+
+					</p:panelGrid>
+			
 			
 			</p:fieldset>
 			
