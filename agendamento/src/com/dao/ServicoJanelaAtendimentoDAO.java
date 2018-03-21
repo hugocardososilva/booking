@@ -25,7 +25,7 @@ public class ServicoJanelaAtendimentoDAO extends GenericDAO<ServicoJanelaAtendim
 	private static final long serialVersionUID = 1L;
 	
 	public List<ServicoJanelaAtendimento> getServicoJanelaPorDataJanela(Date data, Servico servico){
-		TypedQuery<ServicoJanelaAtendimento> q = em.createQuery(ServicoJanelaAtendimento.sql+" where s.atendimentoJanela.data = :dataJanela AND s.servico.id = :idServico", ServicoJanelaAtendimento.class);
+		TypedQuery<ServicoJanelaAtendimento> q = em.createQuery(ServicoJanelaAtendimento.sql+" where s.janelaAtendimento.data = :dataJanela AND s.servico.id = :idServico", ServicoJanelaAtendimento.class);
 		q.setParameter("dataJanela", data );
 		q.setParameter("idServico", servico.getId());
 		

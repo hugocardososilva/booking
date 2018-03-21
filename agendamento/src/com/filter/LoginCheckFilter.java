@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.context.FacesContext;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -14,15 +17,19 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.bean.UserMB;
+
 import seguranca.com.entidade.User;
 
 /**
  * Servlet Filter implementation class UserCheckFilter
  */
-@WebFilter("/pages/*")
+@WebFilter({"/faces/pages/publico/cadastros/*","/faces/pages/publico/consultas/*","/faces/pages/privado/*"})
 public class LoginCheckFilter extends AbstractFilter implements Filter {
 	private static List<String> allowedURIs;
 
+	@ManagedProperty(value = UserMB.INJECTION_NAME)
+	private UserMB userMB;
 	/**
 	 * @see Filter#init(FilterConfig)
 	 */
@@ -31,6 +38,7 @@ public class LoginCheckFilter extends AbstractFilter implements Filter {
 		if(allowedURIs == null){
 			allowedURIs = new ArrayList<String>();
 			allowedURIs.add(fConfig.getInitParameter("loginActionURI"));
+			
 			allowedURIs.add("/osiweb/javax.faces.resource/main.css.xhtml");
 			allowedURIs.add("/osiweb/javax.faces.resource/theme.css.xhtml");
 			allowedURIs.add("/osiweb/javax.faces.resource/primefaces.js.xhtml");
@@ -63,12 +71,14 @@ public class LoginCheckFilter extends AbstractFilter implements Filter {
 			return;
 		}
 
-		User user = (User) session.getAttribute("user");
+		User user = (User) ((HttpServletRequest) request).getSession().getAttribute("user");
 
 		if (user == null && !allowedURIs.contains(req.getRequestURI())) {
-	
+			
 			System.out.println(req.getRequestURI());
-			doLogin(request, response, req);
+			
+				doLogin(request, response, req);
+			
 			return;
 		}
 

@@ -11,6 +11,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
 
+import javax.sound.sampled.SourceDataLine;
+
 import jxl.Cell;
 import jxl.Sheet;
 
@@ -133,6 +135,10 @@ public class PrintTask implements Runnable {
 		}
 
 		return programacaoNavioRN;
+	}
+	
+	private void verificarStatusServicos() {
+		
 	}
 	
 	

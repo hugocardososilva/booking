@@ -78,3 +78,11 @@ body .ui-tabs.ui-tabs-top .ui-tabs-nav li{
 body .ui-tabs.ui-tabs-top .ui-tabs-nav li.ui-state-active a{
 	background: #ccc;
 }
+body .fc .fc-event .green{
+	background-color: green!important;
+	border-color: green!important;
+}
+body .fc .fc-event .red{
+	background-color: red!important;
+	border-color: red!important;
+}

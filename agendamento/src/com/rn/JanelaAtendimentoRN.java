@@ -51,12 +51,26 @@ public class JanelaAtendimentoRN implements Serializable {
 		getServicoDAO().closeTransaction();
 		return lista;
 	}
+	public List<Servico> getTodosServicos(String pesquisa) throws Exception{
+		getServicoDAO().beginTransaction();
+		List<Servico> lista = new ArrayList<Servico>();
+		try {
+			lista= getServicoDAO().pesquisaAutoCompleteTodos(pesquisa);
+			
+			
+		} catch (Exception e) {
+			getServicoDAO().rollback();
+			throw new Exception(e.getMessage());
+		}
+		getServicoDAO().closeTransaction();
+		return lista;
+	}
 	public JanelaAtendimento incluir(JanelaAtendimento janelaAtendimento) throws Exception {
-		//verifica se a data já possui registro
+		//verifica se a data jï¿½ possui registro
 		if(verificarQntRegistrosDataJanela(janelaAtendimento.getData())!= 0) {
-			throw new Exception("Já existe um registro com a mesma data");
+			throw new Exception("JÃ¡ existe um registro com a mesma data");
 		}else if(janelaAtendimento.getData().compareTo(new Date()) <= 0) {
-			throw new Exception("Não é possivel adicionar para datas que já passaram.");
+			throw new Exception("NÃ£o Ã© possivel adicionar para datas que jÃ¡ passaram.");
 		}
 		else {
 		getDAO().beginTransaction();
@@ -145,7 +159,7 @@ public class JanelaAtendimentoRN implements Serializable {
 		} catch (Exception e) {
 			e.printStackTrace();
 			getServicoJanelaAtendimentoDAO().rollback();
-			throw new Exception("Não foi possível salvar.");
+			throw new Exception("Nï¿½o foi possï¿½vel salvar.");
 			
 		}
 		

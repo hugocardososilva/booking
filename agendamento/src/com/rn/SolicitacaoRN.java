@@ -22,6 +22,7 @@ import com.entidade.Servico;
 import com.entidade.ServicoJanelaAtendimento;
 import com.entidade.Solicitacao;
 import com.entidade.SolicitacaoServico;
+import com.enums.StatusServicos;
 import com.enums.StatusSolicitacao;
 import com.proxy.ContainerProxy;
 
@@ -50,14 +51,20 @@ public class SolicitacaoRN implements Serializable {
 	}
 	public Solicitacao localizar(int id) {
 		getDAO().beginTransaction();
-		Solicitacao s = getDAO().localizarPorID(id);
+		Solicitacao s = getDAO().localizarPorIDJoinFetch(id);
 		getDAO().closeTransaction();
 		return s;
 	}
+	public void fecharConexao() {
+		getDAO().closeTransaction();
+	}
 	public Solicitacao alterar(Solicitacao solicitacao) throws Exception{
+		
 		getDAO().beginTransaction();
+		
 		solicitacao = getDAO().alterar(solicitacao);
-		getDAO().commitAndCloseTransaction();
+		
+		getDAO().commit();
 		return solicitacao;
 	}
 	public Solicitacao alterar(Solicitacao solicitacao, String descricao, User user) throws Exception{
@@ -65,7 +72,7 @@ public class SolicitacaoRN implements Serializable {
 		solicitacao = adicionarHistorico(solicitacao, descricao, user);
 		getDAO().beginTransaction();
 		solicitacao = getDAO().alterar(solicitacao);
-		getDAO().commitAndCloseTransaction();
+		getDAO().commit();
 		return solicitacao;
 	}
 	
@@ -75,39 +82,40 @@ public class SolicitacaoRN implements Serializable {
 		try {
 			solicitacao.setDataCadastro(new Date());
 			solicitacao.setStatusSolicitacao(StatusSolicitacao.PENDENTE);
-			
+			//logica aplicada:
 			if(user.isCliente()) {
 				solicitacao.setCliente(user);
 				
 			}else
 				if(user.isClif()||user.isAdmin()) {
 					
-					solicitacao.setUltResponsavel(user);
+					
 				}
 				else
 					if(user.isDespachante()) {
 						solicitacao.setCliente(user);
 					}
 			
-			getDAO().beginTransaction();
+			solicitacao.setUltResponsavel(user);
+			getDAO().beginTransaction();			
 			getDAO().save(solicitacao);
+			
+			//adicionando o numero da ATI
+			String ano = String.valueOf(new DateTime().getYear());
+			System.out.println(solicitacao.getId());
+			solicitacao.setNumeroATI(solicitacao.getId()+"/"+ano);
+			solicitacao = getDAO().alterar(solicitacao);
+		
 			getDAO().commitAndCloseTransaction();
 			
-			solicitacao = localizar(solicitacao.getId());
-			//adicionando o numero da ATI
-			DateTime date = new DateTime(solicitacao.getDataCadastro().getTime());
-			String ano = String.valueOf(date.getYear());
-			solicitacao.setNumeroATI(solicitacao.getId()+"/"+ano);
-			
-			
-			solicitacao = alterar(solicitacao);
-			
-			return solicitacao;
+			return localizar(solicitacao.getId());
 		} catch (Exception e) {
 			e.printStackTrace();
 			getDAO().rollback();
 			return null;
 		}
+		
+		
 			
 
 		
@@ -157,13 +165,33 @@ public class SolicitacaoRN implements Serializable {
 		}
 		
 	
-		return lista;
+	
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
-		}finally {
-			getFlcDAO().closeTransaction();
 		}
+		getFlcDAO().closeTransaction();
+		return lista;
+		
+	}
+	public Solicitacao editarSoliticacaoServico(SolicitacaoServico solicitacaoServico) throws Exception {
+		
+	
+		
+		if(solicitacaoServico.getOS() == null || solicitacaoServico.getOS().isEmpty()) {
+			solicitacaoServico.setStatusServicos(StatusServicos.CRIA_OS_SARA);
+		}else {
+			if(solicitacaoServico.getDataInicioOS()!= null) {
+			if(solicitacaoServico.getDataTerminoOS() == null) {
+				solicitacaoServico.setStatusServicos(StatusServicos.OS_INICIADA);
+			}else {
+				solicitacaoServico.setStatusServicos(StatusServicos.FINALIZADO);
+			}
+		}
+		}
+		 	Solicitacao solicitacao = alterar(solicitacaoServico.getSolicitacao(), "Solicitação de serviço - status alterado : "+ solicitacaoServico.getId() + "  "+ solicitacaoServico.getStatusServicos().getDescricao(), solicitacaoServico.getSolicitacao().getUltResponsavel());
+		
+		return solicitacao;
 	}
 	
 	public Solicitacao novaSolicitacaoServico(Solicitacao solicitacao, Servico servico, List<CadastroBLContanier> containers) {
@@ -175,18 +203,20 @@ public class SolicitacaoRN implements Serializable {
 				solicitacaoServico.setSolicitacao(solicitacao);
 				solicitacaoServico.setServico(servico);
 				solicitacaoServico.setContainer(container);
+				solicitacaoServico.setDataSolicitacao(new Date());
+				solicitacaoServico.setStatusServicos(StatusServicos.CRIA_OS_SARA);
 				
 				
 				
 			
 			}
-			solicitacao = alterar(solicitacao, "Nova Solicita��o de Servi�os", solicitacao.getUltResponsavel());
+			solicitacao = alterar(solicitacao, "Nova Solicitação de Serviços", solicitacao.getUltResponsavel());
 			return solicitacao;
 			
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-			getDAO().rollback();
+		
 			return null;
 		}
 	
@@ -209,10 +239,12 @@ public class SolicitacaoRN implements Serializable {
 		
 		DefaultScheduleEvent defaultScheduleEvent= new DefaultScheduleEvent();
 		defaultScheduleEvent.setAllDay(true);
-		defaultScheduleEvent.setData(data);
+		defaultScheduleEvent.setData(data.toDate());
+		defaultScheduleEvent.setStartDate(data.toDate());
+		defaultScheduleEvent.setEndDate(data.plusHours(20).toDate());
 		
 		
-		if(servicoJanelaAtendimentos!= null) {
+		if(!servicoJanelaAtendimentos.isEmpty()) {
 			
 			
 			getSolicitacaoServicoDAO().beginTransaction();
@@ -227,7 +259,7 @@ public class SolicitacaoRN implements Serializable {
 				janelaSolicitacao = solicitacaoServicos.size();
 			int disponivel = janelaServico-janelaSolicitacao;
 			if(disponivel > 0) {
-				defaultScheduleEvent.setTitle("Dispon�vel");
+				defaultScheduleEvent.setTitle("Disponível");
 				defaultScheduleEvent.setStyleClass("green");
 				
 			}else {
@@ -235,10 +267,10 @@ public class SolicitacaoRN implements Serializable {
 				defaultScheduleEvent.setStyleClass("red");
 				
 			}
-		}
-		defaultScheduleEvent.setTitle("N�o Dispon�vel");
+		}else {
+		defaultScheduleEvent.setTitle("Não Disponível");
 		defaultScheduleEvent.setStyleClass("no-color");
-		
+		}
 		
 		return defaultScheduleEvent;
 	}
@@ -273,6 +305,41 @@ public class SolicitacaoRN implements Serializable {
 	}
 	
 	public void adicionarServicoContainer(Map<String,Object> entry, Servico servico, Solicitacao solicitacao) {
+		
+	}
+	public void atualizarStatusSolicitacaoServicoSara() {
+		//pega todos as solicitacoes que nao estao finalizadas
+		//aplica o novo status e salva com uma mensagem do historico
+		List<SolicitacaoServico> solicitacoes = new ArrayList<>();
+		try {
+		getSolicitacaoServicoDAO().beginTransaction();
+		solicitacoes = getSolicitacaoServicoDAO().getSolicitacaoServicoNaoFinalizadas();
+		getSolicitacaoServicoDAO().closeTransaction();
+		
+		for(SolicitacaoServico s : solicitacoes) {
+			if(s.getStatusServicos() != StatusServicos.CRIA_OS_SARA) {
+			String status = getSolicitacaoServicoDAO().getStatusServerSara(s.getSolicitacao().getNumeroATI(), s.getOS());
+			if(status.equals("OS_GERADA")) {
+				s.setStatusServicos(StatusServicos.OS_GERADA);
+			}else 
+				if(status.equals("OS_INICIADA")) {
+					s.setStatusServicos(StatusServicos.OS_INICIADA);
+				}
+				else 
+					if(status.equals("FINALIZADO")) {
+						s.setStatusServicos(StatusServicos.FINALIZADO);
+					}
+			getDAO().beginTransaction();
+			alterar(s.getSolicitacao(), "Alteração de Status do serviço",s.getSolicitacao().getUltResponsavel());
+			getDAO().commitAndCloseTransaction();
+			}
+		
+		}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		
 		
 	}
 

@@ -65,6 +65,12 @@ public class SolicitacaoServico implements Serializable{
 	
 	private String OS;
 	
+	@Temporal(TemporalType.DATE)
+	private Date dataInicioOS;
+	
+	@Temporal(TemporalType.DATE)
+	private Date dataTerminoOS;
+	
 	@Column(columnDefinition = "int default 0")
 	private boolean encaixe;
 	
@@ -105,8 +111,20 @@ public class SolicitacaoServico implements Serializable{
 	public void setOutrosServicos(String outrosServicos) {
 		this.outrosServicos = outrosServicos;
 	}
+	
 
-
+	public Date getDataInicioOS() {
+		return dataInicioOS;
+	}
+	public void setDataInicioOS(Date dataInicioOS) {
+		this.dataInicioOS = dataInicioOS;
+	}
+	public Date getDataTerminoOS() {
+		return dataTerminoOS;
+	}
+	public void setDataTerminoOS(Date dataTerminoOS) {
+		this.dataTerminoOS = dataTerminoOS;
+	}
 	public CadastroBLContanier getContainer() {
 		return container;
 	}

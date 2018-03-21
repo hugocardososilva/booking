@@ -26,7 +26,7 @@ public class ContainerFlcDAO extends GenericDAO<CadastroBLContanier> {
 	}
 	
 	public List<CadastroBLContanier> findByCliente(int id){
-		TypedQuery<CadastroBLContanier> q = em.createQuery(" Select c from CadastroBLContainer c where c.cadastroBL.userCadastroDtc.id = :id ",CadastroBLContanier.class);
+		TypedQuery<CadastroBLContanier> q = em.createQuery(" Select CadastroBLContanier from CadastroBL c where c.userCadastroDtc.id = :id ",CadastroBLContanier.class);
 		q.setParameter("id", id);
 		
 		try {
@@ -39,7 +39,7 @@ public class ContainerFlcDAO extends GenericDAO<CadastroBLContanier> {
 		
 	}
 	public List<CadastroBLContanier> findByComissarioSemImportador(CadastroComissario comissario){
-		TypedQuery<CadastroBLContanier> q = em.createQuery("Select c from CadastroBLContainer c where c.cadastroBL.statusAtiLclFlclEnum = :status and c.cadastroBL.cadComissario = :idComissario",CadastroBLContanier.class);
+		TypedQuery<CadastroBLContanier> q = em.createQuery("Select container from CadastroBL as c inner join c.listaCadastroBLContanier as container  where c.statusAtiLclFclEnum = :status and c.cadComissario.id = :idComissario",CadastroBLContanier.class);
 		q.setParameter("status", StatusAtiLclFclEnum.PRESENCA_TERMINAL);
 		q.setParameter("idComissario", comissario.getId());
 		
@@ -52,7 +52,7 @@ public class ContainerFlcDAO extends GenericDAO<CadastroBLContanier> {
 		}
 	}
 	public List<CadastroBLContanier> findByImportador(CadastroImportador importador){
-		TypedQuery<CadastroBLContanier> q = em.createQuery("Select c from CadastroBLContainer c where c.cadastroBL.statusAtiLclFlcEnum = :status and c.cadastroBL.importador.id = :idImportador", CadastroBLContanier.class);
+		TypedQuery<CadastroBLContanier> q = em.createQuery("Select container from CadastroBL as c inner join c.listaCadastroBLContanier as container  where c.statusAtiLclFclEnum = :status and c.importador.id = :idImportador", CadastroBLContanier.class);
 		q.setParameter("status", StatusAtiLclFclEnum.PRESENCA_TERMINAL);
 		q.setParameter("idImportador", importador.getId());
 		
@@ -65,7 +65,7 @@ public class ContainerFlcDAO extends GenericDAO<CadastroBLContanier> {
 		}
 	}
 	public List<CadastroBLContanier> findByImportadorEComissario(CadastroComissario comissario, CadastroImportador importador){
-		TypedQuery<CadastroBLContanier> q = em.createQuery("Select c from CadastroBLContainer c where c.cadastroBL.statusAtiLclFlcEnum = :status and c.cadastroBL.importador.id = :idImportador", CadastroBLContanier.class);
+		TypedQuery<CadastroBLContanier> q = em.createQuery("Select container from CadastroBL as c inner join c.listaCadastroBLContanier as container  where c.statusAtiLclFclEnum = :status and c.importador.id = :idImportador", CadastroBLContanier.class);
 		q.setParameter("status", StatusAtiLclFclEnum.PRESENCA_TERMINAL);
 		q.setParameter("idImportador", importador.getId());
 		q.setParameter("idComissario", comissario.getId());

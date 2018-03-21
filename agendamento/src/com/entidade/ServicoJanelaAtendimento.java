@@ -27,7 +27,7 @@ public class ServicoJanelaAtendimento implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	public static final String sql="select s from ServivoJanelaAtendimento s";
+	public static final String sql="select s from ServicoJanelaAtendimento s";
 	
 	@Id
 	@SequenceGenerator(name = "SEQ_SJATENDIMENTO_ID", sequenceName = "SEQ_SJATENDIMENTO_ID")

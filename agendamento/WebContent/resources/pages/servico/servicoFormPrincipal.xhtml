@@ -36,7 +36,11 @@
 			<h:outputText value="#{item.nome} - #{item.descricao}" />
 		</p:column>
 		<p:column id="idCodNCM" headerText="Validar NCM">
-			<h:outputText value="#{item.codigoNCM}" />
+			
+			<span class="#{item.validarNCM? 'label-sim' : 'label-nao'}">
+				<h:outputText value="#{item.validarNCM? 'Sim' : 'Não'}" />
+			</span>
+			
 		</p:column>
 		<p:column id="idJanelaCapacidade" headerText="Utilizar Agendamento">
 			

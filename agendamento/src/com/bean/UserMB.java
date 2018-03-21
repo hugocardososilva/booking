@@ -37,6 +37,9 @@ public class UserMB extends AbstractMB implements IGenericBean, Serializable {
 	private boolean telaLiberadaConsultaProcesso;
 	private boolean telaLiberadaUserImportadorNotify;
 	private boolean telaLiberadaDespachanteUsuarios;
+	private boolean telaLiberadaServicos;
+	private boolean telaLiberadaSolicitacoes;
+	private boolean telaLiberadaJanelaAtendimento;
 	private boolean usuarioMaster;
 
 	private int modoEdicao = 0;
@@ -282,6 +285,15 @@ public class UserMB extends AbstractMB implements IGenericBean, Serializable {
 					if (item.getTelasEntidadesEnum().equals(TelasEntidadesEnum.DESPACHANTE_USUARIOS)) {
 						setTelaLiberadaDespachanteUsuarios(true);
 					}
+					if(item.getTelasEntidadesEnum().equals(TelasEntidadesEnum.SERVICOS)) {
+						setTelaLiberadaServicos(true);
+					}
+					if(item.getTelasEntidadesEnum().equals(TelasEntidadesEnum.SOLICITACOES)) {
+						setTelaLiberadaSolicitacoes(true);
+					}
+					if(item.getTelasEntidadesEnum().equals(TelasEntidadesEnum.JANELA_ATENDIMENTO)) {
+						setTelaLiberadaJanelaAtendimento(true);
+					}
 				}
 
 			}
@@ -295,6 +307,33 @@ public class UserMB extends AbstractMB implements IGenericBean, Serializable {
 		setTelaLiberadaProgramacaoNavio(valor);
 		setTelaLiberadaUserImportadorNotify(valor);
 		setTelaLiberadaDespachanteUsuarios(valor);
+		setTelaLiberadaServicos(valor);
+		setTelaLiberadaSolicitacoes(valor);
+		setTelaLiberadaJanelaAtendimento(valor);
+	}
+	
+	public boolean isTelaLiberadaServicos() {
+		return telaLiberadaServicos;
+	}
+
+	public void setTelaLiberadaServicos(boolean telaLiberadaServicos) {
+		this.telaLiberadaServicos = telaLiberadaServicos;
+	}
+
+	public boolean isTelaLiberadaSolicitacoes() {
+		return telaLiberadaSolicitacoes;
+	}
+
+	public void setTelaLiberadaSolicitacoes(boolean telaLiberadaSolicitacoes) {
+		this.telaLiberadaSolicitacoes = telaLiberadaSolicitacoes;
+	}
+
+	public boolean isTelaLiberadaJanelaAtendimento() {
+		return telaLiberadaJanelaAtendimento;
+	}
+
+	public void setTelaLiberadaJanelaAtendimento(boolean telaLiberadaJanelaAtendimento) {
+		this.telaLiberadaJanelaAtendimento = telaLiberadaJanelaAtendimento;
 	}
 
 	public boolean isTelaLiberadaFCL() {
