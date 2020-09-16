@@ -203,12 +203,20 @@ public class SolicitacaoBean extends AbstractMB implements Serializable {
 			
 			
 			if(!getFiltroStatusServicos().isEmpty()) {
+				getFiltros().remove("filtroStatusServicos");
 				getFiltros().put("filtroStatusServicos", getFiltroStatusServicos());
+
+				setFiltroStatusServicos(new ArrayList<>());
+				
+
 			}else {
 				getFiltros().remove("filtroStatusServicos");
 			}
 			if(!getFiltroStatusSolicitacao().isEmpty()) {
+				getFiltros().remove("filtroStatusSolicitacao");
 				getFiltros().put("filtroStatusSolicitacao", getFiltroStatusSolicitacao());
+
+				setFiltroStatusServicos(new ArrayList<>());
 			}else {
 				getFiltros().remove("filtroStatusSolicitacao");
 			}
@@ -294,7 +302,7 @@ public class SolicitacaoBean extends AbstractMB implements Serializable {
 				DateTime fim = new DateTime(end);
 				for(DateTime data= inicio; data.isBefore(fim); data = data.plusDays(1)) {
 					if(!data.isBefore(new DateTime()) && getServico().isJanelaCapacidade()) {
-					addEvent(rn.getEventosCalendario(data,getServico()));
+					addEvent(getRn().getEventosCalendario(data,getServico()));
 					}
 				}
 				
@@ -311,7 +319,9 @@ public class SolicitacaoBean extends AbstractMB implements Serializable {
 		try {
 			//metodo que ir� retornar a nova instancia do objeto solicitacao
 			//atribuirCliente();
+			//if(userMB.getUser().isCliente()||userMB.getUser().isDespachante()) {
 			getSolicitacao().setCliente(userMB.getUser());
+			//}
 			solicitacao = getRn().novaSolicitacao(getSolicitacao(), userMB.getUser());
 			setControlarFormCadastrar(true);
 			setControlarFormEditar(true);
@@ -378,11 +388,8 @@ public class SolicitacaoBean extends AbstractMB implements Serializable {
 	public void adicionarMensagem() {
 		//TODO
 		try {
-			getMensagem().setSolicitacao(solicitacao);
-			getMensagem().setUsuario(userMB.getUser());
-			getMensagem().setData(new Date());
-			solicitacao.addMensagem(getMensagem());
-			solicitacao = getRn().alterar(solicitacao);
+			getRn().addMensagem(solicitacao, userMB.getUser(), getMensagem());
+			
 		} catch (Exception e) {
 			// TODO: handle exception
 			JSFMessageUtil.adicionarMensagemErro("Erro ao adicionar a mensagem");

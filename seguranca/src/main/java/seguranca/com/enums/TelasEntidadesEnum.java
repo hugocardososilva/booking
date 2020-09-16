@@ -9,20 +9,21 @@ public enum TelasEntidadesEnum {
 	CADASTRO_IMPORTADOR(3,"Cadastro importador", " ", " ", false),
 	CONSULTAR_LOG(4,"Consultar LOG", " ", " ", false),
 	CONSULTAR_CLIF_DEFERIDO(5,"Consultar CLIF", " ", " ", false),
-	CADASTRO_USUARIOS(6,"Cadastro Usu·rios - CLIF", "/pages/privado/usuario/listarUsuarios.xhtml", "add-user.png", false),
-	CADASTRO_ATI_FCL(7,"SolicitaÁ„o DTC/DTA-FCL", "/pages/publico/cadastros/cadastroDtcDta.xhtml", "crane.png", true),
-	CADASTRO_ATI_LCL(8,"SolicitaÁ„o DTC/DTA-LCL", "/pages/publico/cadastros/cadastroLCL.xhtml", "truck-container_lcl.png", true),
+	CADASTRO_USUARIOS(6,"Cadastro Usu√°rios - CLIF", "/pages/privado/usuario/listarUsuarios.xhtml", "add-user.png", false),
+	CADASTRO_ATI_FCL(7,"Solicita√ß√£o DTC/DTA-FCL", "/pages/publico/cadastros/cadastroDtcDta.xhtml", "crane.png", true),
+	CADASTRO_ATI_LCL(8,"Solicita√ß√£o DTC/DTA-LCL", "/pages/publico/cadastros/cadastroLCL.xhtml", "truck-container_lcl.png", true),
 	CONSULTA_PROCESSOS(9,"Consulta Processos", "/pages/publico/consultas/consultarProcessos.xhtml", "search_consulta.png", true),
 	PROGRAMACAO_NAVIO(10,"Programacao Navio", " ", " ", false),
-	IMPORTADOR_NOTIFY_DESPACHANTE(11,"Cadastro Usu·rios - Importador", " ", " ", false),
-	DESPACHANTE_USUARIOS(12,"Cadastro Usu·rios - Comiss·ria", " ", " ", false),
+	IMPORTADOR_NOTIFY_DESPACHANTE(11,"Cadastro Usu√°rios - Importador", " ", " ", false),
+	DESPACHANTE_USUARIOS(12,"Cadastro Usu√°rios - Comiss√°ria", " ", " ", false),
 	GERADOR_ETIQUETAS(13,"Gerador - Etiquetas", "/pages/publico/cadastros/gerarEtiqueta.xhtml", "truck-container_lcl.png", false),
 	DESCARGA_ETIQUETAS(15,"Descarga - Etiquetas", "/pages/publico/cadastros/descargaEtiqueta.xhtml", "truck-container_lcl.png", false),
 	CARGA_ETIQUETAS(14,"Carga - Etiquetas", "/pages/publico/cadastros/cargaEtiqueta.xhtml", "truck-container_lcl.png", false),
 	ETIQUETAS_GERADAS(15,"Etiquetas - Gerdas", "/pages/publico/cadastros/etiquetasGeradas.xhtml", "truck-container_lcl.png", false),
-	SERVICOS(16,"ServiÁos ","/pages/publico/cadastros/cadastroServico.xhtml","",true),
-	SOLICITACOES(17,"SolicitaÁıes","/pages/publico/cadastros/cadastroSOlicitacaoServicos.xhtml","",true),
+	SERVICOS(16,"Servi√ßos ","/pages/publico/cadastros/cadastroServico.xhtml","",true),
+	SOLICITACOES(17,"Solicita√ß√µes","/pages/publico/cadastros/cadastroSOlicitacaoServicos.xhtml","",true),
 	JANELA_ATENDIMENTO(18,"Janela de Atedimento","/pages/publico/cadastros/cadastroJanelaAteimento.xhtml","",true);
+
 	private int codigo;
 	private String descricao;
 	private String caminhoTela;

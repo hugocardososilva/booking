@@ -30,6 +30,7 @@
 		<class>seguranca.com.entidade.ProgramacaoNavio</class>
 		<class>seguranca.com.entidade.CadastroFaturarContra</class>
 		<class>seguranca.com.entidade.CadastroResponsavelLote</class>
+		<class>com.entidade.Solicitacao</class>
 		
 
 		<properties>
@@ -53,7 +54,7 @@
 			<property name="hibernate.ejb.event.post-collection-recreate"
 				value="org.hibernate.envers.event.AuditEventListener" />
 
-
+			<property name="hibernate.enable_lazy_load_no_trans" value="true" />
 		</properties>
 	</persistence-unit>
 </persistence>

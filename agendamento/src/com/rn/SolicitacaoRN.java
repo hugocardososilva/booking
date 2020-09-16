@@ -1,12 +1,16 @@
 package com.rn;
 
 import java.io.Serializable;
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.hibernate.util.SoftLimitMRUCache;
 import org.joda.time.DateTime;
+import org.joda.time.Days;
 import org.primefaces.model.DefaultScheduleEvent;
 
 import com.dao.AnexoSolicitacaoDAO;
@@ -18,6 +22,7 @@ import com.dao.SolicitacaoServicoDAO;
 import com.dao.UserDAO;
 import com.entidade.AnexosSolicitacao;
 import com.entidade.Historico;
+import com.entidade.Mensagem;
 import com.entidade.Servico;
 import com.entidade.ServicoJanelaAtendimento;
 import com.entidade.Solicitacao;
@@ -63,7 +68,7 @@ public class SolicitacaoRN implements Serializable {
 		getDAO().beginTransaction();
 		
 		solicitacao = getDAO().alterar(solicitacao);
-		
+
 		getDAO().commit();
 		return solicitacao;
 	}
@@ -80,6 +85,7 @@ public class SolicitacaoRN implements Serializable {
 		
 		
 		try {
+			getDAO().beginTransaction();
 			solicitacao.setDataCadastro(new Date());
 			solicitacao.setStatusSolicitacao(StatusSolicitacao.PENDENTE);
 			//logica aplicada:
@@ -96,9 +102,11 @@ public class SolicitacaoRN implements Serializable {
 						solicitacao.setCliente(user);
 					}
 			
+
 			solicitacao.setUltResponsavel(user);
 			getDAO().beginTransaction();			
 			getDAO().save(solicitacao);
+
 			
 			//adicionando o numero da ATI
 			String ano = String.valueOf(new DateTime().getYear());
@@ -108,7 +116,10 @@ public class SolicitacaoRN implements Serializable {
 		
 			getDAO().commitAndCloseTransaction();
 			
+
 			return localizar(solicitacao.getId());
+
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			getDAO().rollback();
@@ -189,8 +200,41 @@ public class SolicitacaoRN implements Serializable {
 			}
 		}
 		}
-		 	Solicitacao solicitacao = alterar(solicitacaoServico.getSolicitacao(), "Solicitação de serviço - status alterado : "+ solicitacaoServico.getId() + "  "+ solicitacaoServico.getStatusServicos().getDescricao(), solicitacaoServico.getSolicitacao().getUltResponsavel());
+		 	Solicitacao solicitacao = alterar(solicitacaoServico.getSolicitacao(), "SolicitaÃ§Ã£o de serviÃ§o - status alterado : "+ solicitacaoServico.getId() + "  "+ solicitacaoServico.getStatusServicos().getDescricao(), solicitacaoServico.getSolicitacao().getUltResponsavel());
 		
+		return solicitacao;
+	}
+	public Solicitacao notificarDemurrage(SolicitacaoServico solicitacaoServico, Solicitacao solicitacao) {
+		int freetime= solicitacaoServico.getContainer().getCadastroBL().getFreeTime();
+		
+		DateTime hoje = new DateTime();
+		DateTime data = new DateTime(solicitacaoServico.getContainer().getCadastroBL().getDataAtracacao());
+		Days diasAteDTA = Days.daysBetween(hoje, data);
+		int dta = diasAteDTA.getDays();
+		Format formatter = new SimpleDateFormat("dd/MM/yyyy");
+	
+		int total = dta+freetime;
+		data.plusDays(freetime);
+		
+	
+		Mensagem mensagem = new Mensagem();
+		mensagem.setTitulo("Serviço - " + solicitacaoServico.getServico().getNome() + " - Observaços");
+		mensagem.setConteudo("O prazo máximo de permanência no do container é de " + total + " dias. Com previsão para " + formatter.format(data.toDate()));
+		
+		solicitacao = addMensagem(solicitacaoServico.getSolicitacao(), solicitacaoServico.getSolicitacao().getUltResponsavel(), mensagem);
+		return solicitacao;
+	}
+	public Solicitacao addMensagem(Solicitacao solicitacao, User user, Mensagem mensagem) {
+		mensagem.setSolicitacao(solicitacao);
+		mensagem.setUsuario(user);
+		mensagem.setData(new Date());
+		solicitacao.addMensagem(mensagem);
+		try {
+			solicitacao = alterar(solicitacao);
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+		}
 		return solicitacao;
 	}
 	
@@ -207,10 +251,12 @@ public class SolicitacaoRN implements Serializable {
 				solicitacaoServico.setStatusServicos(StatusServicos.CRIA_OS_SARA);
 				
 				
-				
+				if(servico.isValidarDemurrage()) {
+					solicitacao = notificarDemurrage(solicitacaoServico, solicitacao);
+				}
 			
 			}
-			solicitacao = alterar(solicitacao, "Nova Solicitação de Serviços", solicitacao.getUltResponsavel());
+			solicitacao = alterar(solicitacao, "Nova SolicitaÃ§Ã£o de ServiÃ§os", solicitacao.getUltResponsavel());
 			return solicitacao;
 			
 			
@@ -259,7 +305,7 @@ public class SolicitacaoRN implements Serializable {
 				janelaSolicitacao = solicitacaoServicos.size();
 			int disponivel = janelaServico-janelaSolicitacao;
 			if(disponivel > 0) {
-				defaultScheduleEvent.setTitle("Disponível");
+				defaultScheduleEvent.setTitle("DisponÃ­vel");
 				defaultScheduleEvent.setStyleClass("green");
 				
 			}else {
@@ -268,7 +314,7 @@ public class SolicitacaoRN implements Serializable {
 				
 			}
 		}else {
-		defaultScheduleEvent.setTitle("Não Disponível");
+		defaultScheduleEvent.setTitle("NÃ£o DisponÃ­vel");
 		defaultScheduleEvent.setStyleClass("no-color");
 		}
 		
@@ -330,7 +376,7 @@ public class SolicitacaoRN implements Serializable {
 						s.setStatusServicos(StatusServicos.FINALIZADO);
 					}
 			getDAO().beginTransaction();
-			alterar(s.getSolicitacao(), "Alteração de Status do serviço",s.getSolicitacao().getUltResponsavel());
+			alterar(s.getSolicitacao(), "AlteraÃ§Ã£o de Status do serviÃ§o",s.getSolicitacao().getUltResponsavel());
 			getDAO().commitAndCloseTransaction();
 			}
 		

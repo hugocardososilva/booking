@@ -138,7 +138,6 @@
 					action="#{solicitacaoBean.carregarEventosServicoJanela}">
 				</p:commandButton>
 			</p:panelGrid>
-
 			<p:toolbar>
 				<f:facet name="left">
 					<p:commandButton value="Adicionar" ajax="true" update="@form"
@@ -278,11 +277,7 @@
 							<p:commandButton value="Adicionar" ajax="true" update="@form"
 								icon="#{bundle.iconSalvar}" id="btSalvarMensagem"
 								action="#{solicitacaoBean.adicionarMensagem}" process="@form">
-
-
 							</p:commandButton>
-
-
 							<p:spacer width="20" />
 							<p:commandButton value="Limpar" update="@form" icon="fa fa-undo"
 								styleClass="orange-btn" id="btLimparMensagem">
@@ -311,12 +306,7 @@
 							</p:commandLink>
 						</p:column>
 
-
-
-
 					</p:dataTable>
-
-
 				</h:panelGrid>
 
 			</h:form>
@@ -382,6 +372,42 @@
 							<h:outputText value="#{solicitacaoBean.mensagem.conteudo}" />
 						
 
+
+					</p:panelGrid>
+				</h:form>
+			
+			</p:fieldset>
+			<p:fieldset legend="Historico" rendered="#{loginMB.userMB.admin}">
+			
+					<p:panelGrid id="pnlMensagemSolicitacao" layout="grid" columns="1">
+
+						
+						<p:dataTable id="tblHistorico" emptyMessage="Nenhum registro encontrado." value="#{solicitacaoBean.solicitacao.historico}" var="item" 
+							 style="margin-bottom:20px">
+
+							<p:column headerText="Data">
+							<h:outputText value="#{item.data}">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputText>
+							</p:column>
+							<p:column headerText="Usuário">
+								<h:outputText value="#{item.usuario.name}"/>
+							</p:column>
+							<p:column headerText="Descrição">
+								<h:outputText value="#{item.descricao}"/>
+							</p:column>
+							
+							
+
+						
+							
+						</p:dataTable>
+						
+
+					</p:panelGrid>
+			
+			
+			</p:fieldset>
 
 
 					</p:panelGrid>
