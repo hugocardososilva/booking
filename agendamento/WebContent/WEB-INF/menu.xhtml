@@ -22,15 +22,19 @@
 												rendered="#{loginMB.userMB.telaLiberadaFCL}" />
 											<p:menuitem value="DTC/DTA - LCL" outcome="/pages/publico/cadastros/cadastroLCL.xhtml" 
 												rendered="#{loginMB.userMB.telaLiberadaLCL}" />
-												<p:menuitem value="Serviços" rendered="#{loginMB.userMB.telaServicos}" outcome="/pages/publico/cadastros/cadastroServico.xhtml"/>
-												<p:menuitem value="Solicitações" rendered="#{loginMB.userMB.telaSolicitacaoServicos}" outcome="/pages/publico/cadastros/cadastroSolicitacaoServicos.xhtml"/>
+
+												<p:menuitem value="Serviços" rendered="#{loginMB.userMB.telaLiberadaServicos}" outcome="/pages/publico/cadastros/cadastroServico.xhtml"/>
+												<p:menuitem value="Solicitações" rendered="#{loginMB.userMB.telaLiberadaSolicitacoes}" outcome="/pages/publico/cadastros/cadastroSolicitacaoServicos.xhtml"/>
+
 										
 											
 										</p:submenu>
 		                           <p:submenu label="Agendamento" >
 									<p:menuitem value="Programação Navio" outcome="/pages/publico/cadastros/programacaoNavio.xhtml" 
 												rendered="#{loginMB.userMB.telaLiberadaProgramacaoNavio}" />
-									<p:menuitem value="Janela de Atendimento" rendered="#{loginMB.userMB.telaJanelaAtendimento}" outcome="/pages/publico/cadastros/cadastroJanelaAtendimento.xhtml"  />			
+
+									<p:menuitem value="Janela de Atendimento" rendered="#{loginMB.userMB.telaLiberadaJanelaAtendimento}" outcome="/pages/publico/cadastros/cadastroJanelaAtendimento.xhtml"  />			
+
 						
 									</p:submenu>
 										

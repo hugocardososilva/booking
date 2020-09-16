@@ -7,7 +7,7 @@ import javax.faces.convert.FacesConverter;
 
 import seguranca.com.entidade.CadastroBLContanier;
 import seguranca.com.entidade.CadastroBLContanierLCL;
-@FacesConverter(value="containerConverter")
+@FacesConverter(forClass=CadastroBLContanier.class)
 public class CadastroContainerConverter implements Converter {
 	@Override
 	public Object getAsObject(FacesContext facesContext, UIComponent uiComponent, String value) {

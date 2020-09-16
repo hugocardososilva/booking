@@ -30,6 +30,7 @@ import org.primefaces.event.SelectEvent;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.LazyScheduleModel;
+import org.primefaces.model.ScheduleEvent;
 import org.primefaces.model.ScheduleModel;
 import org.primefaces.model.StreamedContent;
 
@@ -103,6 +104,7 @@ public class SolicitacaoBean extends AbstractMB implements Serializable {
 	 private SolicitacaoRN rn;
 	 private JanelaAtendimentoRN janelaAtendimentoRN;
 	 
+	 
 	 //filtros
 	 private Date dataCadastroInicio;
 	 private Date dataCadastroFim;
@@ -120,9 +122,12 @@ public class SolicitacaoBean extends AbstractMB implements Serializable {
 	 public AnexosSolicitacao anexo;
 	 private StreamedContent pdf;
 	 
-	 
+	 private String filtroNumeroATI = new String();
+	 private String filtroCodigoBL = new String();
+	 private String filtroCodigoSolicitacao= new String();
+	 private String filtroCodigoContainer= new String();
 	
-	
+	private boolean encaixe;
 	
 
 	@PostConstruct
@@ -132,9 +137,18 @@ public class SolicitacaoBean extends AbstractMB implements Serializable {
 		setControlarFormEditar(false);
 		setControlarFormListar(true);
 		filtros();
-		carregarEventosServicoJanela();
+		container= new CadastroBLContanier();
+		//carregarEventosServicoJanela();
 		
 		
+	}
+	public void editarSolicitacaoServico() {
+		try {
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			JSFMessageUtil.adicionarMensagemErro("Ouve um problema na operaÃ§Ã£o!");
+		}
 	}
 	public void editarEntidade() {
 		
@@ -142,21 +156,26 @@ public class SolicitacaoBean extends AbstractMB implements Serializable {
 			setControlarFormCadastrar(true);
 			setControlarFormEditar(true);
 			setControlarFormListar(false);
+			carregarContainers();
 			
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-			JSFMessageUtil.adicionarMensagemErro("Ouve um problema na operação!");
+			JSFMessageUtil.adicionarMensagemErro("Ouve um problema na operaÃ§Ã£o!");
 		}
 	
+	}
+	public void exibirMensagem(Mensagem mensagem) {
+		this.mensagem = mensagem;
 	}
 	public void filtros() {
 		try {
 			
-		
+		if(userMB.getUser().isAdmin() || userMB.getUser().isClif()) {
+			getFiltros().put("sessao", "admin");
 		if(dataCadastroInicio!=null || dataCadastroFim != null ) {
 			if(dataCadastroInicio.after(dataCadastroFim)) {
-				JSFMessageUtil.adicionarMensagemErro(" A data 'De:' não pode ser mais que a data 'Até:' ");
+				JSFMessageUtil.adicionarMensagemErro(" A data 'De:' nÃ£o pode ser mais que a data 'AtÃ©:' ");
 				return;
 			}else {
 				Map<String, Object> filtrosDataCadastro = new HashMap<>();
@@ -164,10 +183,12 @@ public class SolicitacaoBean extends AbstractMB implements Serializable {
 				filtrosDataCadastro.put("dataCadastroFim", dataCadastroFim);
 				getFiltros().put("filtrosDataCadastro", filtrosDataCadastro);
 			}
-		}	
+		}else {
+			getFiltros().remove("filtrosDataCadastro");
+		}
 			if(dataSolicitacaoInicio != null || dataSolicitacaoFim != null) {
 				if(dataSolicitacaoInicio.after(dataSolicitacaoFim)) {
-					JSFMessageUtil.adicionarMensagemErro(" A data 'De:' não pode ser mais que a data 'Até:' ");
+					JSFMessageUtil.adicionarMensagemErro(" A data 'De:' nÃ£o pode ser mais que a data 'AtÃ©:' ");
 					return;
 				}else {
 					Map<String, Object> filtrosDataSolicitacao = new HashMap<>();
@@ -176,41 +197,84 @@ public class SolicitacaoBean extends AbstractMB implements Serializable {
 					getFiltros().put("filtrosDataSolicitacao", filtrosDataSolicitacao);
 				}
 				
+			}else {
+				getFiltros().remove("filtrosDataSolicitacao");
 			}
+			
 			
 			if(!getFiltroStatusServicos().isEmpty()) {
 				getFiltros().remove("filtroStatusServicos");
 				getFiltros().put("filtroStatusServicos", getFiltroStatusServicos());
+
 				setFiltroStatusServicos(new ArrayList<>());
 				
+
 			}else {
 				getFiltros().remove("filtroStatusServicos");
 			}
 			if(!getFiltroStatusSolicitacao().isEmpty()) {
 				getFiltros().remove("filtroStatusSolicitacao");
 				getFiltros().put("filtroStatusSolicitacao", getFiltroStatusSolicitacao());
+
 				setFiltroStatusServicos(new ArrayList<>());
 			}else {
 				getFiltros().remove("filtroStatusSolicitacao");
 			}
 			if(cliente != null) {
 				getFiltros().put("cliente", cliente.getId());
+			}else {
+				getFiltros().remove("cliente");
 			}
+		}else
 			
+			//se o usuario for um cliente
+			if(userMB.getUser().isCliente()|| userMB.getUser().isDespachante()) {
+				getFiltros().put("sessao", "cliente");
+				getFiltros().put("cliente", userMB.getUser().getId());
+				if(!filtroCodigoBL.isEmpty() && filtroCodigoBL != null) {
+					getFiltros().put("filtroCodigoBL", filtroCodigoBL);
+				}else {
+					getFiltros().remove("filtroCodigoBL");
+				}
+				if(!filtroNumeroATI.isEmpty() && filtroNumeroATI != null) {
+					getFiltros().put("filtroNumeroATI", filtroNumeroATI);
+				}else {
+					getFiltros().remove("filtroNumeroATI");
+				}
+				if(!filtroCodigoContainer.isEmpty() && filtroCodigoContainer != null) {
+					getFiltros().put("filtroCodigoContainer", filtroCodigoContainer);
+				}else {
+					getFiltros().remove("filtroCodigoContainer");
+				}
+				if(!filtroCodigoSolicitacao.isEmpty() && filtroCodigoSolicitacao != null) {
+					getFiltros().put("filtroCodigoSolicitacao", filtroCodigoSolicitacao);
+				}else {
+					getFiltros().remove("filtroCodigoSolicitacao");
+				}
+				if(!getFiltroStatusSolicitacao().isEmpty()) {
+					getFiltros().put("filtroStatusSolicitacao", getFiltroStatusSolicitacao());
+				}else {
+					getFiltros().remove("filtroStatusSolicitacao");
+				}
+			}
 		
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
 	}
 	
-	
-	//método que insere o cliente no filtro
+	public void onEnvetServicoJanelaSelect(SelectEvent event) {
+		ScheduleEvent evento = (ScheduleEvent) event.getObject();
+		dataSolicitacao = evento.getStartDate();
+	}
+	//mï¿½todo que insere o cliente no filtro
 	public void filtrarCliente(SelectEvent event) {
 		cliente = (User)event.getObject();
 		
 	}
 	public void selecionarServico(SelectEvent event) {
-		//TODO metodo que pesquisa se o servico tem ou não os requisitos para abrir a janela de atendimento outro serviço
+		//TODO metodo que pesquisa se o servico tem ou nï¿½o os requisitos para abrir a janela de atendimento outro serviï¿½o
 		servico = (Servico)event.getObject();
 		if(getServico().isJanelaCapacidade()) {
 			carregarEventosServicoJanela();
@@ -247,12 +311,13 @@ public class SolicitacaoBean extends AbstractMB implements Serializable {
 		};
 		} catch (Exception e) {
 			e.printStackTrace();
-			JSFMessageUtil.adicionarMensagemErro("Ouve um problema na operação!");
+			JSFMessageUtil.adicionarMensagemErro("Ouve um problema na operaï¿½ï¿½o!");
 		}
 	}
+	
 	public void novaSolicitacao() {
 		try {
-			//metodo que irá retornar a nova instancia do objeto solicitacao
+			//metodo que irï¿½ retornar a nova instancia do objeto solicitacao
 			//atribuirCliente();
 			//if(userMB.getUser().isCliente()||userMB.getUser().isDespachante()) {
 			getSolicitacao().setCliente(userMB.getUser());
@@ -261,13 +326,22 @@ public class SolicitacaoBean extends AbstractMB implements Serializable {
 			setControlarFormCadastrar(true);
 			setControlarFormEditar(true);
 			setControlarFormListar(false);
+			carregarContainers();
 		} catch (Exception e) {	
 			e.printStackTrace();
-			JSFMessageUtil.adicionarMensagemErro("Ouve um problema na operação!");
+			JSFMessageUtil.adicionarMensagemErro("Ouve um problema na operaÃ§Ã£o!");
 		}
 		
 	}
-	
+	public void salvarnomeBL() {
+		try {
+			solicitacao = getRn().alterar(getSolicitacao(), "CÃ³digo da BL adicionado: " + getSolicitacao().getCodigoBL(), userMB.getUser());
+			JSFMessageUtil.adicionarMensagemSucesso("Registro salvo com sucesso");
+		} catch (Exception e) {
+			e.printStackTrace();
+			JSFMessageUtil.adicionarMensagemErro("Ouve um problema na operaÃ§Ã£o!");
+		}
+	}
 	public void atribuirCliente() {
 		if(userMB.getUser().isCliente()) {
 			getSolicitacao().setCliente(userMB.getUser());
@@ -281,17 +355,17 @@ public class SolicitacaoBean extends AbstractMB implements Serializable {
 			JSFMessageUtil.adicionarMensagemErro("Nenhum Container foi selecionado.");
 		}else
 			if(getServico().getId()==0) {
-				JSFMessageUtil.adicionarMensagemErro("É necessário adicionar um serviço");
+				JSFMessageUtil.adicionarMensagemErro("Ã‰ necessÃ¡rio adicionar um serviÃ§o");
 			}
 			else {
 				try {
 					solicitacao = getRn().novaSolicitacaoServico(getSolicitacao(), getServico(), getContainersSelecionados());
 					servico = new Servico();
 					containersSelecionados = new ArrayList<>();
-					JSFMessageUtil.adicionarMensagemSucesso("Solicitação de serviço relizada com sucesso!");
+					JSFMessageUtil.adicionarMensagemSucesso("SolicitaÃ§Ã£o de serviÃ§o relizada com sucesso!");
 				} catch (Exception e) {
 					e.printStackTrace();
-					JSFMessageUtil.adicionarMensagemErro("Ouve um problema na operação!");
+					JSFMessageUtil.adicionarMensagemErro("Ouve um problema na operaÃ§Ã£o!");
 				}
 			}
 	}
@@ -303,10 +377,10 @@ public class SolicitacaoBean extends AbstractMB implements Serializable {
 		try {
 			solicitacao.removeSolicitacaoServico(solicitacaoServico);
 			solicitacaoServico.setSolicitacao(null);
-			solicitacao = getRn().alterar(solicitacao, "Remoção de solicitação de servico", userMB.getUser());
-			JSFMessageUtil.adicionarMensagemSucesso("Solicitação excluida com sucesso!");
+			solicitacao = getRn().alterar(solicitacao, "RemoÃ§Ã£oo de solicitaÃ§Ã£o de servico", userMB.getUser());
+			JSFMessageUtil.adicionarMensagemSucesso("SolicitaÃ§Ã£o excluida com sucesso!");
 		} catch (Exception e) {
-			JSFMessageUtil.adicionarMensagemErro("Erro ao remover a solicitação");
+			JSFMessageUtil.adicionarMensagemErro("Erro ao remover a solicitaÃ§Ã£o");
 			e.printStackTrace();
 		}
 		
@@ -321,6 +395,9 @@ public class SolicitacaoBean extends AbstractMB implements Serializable {
 			JSFMessageUtil.adicionarMensagemErro("Erro ao adicionar a mensagem");
 			e.printStackTrace();
 		}
+	}
+	public void limparMensagem() {
+		mensagem = new Mensagem();
 	}
 	public void removeAnexo() {
 		//TODO 
@@ -369,12 +446,8 @@ public class SolicitacaoBean extends AbstractMB implements Serializable {
 		}
 	}
 	public void adicionarTodosOsContainers() {
-		for(CadastroBLContanier container : getContainers()) {
-			if(!getContainersSelecionados().contains(container)) {
-				getContainersSelecionados().add(container);
-				getContainers().remove(container);
-			}
-		}
+		containersSelecionados = getContainers();
+		containers = new ArrayList<>();
 	}
 	public void adicionarContainer(SelectEvent event) {
 		container = (CadastroBLContanier) event.getObject();
@@ -386,6 +459,7 @@ public class SolicitacaoBean extends AbstractMB implements Serializable {
 		getContainersSelecionados().remove(container);
 		getContainers().add(container);
 	}
+	
 	public List<Servico> pesquisaServico(String pesquisa) {
 		List<Servico> servicos = new ArrayList<Servico>();
 		try {
@@ -411,8 +485,9 @@ public class SolicitacaoBean extends AbstractMB implements Serializable {
 		return list;
 	}
 	public void carregarContainers() {
-		// TODO método que irá buscar os containers do cliente
-		containers = getRn().getContainersDoUsuario(userMB.getUser());
+		// TODO mï¿½todo que irï¿½ buscar os containers do cliente
+		containers = getRn().getContainersDoUsuario(solicitacao.getCliente());
+		System.out.println(containers.toString());
 		
 	}
 	public List<CadastroBLContanier> pesquisaContainers(String pesquisa){
@@ -430,7 +505,7 @@ public class SolicitacaoBean extends AbstractMB implements Serializable {
 			e.printStackTrace();
 			JSFMessageUtil.adicionarMensagemErro(e.getMessage());
 		}
-		return null;
+		return containersFiltrados;
 	}
 	
 	
@@ -454,6 +529,7 @@ public class SolicitacaoBean extends AbstractMB implements Serializable {
 		this.lazyEventServicoJanela = lazyEventServicoJanela;
 	}
 	public LazyDataModel<Solicitacao> getLazyModel() {
+		filtros();
 		if(lazyModel == null) lazyModel = new SolicitacaoLazyDataModel(getFiltros());
 		return lazyModel;
 	}
@@ -485,6 +561,7 @@ public class SolicitacaoBean extends AbstractMB implements Serializable {
 		this.descricaoOutros = descricaoOutros;
 	}
 	public List<CadastroBLContanier> getContainers() {
+		if(containers== null) containers = new ArrayList<>();
 		return containers;
 	}
 	public void setContainers(List<CadastroBLContanier> containers) {
@@ -631,6 +708,7 @@ public class SolicitacaoBean extends AbstractMB implements Serializable {
 	}
 	
 	public CadastroBLContanier getContainer() {
+		if(container == null) container = new CadastroBLContanier();
 		return container;
 	}
 	public void setContainer(CadastroBLContanier container) {
@@ -680,6 +758,37 @@ public class SolicitacaoBean extends AbstractMB implements Serializable {
 	public void setPdf(StreamedContent pdf) {
 		this.pdf = pdf;
 	}
+	public String getFiltroNumeroATI() {
+		return filtroNumeroATI;
+	}
+	public void setFiltroNumeroATI(String filtroNumeroATI) {
+		this.filtroNumeroATI = filtroNumeroATI;
+	}
+	public String getFiltroCodigoBL() {
+		return filtroCodigoBL;
+	}
+	public void setFiltroCodigoBL(String filtroCodigoBL) {
+		this.filtroCodigoBL = filtroCodigoBL;
+	}
+	public String getFiltroCodigoSolicitacao() {
+		return filtroCodigoSolicitacao;
+	}
+	public void setFiltroCodigoSolicitacao(String filtroCodigoSolicitacao) {
+		this.filtroCodigoSolicitacao = filtroCodigoSolicitacao;
+	}
+	public String getFiltroCodigoContainer() {
+		return filtroCodigoContainer;
+	}
+	public void setFiltroCodigoContainer(String filtroCodigoContainer) {
+		this.filtroCodigoContainer = filtroCodigoContainer;
+	}
+	public boolean isEncaixe() {
+		return encaixe;
+	}
+	public void setEncaixe(boolean encaixe) {
+		this.encaixe = encaixe;
+	}
+	
 
 	
 	

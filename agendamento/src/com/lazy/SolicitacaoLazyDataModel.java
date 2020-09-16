@@ -29,6 +29,11 @@ public class SolicitacaoLazyDataModel extends LazyDataModel<Solicitacao> {
 	private StringBuilder consultaStatusSolicitacao;
 	private StringBuilder consultaCliente;
 	
+	private StringBuilder consultaFiltroNumeroATI;
+	private StringBuilder consultaFiltroCodigoBL;
+	private StringBuilder consultaFriltroCodigoContainer;
+	private StringBuilder consultaFiltroCodigoSolicitacao;
+	
 	/**
 	 * 
 	 */
@@ -79,77 +84,197 @@ public class SolicitacaoLazyDataModel extends LazyDataModel<Solicitacao> {
 			
 			
 			if(!filtros.isEmpty()) {
-				
+					String sessao = (String)filtros.get("sessao");
 				for(Map.Entry<String, Object> entry : filtros.entrySet()) {
-					if(entry.getKey().equals("filtrosDataCadastro")) {
+					if(sessao.equals("admin")) {
+							if(entry.getKey().equals("filtrosDataCadastro")) {
+								
+								Map<String, Object> filtrosDataCadastro = (Map<String, Object>) entry.getValue();
+								inserirConsultaFiltroDateCadastro(filtrosDataCadastro);
+							}
+							if(entry.getKey().equals("filtrosDataSolicitacao")) {
+								Map<String, Object> filtrosDataSolicitacao = (Map<String, Object>)entry.getValue();
+								inserirConsultaFiltroDateSolicitacao(filtrosDataSolicitacao);
+							}
+							if(entry.getKey().equals("filtroStatusServicos")) {
+								List<Integer> filtroStatusServicos= (List<Integer>)entry.getValue();
+								inserirConsultaFiltroStatusServicos(filtroStatusServicos);
+							}
+							if(entry.getKey().equals("filtroStatusSolicitacao")) {
+								List<Integer> filtroStatusSolicitacao = (List<Integer>)entry.getValue();
+								inserirConsultaFiltroStatusSolicitacao(filtroStatusSolicitacao);
+							}
+							if(entry.getKey().equals("cliente")) {
+								int id = (int) entry.getValue();
+								inserirConsultaFiltroCliente(id);
+								
+							}
+						}else if(sessao.equals("cliente")) {
+							if(entry.getKey().equals("filtroNumeroATI")) {
+								String ati = (String) entry.getValue();
+								inserirConsultaFiltroNumeroATI(ati);
+							}
+							if(entry.getKey().equals("filtroCodigoBL")) {
+								String codigoBL = (String) entry.getValue();
+								inserirConsultaFiltroCodigoBL(codigoBL);
+							}
+							if(entry.getKey().equals("filtroCodigoContainer")) {
+								String container = (String) entry.getValue();
+								inserirConsultaFiltroCodigoContainer(container);
+							}
+							if(entry.getKey().equals("filtroCodigoSolicitacao")) {
+								String s = (String) entry.getValue();
+								inserirConsultaFiltroCodigoSolicitacao(s);
+							}
+							if(entry.getKey().equals("filtroStatusSolicitacao")) {
+								List<Integer> filtroStatusSolicitacao = (List<Integer>)entry.getValue();
+								inserirConsultaFiltroStatusSolicitacao(filtroStatusSolicitacao);
+							}
+							if(entry.getKey().equals("cliente")) {
+								int id = (int) entry.getValue();
+								inserirConsultaFiltroCliente(id);
+							}
+					}
+				}
+				
+
+				if(sessao.equals("admin")) {	
+		
+						if(consultaStatusServico == null) {
+							//consulta.append(" where ");
+							//consultaCount.append(" where ");
+						}else{	
+							consulta.append(consultaStatusServico.toString());				
+							consultaCount.append(consultaStatusServico.toString());
+						}
+						if(consultaDataCadastro != null ) {
+							if(consultaStatusServico!= null) {
+								consulta.append(" and ");
+								consultaCount.append(" and ");
+							}else if(consultaStatusServico == null)  {
+								consulta.append(" where ");
+								consultaCount.append(" where ");
+							}
+							
+							consulta.append(consultaDataCadastro.toString());					
+							consultaCount.append(consultaDataCadastro.toString());
+						}
+						if(consultaDataSolicitacao != null) {
+							if(consultaStatusServico != null || consultaDataCadastro != null) {
+								consulta.append(" and ");
+								consultaCount.append(" and ");
+							}else  if(consultaStatusServico == null && consultaDataCadastro == null) {
+								consulta.append(" where ");
+								consultaCount.append(" where ");
+							}
+							
+							consulta.append(consultaDataSolicitacao.toString());					
+							consultaCount.append(consultaDataSolicitacao.toString());				
+							
+						}
 						
-						Map<String, Object> filtrosDataCadastro = (Map<String, Object>) entry.getValue();
-						inserirConsultaFiltroDateCadastro(filtrosDataCadastro);
-					}
-					if(entry.getKey().equals("filtrosDataSolicitacao")) {
-						Map<String, Object> filtrosDataSolicitacao = (Map<String, Object>)entry.getValue();
-						inserirConsultaFiltroDateSolicitacao(filtrosDataSolicitacao);
-					}
-					if(entry.getKey().equals("filtroStatusServicos")) {
-						List<Integer> filtroStatusServicos= (List<Integer>)entry.getValue();
-						inserirConsultaFiltroStatusServicos(filtroStatusServicos);
-					}
-					if(entry.getKey().equals("filtroStatusSolicitacao")) {
-						List<Integer> filtroStatusSolicitacao = (List<Integer>)entry.getValue();
-						inserirConsultaFiltroStatusSolicitacao(filtroStatusSolicitacao);
-					}
-					if(entry.getKey().equals("cliente")) {
-						int id = (int) entry.getValue();
-						inserirConsultaFiltroCliente(id);
 						
-					}
-				}
-				if(consultaStatusServico == null) {
-					consulta.append(" where ");
-					consultaCount.append(" where ");
-				}else{	
-					consulta.append(consultaStatusServico.toString());				
-					consultaCount.append(consultaStatusServico.toString());
-				}
-				if(consultaDataCadastro != null ) {
-					if(consultaStatusServico!= null) {
-						consulta.append(" and ");
-						consultaCount.append(" and ");
-					}
+						
+						if(consultaCliente != null) {
+							if(consultaStatusServico != null || consultaDataCadastro != null || consultaDataSolicitacao != null) {
+								consulta.append(" and ");
+								consultaCount.append(" and ");
+							}else if(consultaStatusServico == null && consultaDataCadastro == null && consultaDataSolicitacao == null){
+								consulta.append(" where ");
+								consultaCount.append(" where ");
+							}
+						
+							consulta.append(consultaCliente.toString());
+							
+							consultaCount.append(consultaCliente.toString());
+						}
 					
-					consulta.append(consultaDataCadastro.toString());					
-					consultaCount.append(consultaDataCadastro.toString());
-				}
-				if(consultaDataSolicitacao != null) {
-					if(consultaStatusServico != null && consultaDataCadastro != null) {
-						consulta.append(" and ");
-						consultaCount.append(" and ");
+					if(consultaStatusSolicitacao != null) {
+						if(consultaStatusServico != null || consultaDataCadastro != null || consultaDataSolicitacao != null || consultaCliente != null ) {
+							consulta.append(" and ");
+							consultaCount.append(" and ");
+							
+						}else if(consultaStatusServico == null && consultaDataCadastro == null && consultaDataSolicitacao == null && consultaCliente == null ){
+							consulta.append(" where ");
+							consultaCount.append(" where ");
+						}
+						
+						consulta.append(consultaStatusSolicitacao.toString());
+						
+						consultaCount.append(consultaStatusSolicitacao.toString());
 					}
-					
-					consulta.append(consultaDataSolicitacao.toString());					
-					consultaCount.append(consultaDataSolicitacao.toString());				
+				}else 
+					if(sessao.equals("cliente")){
+						
+						if(consultaFriltroCodigoContainer!= null) {
+							consulta.append(consultaFriltroCodigoContainer.toString());
+							consultaCount.append(consultaFriltroCodigoContainer.toString());
+						}
+						if(consultaFiltroNumeroATI != null) {
+							if(consultaFriltroCodigoContainer!= null) {
+								consulta.append(" and ");
+								consultaCount.append(" and ");
+							}else if(consultaFriltroCodigoContainer== null) {
+								consulta.append(" where ");
+								consultaCount.append(" where ");
+							}
+							 consulta.append(consultaFiltroNumeroATI.toString());
+							 consultaCount.append(consultaFiltroNumeroATI.toString());
+						}
+						if(consultaFiltroCodigoBL != null) {
+							if(consultaFriltroCodigoContainer!= null || consultaFiltroNumeroATI != null) {
+								consulta.append(" and ");
+								consultaCount.append(" and ");
+							}else if(consultaFriltroCodigoContainer== null && consultaFiltroNumeroATI == null){
+								consulta.append(" where ");
+								consultaCount.append(" where ");
+							}
+							 consulta.append(consultaFiltroCodigoBL.toString());
+							 consultaCount.append(consultaFiltroCodigoBL.toString());
+						}
+						if(consultaFiltroCodigoSolicitacao != null) {
+							if(consultaFriltroCodigoContainer!= null || consultaFiltroNumeroATI != null || consultaFiltroCodigoBL != null) {
+								consulta.append(" and ");
+								consultaCount.append(" and ");
+							}else if(consultaFriltroCodigoContainer== null && consultaFiltroNumeroATI == null && consultaFiltroCodigoBL == null) {
+								consulta.append(" where ");
+								consultaCount.append(" where ");
+							}
+								consulta.append(consultaFiltroCodigoSolicitacao.toString());
+							 consultaCount.append(consultaFiltroCodigoSolicitacao.toString());
+						}
+						if(consultaStatusSolicitacao != null) {
+							if(consultaFriltroCodigoContainer!= null || consultaFiltroNumeroATI != null || consultaFiltroCodigoBL != null || consultaFiltroCodigoSolicitacao != null) {
+								consulta.append(" and ");
+								consultaCount.append(" and ");
+								
+							}else if(consultaFriltroCodigoContainer== null && consultaFiltroNumeroATI == null && consultaFiltroCodigoBL == null && consultaFiltroCodigoSolicitacao == null){
+								consulta.append(" where ");
+								consultaCount.append(" where ");
+							}
+							
+							consulta.append(consultaStatusSolicitacao.toString());
+							
+							consultaCount.append(consultaStatusSolicitacao.toString());
+						}
+						if(consultaCliente != null) {
+							if(consultaFriltroCodigoContainer!= null || consultaFiltroNumeroATI != null || consultaFiltroCodigoBL != null || consultaFiltroCodigoSolicitacao != null || consultaStatusSolicitacao != null) {
+								consulta.append(" and ");
+								consultaCount.append(" and ");
+							}else if(consultaFriltroCodigoContainer == null && consultaFiltroNumeroATI == null && consultaFiltroCodigoBL == null && consultaFiltroCodigoSolicitacao == null && consultaStatusSolicitacao == null){
+								consulta.append(" where ");
+								consultaCount.append(" where ");
+							}
+						
+							consulta.append(consultaCliente.toString());
+							
+							consultaCount.append(consultaCliente.toString());
+						}
 					
 				}
-				
-				
-				
-				if(consultaCliente != null) {
-					if(consultaStatusServico != null && consultaDataCadastro != null && consultaDataSolicitacao != null) {
-						consulta.append(" and ");
-						consultaCount.append(" and ");
-					}
-				
-					consulta.append(consultaCliente.toString());
 					
-					consultaCount.append(consultaCliente.toString());
-				}
 			}
-			if(consultaStatusSolicitacao != null) {
-				consulta.append(" and ");
-				consulta.append(consultaStatusSolicitacao.toString());
-				consultaCount.append(" and ");
-				consultaCount.append(consultaStatusSolicitacao.toString());
-			}
+				
 			if(sortField != null && !sortField.isEmpty()) {
 				consulta.append(" order by ");
 				consulta.append(sortField);
@@ -269,6 +394,50 @@ public class SolicitacaoLazyDataModel extends LazyDataModel<Solicitacao> {
 		consultaCliente.append(id);
 		consultaCliente.append(" ");
 		consultaCliente.append(") ");
+	}
+	public void inserirConsultaFiltroNumeroATI(String ati) {
+		consultaFiltroNumeroATI = new StringBuilder();
+		consultaFiltroNumeroATI.append(" (");
+		consultaFiltroNumeroATI.append("s.numeroATI");
+		consultaFiltroNumeroATI.append(" ");
+		consultaFiltroNumeroATI.append(" like ");
+		consultaFiltroNumeroATI.append("'%");
+		consultaFiltroNumeroATI.append(ati);
+		consultaFiltroNumeroATI.append("%'");
+		consultaFiltroNumeroATI.append(") ");
+	}
+	public void inserirConsultaFiltroCodigoBL(String bl) {
+		consultaFiltroCodigoBL = new StringBuilder();
+		consultaFiltroCodigoBL.append(" (");
+		consultaFiltroCodigoBL.append("s.codigoBL");
+		consultaFiltroCodigoBL.append(" ");
+		consultaFiltroCodigoBL.append(" like ");
+		consultaFiltroCodigoBL.append("'%");
+		consultaFiltroCodigoBL.append(bl);
+		consultaFiltroCodigoBL.append("%'");
+		consultaFiltroCodigoBL.append(") ");
+	}
+	public void inserirConsultaFiltroCodigoContainer(String container) {
+		consultaFriltroCodigoContainer = new StringBuilder();
+		consultaFriltroCodigoContainer.append(" left join s.solicitacaoServicos as ss");
+		consultaFriltroCodigoContainer.append(" where ss.container.numeroContanier");
+		consultaFriltroCodigoContainer.append(" ");
+		consultaFriltroCodigoContainer.append(" like ");
+		consultaFriltroCodigoContainer.append("'%");
+		consultaFriltroCodigoContainer.append(container);
+		consultaFriltroCodigoContainer.append("%'");
+		consultaFriltroCodigoContainer.append(" ");
+	}
+	public void inserirConsultaFiltroCodigoSolicitacao(String s) {
+		consultaFiltroCodigoSolicitacao = new StringBuilder();
+		consultaFiltroCodigoSolicitacao.append(" (");
+		consultaFiltroCodigoSolicitacao.append("s.id");
+		consultaFiltroCodigoSolicitacao.append(" ");
+		consultaFiltroCodigoSolicitacao.append(" = ");
+		consultaFiltroCodigoSolicitacao.append("");
+		consultaFiltroCodigoSolicitacao.append(s);
+		consultaFiltroCodigoSolicitacao.append(" ");
+		consultaFiltroCodigoSolicitacao.append(") ");
 	}
 
 }

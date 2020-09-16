@@ -245,4 +245,13 @@ public class CadastroBLContanier extends GenericoEntidade implements Serializabl
 		this.numeroDtcProcesso = numeroDtcProcesso;
 	}
 
+	@Override
+	public String toString() {
+		if(numeroContanier == null) {
+			return "";
+		}
+		return numeroContanier;
+	}
+	
+
 }

@@ -177,7 +177,7 @@
 				<p:outputLabel for="comissario" value="#{bundle.cadastroBLComissario}" />
 			</p:panelGrid>
 			<p:panelGrid id="panelBL_comissa1" columns="3" layout="grid" columnClasses="ui-grid-col-6,ui-grid-col-1,ui-grid-col-1">
-				<p:selectOneMenu id="comissario" value="#{cadastroLCLBean.comissarioSelecionado}" style="width:90%" styleClass="estendido alinhadoEsquerda"
+				<p:selectOneMenu id="comissario" autoWidth="false" value="#{cadastroLCLBean.comissarioSelecionado}" style="width:90%" styleClass="estendido alinhadoEsquerda"
 					converter="cadastroComissarioConverter" required="true">
 					<f:selectItem itemLabel="Selecione um comissária" itemValue="#{null}" />
 					<f:selectItems value="#{cadastroLCLBean.listaUserComissario}" var="item" itemValue="#{item}" itemLabel="#{item}" />

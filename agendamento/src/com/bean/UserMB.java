@@ -37,6 +37,9 @@ public class UserMB extends AbstractMB implements IGenericBean, Serializable {
 	private boolean telaLiberadaConsultaProcesso;
 	private boolean telaLiberadaUserImportadorNotify;
 	private boolean telaLiberadaDespachanteUsuarios;
+	private boolean telaLiberadaServicos;
+	private boolean telaLiberadaSolicitacoes;
+	private boolean telaLiberadaJanelaAtendimento;
 	private boolean usuarioMaster;
 	private boolean telaJanelaAtendimento;
 	private boolean telaServicos;
@@ -311,15 +314,16 @@ public class UserMB extends AbstractMB implements IGenericBean, Serializable {
 						setTelaLiberadaDespachanteUsuarios(true);
 					}
 					if(item.getTelasEntidadesEnum().equals(TelasEntidadesEnum.SERVICOS)) {
-						setTelaServicos(true);
+
+						setTelaLiberadaServicos(true);
 					}
-					if(item.getTelasEntidadesEnum().equals(TelasEntidadesEnum.SOLICITACAO)) {
-						setTelaSolicitacaoServicos(true);
+					if(item.getTelasEntidadesEnum().equals(TelasEntidadesEnum.SOLICITACOES)) {
+						setTelaLiberadaSolicitacoes(true);
 					}
 					if(item.getTelasEntidadesEnum().equals(TelasEntidadesEnum.JANELA_ATENDIMENTO)) {
-						setTelaSolicitacaoServicos(true);
+						setTelaLiberadaJanelaAtendimento(true);
 					}
-					
+
 				}
 
 			}
@@ -333,9 +337,34 @@ public class UserMB extends AbstractMB implements IGenericBean, Serializable {
 		setTelaLiberadaProgramacaoNavio(valor);
 		setTelaLiberadaUserImportadorNotify(valor);
 		setTelaLiberadaDespachanteUsuarios(valor);
-		setTelaServicos(valor);
-		setTelaSolicitacaoServicos(valor);
-		setTelaJanelaAtendimento(valor);
+		setTelaLiberadaServicos(valor);
+		setTelaLiberadaSolicitacoes(valor);
+		setTelaLiberadaJanelaAtendimento(valor);
+	}
+	
+	public boolean isTelaLiberadaServicos() {
+		return telaLiberadaServicos;
+	}
+
+	public void setTelaLiberadaServicos(boolean telaLiberadaServicos) {
+		this.telaLiberadaServicos = telaLiberadaServicos;
+	}
+
+	public boolean isTelaLiberadaSolicitacoes() {
+		return telaLiberadaSolicitacoes;
+	}
+
+	public void setTelaLiberadaSolicitacoes(boolean telaLiberadaSolicitacoes) {
+		this.telaLiberadaSolicitacoes = telaLiberadaSolicitacoes;
+	}
+
+	public boolean isTelaLiberadaJanelaAtendimento() {
+		return telaLiberadaJanelaAtendimento;
+	}
+
+	public void setTelaLiberadaJanelaAtendimento(boolean telaLiberadaJanelaAtendimento) {
+		this.telaLiberadaJanelaAtendimento = telaLiberadaJanelaAtendimento;
+
 	}
 
 	public boolean isTelaLiberadaFCL() {

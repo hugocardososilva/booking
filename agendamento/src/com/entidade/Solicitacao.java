@@ -63,7 +63,7 @@ public class Solicitacao implements Serializable {
 	private User cliente;
 	
 	@ManyToOne
-	@JoinColumn(name="ID_ULT_RESPOSAVEL", nullable = false, insertable = true, updatable = true)
+	@JoinColumn(name="ID_ULT_RESPOSAVEL", nullable = true, insertable = true, updatable = true)
 	@ForeignKey(name="FK_ULTIMO_RESPOSAVEL")
 	private User ultResponsavel;
 	

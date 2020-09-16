@@ -31,6 +31,7 @@ public class ServicoDAO extends GenericDAO<Servico> {
 	public List<Servico> pesquisaAutoCompleteTodos(String pesquisa){
 		Map<String, Object> param= new HashMap<String, Object>();
 		param.put(Servico.CAMPO_NOME, "%"+pesquisa+"%");
+
 		return super.retornaResultadoListaObjeto(Servico.sql_pesquisa_autocomplete_solicitacao, param, false);
 	}
 	

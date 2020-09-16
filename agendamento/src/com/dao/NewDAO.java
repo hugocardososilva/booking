@@ -1,4 +1,4 @@
-package conexao.com.dao;
+package com.dao;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -11,6 +11,8 @@ import java.util.Map.Entry;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
+import javax.persistence.Persistence;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -24,23 +26,26 @@ import org.hibernate.exception.ConstraintViolationException;
 import conexao.com.util.ConexaoManagerFactoryGeneric;
 import net.sf.jasperreports.engine.type.SortOrderEnum;
 
-public abstract class GenericDAO<T> implements Serializable {
-	private static final long serialVersionUID = 1L;
+public abstract class NewDAO<T> implements Serializable {
 
-	private static final EntityManagerFactory emf = ConexaoManagerFactoryGeneric.getEntityManager();
-
+	@PersistenceContext
+	private static EntityManagerFactory emf;
+	@PersistenceContext
 	protected EntityManager em;
-
+	
 	private Class<T> entityClass;
-
-	public void beginTransaction() {
-		
-		em = emf.createEntityManager();
-
-		em.getTransaction().begin();
-
+	
+	static {
+		if(emf == null) {
+			emf = ConexaoManagerFactoryGeneric.getEntityManager();
+		}
 	}
-
+	public void beginTransaction() {
+		if(em == null) {
+			em = emf.createEntityManager();
+		}
+		em.getTransaction().begin();
+	}
 	public void commit() {
 		em.getTransaction().commit();
 	}
@@ -71,7 +76,7 @@ public abstract class GenericDAO<T> implements Serializable {
 		em.joinTransaction();
 	}
 
-	public GenericDAO(Class<T> entityClass) {
+	public NewDAO(Class<T> entityClass) {
 		this.entityClass = entityClass;
 	}
 
@@ -81,7 +86,7 @@ public abstract class GenericDAO<T> implements Serializable {
 		} catch (Exception e) {
 			rollback();
 			if (e.getCause() instanceof ConstraintViolationException) {
-				throw new Exception("Registro j� existente ! ");
+				throw new Exception("Registro já existente ! ");
 			} else {
 				throw new Exception(e.getMessage());
 			}
@@ -105,7 +110,7 @@ public abstract class GenericDAO<T> implements Serializable {
 		} catch (Exception e) {
 			rollback();
 			if (e.getCause() instanceof ConstraintViolationException) {
-				throw new Exception("Registro j� existente ! ");
+				throw new Exception("Registro já existente ! ");
 			} else {
 				throw new Exception(e.getMessage());
 			}
@@ -333,7 +338,7 @@ public abstract class GenericDAO<T> implements Serializable {
 	}
 
 	/**
-	 * Verifica se é inteiro ( numerico ) ou STRING ( TEXTO )
+	 * Verifica se Ã© inteiro ( numerico ) ou STRING ( TEXTO )
 	 * 
 	 * @param s
 	 * @return
@@ -484,4 +489,5 @@ public abstract class GenericDAO<T> implements Serializable {
 			e.printStackTrace();
 		}
 	}
+
 }

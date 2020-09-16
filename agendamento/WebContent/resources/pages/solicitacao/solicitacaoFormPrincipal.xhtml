@@ -28,7 +28,7 @@
 	
 </p:toolbar>
 <p:spacer width="0" height="25"/>
-	<p:fieldset  legend="Data do Cadastro" >
+	<p:fieldset rendered="#{userMB.user.admin or userMB.user.clif}"  legend="Data do Cadastro" >
 
 		<p:outputLabel for="idDataCadastroInicio" value="De:" />
 		<p:calendar id="idDataCadastroInicio"
@@ -42,7 +42,7 @@
 	
 	
 	</p:fieldset>
-	<p:fieldset legend="Data da Solicitação">
+	<p:fieldset rendered="#{userMB.user.admin or userMB.user.clif}"  legend="Data da Solicitação">
 
 		<p:outputLabel for="idDataSolicitacaoInicio" value="De:" />
 		<p:calendar id="idDataSolicitacaoInicio"
@@ -56,7 +56,7 @@
 		
 		
 	</p:fieldset>
-	<p:fieldset legend="Cliente">
+	<p:fieldset rendered="#{userMB.user.admin or userMB.user.clif}"  legend="Cliente">
 
 			<p:panelGrid columns="1" styleClass="form-group ui-panelgrid-blank"
 				layout="grid">
@@ -71,13 +71,13 @@
 			</p:panelGrid>
 	</p:fieldset>
 	
-	<p:fieldset legend="Status das Solicitações" >
+	<p:fieldset rendered="#{userMB.user.admin or userMB.user.clif}"  legend="Status das Solicitações" >
 	 	<p:selectManyButton value="#{solicitacaoBean.filtroStatusSolicitacao}">
 		 	<f:selectItems value="#{solicitacaoBean.statusSolicitacao}" var="status" 
 		 	itemLabel="#{status.descricao}" itemValue="#{status.codigo}" />
 		 </p:selectManyButton>
 	</p:fieldset>
-	<p:fieldset legend="Status dos Servicos">
+	<p:fieldset rendered="#{userMB.user.admin or userMB.user.clif}"  legend="Status dos Servicos">
 	 	<p:selectManyButton  value="#{solicitacaoBean.filtroStatusServicos}" >
 		 	<f:selectItems value="#{solicitacaoBean.statusServicos}" var="status" 
 		 	itemLabel="#{status.descricao}" itemValue="#{status.codigo}"  />
@@ -86,17 +86,43 @@
 	
 	
 	
+	<p:fieldset legend="Filtros" rendered="#{userMB.user.cliente or userMB.user.despachante}" >
+		<p:panelGrid columns="1" layout="grid">
+			<p:outputLabel for="inptATI" value="ATI:"/>
+			<p:inputText id="inptATI" value="#{solicitacaoBean.filtroNumeroATI}" placeholder="Informe o código da ATI"></p:inputText>
+			
+			<p:outputLabel for="inptBL" value="BL:"/>
+			<p:inputText id="inptBL" value="#{solicitacaoBean.filtroCodigoBL}" placeholder="Informe o código da BL"></p:inputText>
+			
+			<p:outputLabel for="inptSolicitacao" value="Solicitação:"/>
+			<p:inputText id="inptSolicitacao" value="#{solicitacaoBean.filtroCodigoSolicitacao}" placeholder="Informe o código da Solicitação"></p:inputText>
+			
+			<p:outputLabel for="inptContainer" value="Container:"/>
+			<p:inputText id="inptContainer" value="#{solicitacaoBean.filtroCodigoContainer}" placeholder="Informe o código do Container"></p:inputText>
+		
+			<p:outputLabel for="btnsStatusSolicitacao" value="Container:"/>
+			<p:selectManyButton id="btnsStatusSolicitacao" value="#{solicitacaoBean.filtroStatusSolicitacao}">
+			 	<f:selectItems value="#{solicitacaoBean.statusSolicitacao}" var="status" 
+			 	itemLabel="#{status.descricao}" itemValue="#{status.codigo}" />
+			 </p:selectManyButton>
+		</p:panelGrid>
+		<p:panelGrid>
+			
+		</p:panelGrid>
 	
+	</p:fieldset>
 	
 	
 	<p:toolbar>
+	
 	<f:facet name="left">
 		<p:commandButton id="idBtnFiltrar" icon="fa fa-search"
 		value="Filtrar" action="#{solicitacaoBean.filtros}" update="#{p:component('tbListarEntidade')} " />
 	 	<p:spacer width="10" height="0"/>
 	 	<p:commandButton id="idBtnLimpar" icon="fa fa-eraser" 
 		value="Limpar" styleClass="orange-btn"  >
-			<p:ajax resetValues="true" update="#{p:component('frmListarPrincipal')}"/>
+		<p:resetInput  update="#{p:component('frmListarPrincipal')}" target="frmListarPrincipal"></p:resetInput>
+			
 		</p:commandButton>
 	 	
 				
@@ -146,11 +172,11 @@
 				</p:column>
 				
 				<p:column id="idATIcol" headerText="ATI" width="60">
-					<h:outputText value="*" />
+					<h:outputText value="#{item.numeroATI}" />
 				</p:column>
 				
 				<p:column id="idBLcol" headerText="BL" width="60">
-					<h:outputText value="*" />
+					<h:outputText value="#{item.codigoBL}" />
 				</p:column>
 				
 				<p:column id="idStatus" sortBy="#{item.statusSolicitacao}"

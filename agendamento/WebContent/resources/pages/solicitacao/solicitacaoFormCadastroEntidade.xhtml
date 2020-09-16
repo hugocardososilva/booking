@@ -19,238 +19,359 @@
 <composite:implementation>
 	<div class="card card-w-title">
 		<h3>Cadastro de Soliciatação de serviço - Nova Solicitação</h3>
-		
+
 
 
 
 
 		<p:fieldset legend="Dados" style="margin-bottom:20px">
-			
-			<p:panelGrid columns="2" style="width:400px;" columnClasses="label, value" styleClass="no-border form-group ui-panelgrid-blank"
-				layout="grid">
-				<h:outputText value="ATI:"  />
-				<h:outputText value="#{solicitacaoBean.solicitacao.numeroATI}"/>
-				
-				<h:outputText value="BL:"/>
-				<p:inputText value="#{solicitacaoBean.solicitacao.codigoBL}"/>
-				
-				<h:outputText value="Container:"/>
-				<p><c:forEach var="item" items="#{solicitacaoBean.solicitacao.solicitacaoServicos}">
-					#{item.container.numeroContainer},
-				</c:forEach> </p>
-			</p:panelGrid>	
-			<p:panelGrid columns="2" style="width:400px;" columnClasses="label, value" styleClass="no-border form-group ui-panelgrid-blank">
-				<h:outputText value="Solicitação"/>
-				<h:outputText value="#{solicitacaoBean.solicitacao.id}"/>
+
+			<p:panelGrid columns="2" style="width:400px;"
+				columnClasses="label, value"
+				styleClass="no-border form-group ui-panelgrid-blank" layout="grid">
+				<h:outputText value="ATI:" />
+				<h:outputText value="#{solicitacaoBean.solicitacao.numeroATI}" />
+
+				<h:outputText value="BL:" />
+				<p:inputText id="inptBL" size="100"
+					disabled="#{!solicitacaoBean.solicitacao.codigoBL eq ''}"
+					value="#{solicitacaoBean.solicitacao.codigoBL}">
+					<p:ajax event="blur" update="#{p:component('inptBL')}"
+						listener="#{solicitacaoBean.salvarnomeBL}" />
+				</p:inputText>
+
+				<h:outputText value="Container:" />
+				<p>
+					<c:forEach var="item"
+						items="#{solicitacaoBean.solicitacao.solicitacaoServicos}">
+					#{item.container.numeroContanier},
+				</c:forEach>
+				</p>
+			</p:panelGrid>
+			<p:panelGrid columns="2" style="width:400px;"
+				columnClasses="label, value"
+				styleClass="no-border form-group ui-panelgrid-blank">
+				<h:outputText value="Solicitação" />
+				<h:outputText value="#{solicitacaoBean.solicitacao.id}" />
 			</p:panelGrid>
 
 		</p:fieldset>
 
-		<p:fieldset legend="Adicionar Serviço"	style="margin-bottom:20px">
+		<p:fieldset id="fieldsetServico" legend="Adicionar Serviço" style="margin-bottom:20px">
 
 			<p:panelGrid columns="1" styleClass="form-group ui-panelgrid-blank"
-			layout="grid">
-			<p:outputLabel value="Código do Container:" for="cc" />
-			<p:autoComplete id="cc" dropdown="true" size="100" converter="containerConverter"
-				value="#{solicitacaoBean.container}" var="item"
-				itemLabel="#{item}" itemValue="#{item}" 
-				update="#{p:component('panelContainerSelecionado')}"
-				completeMethod="#{solicitacaoBean.pesquisaContainers}">
-				<p:ajax event="itemSelect"
-					listener="#{solicitacaoBean.adicionarContainer}"
-					update="#{p:component('panelContainerSelecionado')}" />
-			</p:autoComplete>
-			</p:panelGrid>
-			<p:panelGrid columns="1" layout="grid" id="panelContainerSelecionado" styleClass="form-group ui-panelgrid-blank">
-			<p:dataTable value="#{solicitacaoBean.containersSelecionados}" var="item" reflow="true">
-			<p:column headerText="Container">
-				<h:outputText value="#{item.numeroContanier}"/>
-			</p:column>
-			<p:column>
-				<p:commandLink id="btnExcluirContainer" value="Remover" update="@form" action="#{solicitacaoBean.removerContainer}">
-					<f:setPropertyActionListener value="#{item}"
-							target="#{solicitacaoBean.container}" />
-					<p:confirm header="Confirmar Exclusão" message="Tem certeza que deseja excluir o registro?" 
-						icon="ui-icon-alert" />
-				</p:commandLink>
-			 </p:column>
+				layout="grid">
+				<p:outputLabel value="Código do Container:" for="cc" />
 			
-			</p:dataTable>
-			
-		
-			</p:panelGrid>
-			<p:panelGrid columns="1" layout="grid" styleClass="form-group ui-panelgrid-blank">
-			<p:outputLabel for="acSolicitacaoServico" value="Serviço"/>
-			<p:autoComplete id="acSolicitacaoServico" dropdown="true" size="100"
-					value="#{solicitacaoBean.servico}" var="item"
-					itemLabel="#{item}" itemValue="#{item}"
-					update="#{p:component('descOutro')}"
-					completeMethod="#{solicitacaoBean.pesquisaServico}">
-					<p:ajax event="itemSelect"
-						listener="#{solicitacaoBean.selecionarServico}"
-						update="#{p:component('descOutro')} #{p:component('dtSolicitacao')} #{p:component('btnDlgjanela')}" />
+				<p:autoComplete id="cc" dropdown="true" size="100"
+					value="#{solicitacaoBean.container}"
+					var="item" scrollHeight="300" itemLabel="#{item}"
+					itemValue="#{item}"
+					update="#{p:component('panelContainerSelecionado')}"
+					completeMethod="#{solicitacaoBean.pesquisaContainers}">
+					<p:ajax event="itemSelect" process="@form"
+						listener="#{solicitacaoBean.adicionarContainer}"
+						update="#{p:component('panelContainerSelecionado')}" />
 				</p:autoComplete>
-			<p:outputLabel for="descOutro" rendered="#{solicitacaoBean.outroServico}" value="Descrição - (*Outros)"/>
-			<p:inputText id="descOutro" rendered="#{solicitacaoBean.outroServico}" required="true" requiredMessage="O preenchimento do campo é obrigatório." value="#{solicitacaoBean.descricaoOutros}"></p:inputText>
 			</p:panelGrid>
-			<p:panelGrid columns="1" layout="grid" styleClass="form-group ui-panelgrid-blank">
-			<p:outputLabel for="dtSolicitacao" value="Data Solicitacao"/>
+			<p:panelGrid columns="1" styleClass="form-group ui-panelgrid-blank"
+				layout="grid">
+				<p:commandButton value="Adicionar Todos" action="#{solicitacaoBean.adicionarTodosOsContainers}"
+				 update="#{p:component('fieldsetServico')}" process="@this"/>
+			</p:panelGrid>
+			<p:panelGrid columns="1" layout="grid" id="panelContainerSelecionado"
+				styleClass="form-group ui-panelgrid-blank">
+				<p:dataTable emptyMessage="Não há registros"
+					styleClass="border-header" paginator="true" rows="10"
+					value="#{solicitacaoBean.containersSelecionados}" var="item"
+					reflow="true">
+					<p:column headerText="Container">
+						<h:outputText value="#{item.numeroContanier}" />
+					</p:column>
+					<p:column>
+						<p:commandLink id="btnExcluirContainer" value="Remover"
+							update="@form" action="#{solicitacaoBean.removerContainer}">
+							<f:setPropertyActionListener value="#{item}"
+								target="#{solicitacaoBean.container}" />
+							<p:confirm header="Confirmar Exclusão"
+								message="Tem certeza que deseja excluir o registro?"
+								icon="ui-icon-alert" />
+						</p:commandLink>
+					</p:column>
+
+				</p:dataTable>
+
+
+			</p:panelGrid>
+			<p:panelGrid columns="1" layout="grid"
+				styleClass="form-group ui-panelgrid-blank">
+				<p:outputLabel for="acSolicitacaoServico" value="Serviço" />
+				<p:autoComplete id="acSolicitacaoServico" dropdown="true" size="100"
+					value="#{solicitacaoBean.servico}" var="item" itemLabel="#{item}"
+					itemValue="#{item}" update="#{p:component('descOutro')}" 
+					completeMethod="#{solicitacaoBean.pesquisaServico}">
+					<p:ajax event="itemSelect" process="@this"
+						listener="#{solicitacaoBean.selecionarServico}"
+						update="#{p:component('descOutro')} #{p:component('descLabelOutro')} #{p:component('btnJanela')}  #{p:component('dtSolicitacao')}" />
+				</p:autoComplete>
+				<p:outputLabel id="descLabelOutro" for="descOutro"
+					rendered="#{solicitacaoBean.outroServico}"
+					value="Descrição - (*Outros)" />
+				<p:inputText id="descOutro"
+					rendered="#{solicitacaoBean.outroServico}" required="true"
+					requiredMessage="O preenchimento do campo é obrigatório."
+					value="#{solicitacaoBean.descricaoOutros}"></p:inputText>
+			</p:panelGrid>
+			<p:panelGrid columns="1" layout="grid"
+				styleClass="form-group ui-panelgrid-blank">
+				<p:outputLabel for="dtSolicitacao" value="Data Solicitacao" />
 			</p:panelGrid>
 			<p:panelGrid columns="2" styleClass="form-group ui-panelgrid-blank">
-			<p:calendar id="dtSolicitacao" value="#{solicitacaoBean.dataSolicitacao}" disabled="#{solicitacaoBean.servico.janelaCapacidade}" pattern="dd/MM/yyyy"/>
-			<p:commandButton value="Verificar disponibilidade" id="btnDlgjanela" icon="fa fa-calendar"  disabled="#{!solicitacaoBean.servico.janelaCapacidade}" update="#{p:component('dtSolicitacao')}"
-				onclick="PF('dlgServJanelaAtend').show();" actionListener="#{solicitacaoBean.carregarEventosServicoJanela}">
-			</p:commandButton>
+				<p:calendar id="dtSolicitacao"
+					value="#{solicitacaoBean.dataSolicitacao}"
+					disabled="#{solicitacaoBean.servico.janelaCapacidade}"
+					pattern="dd/MM/yyyy" />
+				<p:commandButton id="btnJanela" icon="fa fa-calendar"
+					update="#{p:component('dtSolicitacao')}"
+					disabled="#{!solicitacaoBean.servico.janelaCapacidade}"
+					onclick="PF('dlgServJanelaAtend').show();"
+					action="#{solicitacaoBean.carregarEventosServicoJanela}">
+				</p:commandButton>
 			</p:panelGrid>
-			
-				<p:toolbar>
+			<p:toolbar>
 				<f:facet name="left">
 					<p:commandButton value="Adicionar" ajax="true" update="@form"
-						icon="#{bundle.iconSalvar}" id="btSalvar"
+						icon="#{bundle.iconSalvar}" id="btSalvar" process="@form"
 						action="#{solicitacaoBean.adicionarSolicitacaoServico}" />
 
 
 					<p:spacer width="20" />
-					<p:commandButton value="Limpar" update="@form"
-						icon="fa fa-undo" styleClass="orange-btn" id="btVoltar"
+					<p:commandButton value="Limpar" update="@form" icon="fa fa-undo"
+						styleClass="orange-btn" id="btVoltar"
 						action="#{solicitacaoBean.limparSolicitacaoServico}" />
 				</f:facet>
 			</p:toolbar>
-			</p:fieldset>
-			<p:dialog id="idDlgServJanelaAtend" widgetVar="dlgServJanelaAtend" modal="true">
-			<p:schedule value="#{solicitacaoBean.lazyEventServicoJanela}"></p:schedule>
-			
-			</p:dialog>
+		</p:fieldset>
+		<p:dialog id="idDlgServJanelaAtend" widgetVar="dlgServJanelaAtend" width="600" height="600" resizable="true" closable="true" closeOnEscape="true"
+			modal="true">
+			<p:schedule value="#{solicitacaoBean.lazyEventServicoJanela}">
+			 <p:ajax event="eventSelect" listener="#{solicitacaoBean.onEnvetServicoJanelaSelect}" update="#{p:component('dtSolicitacao')}" oncomplete="PF('dlgServJanelaAtend').hide();" />
+			</p:schedule>
 
-			
-			<p:fieldset legend="Serviços Selecionados">
-			<p:dataTable id="tblServicosSelecionados" emptyMessage="Nenhum registro encontrado." value="#{solicitacaoBean.solicitacao.solicitacaoServicos}" var="item" 
-				 style="margin-bottom:20px">
+		</p:dialog>
+
+
+		<p:fieldset legend="Serviços Selecionados">
+			<p:dataTable id="tblServicosSelecionados"
+				emptyMessage="Nenhum registro encontrado."
+				value="#{solicitacaoBean.solicitacao.solicitacaoServicos}"
+				var="item" style="margin-bottom:20px">
 				<p:column headerText="Container">
-					<h:outputText value="#{item.container.numeroContanier}"/>
-				</p:column>				 
-				<p:column headerText="Serviço">
-					<h:outputText rendered="#{item.servico.unMedidaJanela != 'O'.charAt(0) }" value="#{item.servico.id} - #{item.servico.descricao}"/>
-					<h:outputText rendered="#{item.servico.unMedidaJanela eq 'O'.charAt(0) }" value="#{item.servico.id} - #{item.servico.descricao} (#{item.outrosServicos})"/>
+					<h:outputText value="#{item.container.numeroContanier}" />
 				</p:column>
-				<p:column headerText="Data da Solicitacao" >
-				<h:outputText value="#{item.dataSolicitacao}">
-					<f:convertDateTime pattern="dd/MM/yyyy" />
-				</h:outputText>
-			</p:column>
+				<p:column headerText="Serviço">
+					<h:outputText
+						rendered="#{item.servico.unMedidaJanela != 'O'.charAt(0) }"
+						value="#{item.servico.id} - #{item.servico.descricao}" />
+					<h:outputText
+						rendered="#{item.servico.unMedidaJanela eq 'O'.charAt(0) }"
+						value="#{item.servico.id} - #{item.servico.descricao} (#{item.outrosServicos})" />
+				</p:column>
+				<p:column headerText="Data da Solicitacao">
+					<h:outputText value="#{item.dataSolicitacao}">
+						<f:convertDateTime pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
 				<p:column headerText="OS">
-					<h:outputText value="#{item.OS}"/>
-				</p:column>	
+					<h:outputText value="#{item.OS}" />
+				</p:column>
 				<p:column headerText="Status">
-					<h:outputText value="#{item.statusServicos}"/>
-				</p:column>	
-				
-				<p:column>
-				<p:commandLink id="btnExcluirSolicitacaoServico" value="Remover" update="@form" action="#{solicitacaoBean.removerSolicitacaoServico}">
-					<f:setPropertyActionListener value="#{item}"
+					<h:outputText value="#{item.statusServicos}" />
+				</p:column>
+				<p:column rendered="#{userMB.user.admin || userMB.user.clif}">
+					<p:commandLink id="btnEditarSolicitacaoServico" value="Editar"
+						onclick="PF('dlgSolicitacaoServico').show();">
+						<f:setPropertyActionListener value="#{item}"
 							target="#{solicitacaoBean.solicitacaoServico}" />
-					<p:confirm header="Confirmar Exclusão" message="Tem certeza que deseja excluir o registro?" 
-						icon="ui-icon-alert" />
-				</p:commandLink>
-			 </p:column>
-			
+					
+					</p:commandLink>
+				</p:column>
+				<p:column>
+					<p:commandLink id="btnExcluirSolicitacaoServico" value="Remover"
+						update="@form"
+						action="#{solicitacaoBean.removerSolicitacaoServico}">
+						<f:setPropertyActionListener value="#{item}"
+							target="#{solicitacaoBean.solicitacaoServico}" />
+						<p:confirm header="Confirmar Exclusão"
+							message="Tem certeza que deseja excluir o registro?"
+							icon="ui-icon-alert" />
+					</p:commandLink>
+				</p:column>
+
 			</p:dataTable>
-							 
-			</p:fieldset>
-			<p:fieldset legend="Anexos">
+
+		</p:fieldset>
+		<p:fieldset legend="Anexos">
 			<h:form id="frmAnexosSolicitacao" enctype="multipart/form-data">
-					<h:panelGrid id="pnlAnexosSolicitacao" columns="1">
+				<h:panelGrid id="pnlAnexosSolicitacao" columns="1">
 
-						<p:fileUpload label="Escolher arquivo (formato pdf até 3MB)" mode="advanced" dragDropSupport="false" sizeLimit="3000000"
-							invalidSizeMessage="Tamanho máximo permitido: 3MB" allowTypes="/(\.|\/)(pdf)$/" invalidFileMessage="Extensão de arquivo permitida: PDF."
-							fileUploadListener="#{solicitacaoBean.uploadAnexo}" auto="true" update="#{p:component('frmAnexosSolicitacao')}" />
-						
+					<p:fileUpload label="Escolher arquivo (formato pdf até 3MB)"
+						mode="advanced" dragDropSupport="false" sizeLimit="3000000"
+						invalidSizeMessage="Tamanho máximo permitido: 3MB"
+						allowTypes="/(\.|\/)(pdf)$/"
+						invalidFileMessage="Extensão de arquivo permitida: PDF."
+						fileUploadListener="#{solicitacaoBean.uploadAnexo}" auto="true"
+						update="#{p:component('frmAnexosSolicitacao')}" />
 
-						<p:dataTable id="tblAnexosImportacao" emptyMessage="Nenhum registro encontrado." value="#{solicitacaoBean.solicitacao.anexos}" var="anexo" 
-							 style="margin-bottom:20px">
 
-							<p:column headerText="Arquivo" width="270">
-								<p:commandLink  value="#{anexo.caminhoAnexo}" actionListener="#{solicitacaoBean.download}" ajax="false" process="@this">
-									<f:attribute name="anexoSelecionado" value="#{anexo}" />
-									<p:fileDownload value="#{solicitacaoBean.pdf}" />
-								</p:commandLink>
-							</p:column>
-							<p:column headerText="Descrição" width="270">
-								<h:outputText value="#{anexo.caminhoAnexo}"/>
-								
-							</p:column>
+					<p:dataTable id="tblAnexosImportacao"
+						emptyMessage="Nenhum registro encontrado."
+						value="#{solicitacaoBean.solicitacao.anexos}" var="anexo"
+						style="margin-bottom:20px">
 
-							<p:column id="columRemoverAnexo">
-								<p:commandLink id="btnRemoverAnexo" action="#{solicitacaoBean.removerAnexo}" icon="fa fa-trash-o" style="color: red">
-									<f:setPropertyActionListener value="#{anexo}"
-										target="#{solicitacaoBean.anexo}" />
-									<p:tooltip for="btnRemoverAnexo" value="#{bundle.excluir}" showEffect="clip" hideEffect="explode" />
-									<p:confirm header="Excluir" message="Deseja excluir este item ?" icon="ui-icon-alert" />
-								</p:commandLink>
-							</p:column>
+						<p:column headerText="Arquivo" width="270">
+							<p:commandLink value="#{anexo.caminhoAnexo}"
+								actionListener="#{solicitacaoBean.download}" ajax="false"
+								process="@this">
+								<f:attribute name="anexoSelecionado" value="#{anexo}" />
+								<p:fileDownload value="#{solicitacaoBean.pdf}" />
+							</p:commandLink>
+						</p:column>
+						<p:column headerText="Descrição" width="270">
+							<h:outputText value="#{anexo.caminhoAnexo}" />
 
-						
+						</p:column>
 
-						</p:dataTable>
+						<p:column id="columRemoverAnexo">
+							<p:commandLink id="btnRemoverAnexo"
+								action="#{solicitacaoBean.removerAnexo}" icon="fa fa-trash-o"
+								style="color: red">
+								<f:setPropertyActionListener value="#{anexo}"
+									target="#{solicitacaoBean.anexo}" />
+								<p:tooltip for="btnRemoverAnexo" value="#{bundle.excluir}"
+									showEffect="clip" hideEffect="explode" />
+								<p:confirm header="Excluir" message="Deseja excluir este item ?"
+									icon="ui-icon-alert" />
+							</p:commandLink>
+						</p:column>
 
-					</h:panelGrid>
-				</h:form>
-			
-			</p:fieldset>
-			<p:fieldset legend="Mensagens">
+
+
+					</p:dataTable>
+
+				</h:panelGrid>
+			</h:form>
+
+		</p:fieldset>
+		<p:fieldset legend="Mensagens">
 			<h:form id="frmMensagemSolicitacao">
-					<p:panelGrid id="pnlMensagemSolicitacao" layout="grid" columns="1">
+				<h:panelGrid id="pnlMensagemSolicitacao" lang="grid" columns="1">
 
-						<p:inputText value="#{solicitacaoBean.mensagem.titulo}" placeholder="Informe o título da mensagem." size="100"/>
-						<p:inputTextarea cols="100" rows="5" value="#{solicitacaoBean.mensagem.conteudo}" placeholder="Informe neste campo algum detalhe que será importante ao serviço solicitado."></p:inputTextarea>
-				<p:toolbar>
-				<f:facet name="left">
-					<p:commandButton value="Enviar" ajax="true" update="@form" process="@form"
-						icon="#{bundle.iconSalvar}" id="btSalvar"
-						action="#{solicitacaoBean.adicionarMensagem}" />
-				</f:facet>
-				</p:toolbar>
-						<p:dataTable id="tblmensagens" emptyMessage="Nenhum registro encontrado." value="#{solicitacaoBean.solicitacao.mensagems}" var="item" 
-							 style="margin-bottom:20px">
+					<p:inputText value="#{solicitacaoBean.mensagem.titulo}"
+						placeholder="Informe o título da mensagem." size="100" />
+					<p:inputTextarea cols="100" rows="5"
+						value="#{solicitacaoBean.mensagem.conteudo}"
+						placeholder="Informe neste campo algum detalhe que será importante ao serviço solicitado."></p:inputTextarea>
+					<p:toolbar>
+						<f:facet name="left">
+							<p:commandButton value="Adicionar" ajax="true" update="@form"
+								icon="#{bundle.iconSalvar}" id="btSalvarMensagem"
+								action="#{solicitacaoBean.adicionarMensagem}" process="@form">
+							</p:commandButton>
+							<p:spacer width="20" />
+							<p:commandButton value="Limpar" update="@form" icon="fa fa-undo"
+								styleClass="orange-btn" id="btLimparMensagem">
+								<p:resetInput target="#{p:component('frmMensagemSolicitacao')}" />
+							</p:commandButton>
+						</f:facet>
+					</p:toolbar>
+					<p:dataTable id="tblmensagens"
+						emptyMessage="Nenhum registro encontrado."
+						value="#{solicitacaoBean.solicitacao.mensagems}" var="item"
+						style="margin-bottom:20px">
 
-							<p:column headerText="Data">
+						<p:column headerText="Data">
 							<h:outputText value="#{item.data}">
-									<f:convertDateTime pattern="dd/MM/yyyy" />
-								</h:outputText>
-							</p:column>
-							<p:column headerText="Remetente">
-								<h:outputText value="#{item.usuario.name}"/>
-							</p:column>
-							<p:column>
-						<p:commandLink id="btnVerMEnsagem" value="#{item.titulo}" actionListener="#{solicitacaoBean.visualizarMensagem}" 
-							update="#{p:component('iddlgVerMensagem')}" onclick="PF('dlgVerMensagem').show();">
-								<f:setPropertyActionListener value="#{item}" target="#{solicitacaoBean.mensagem}" />
-						</p:commandLink>
-					 </p:column>
-							
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputText>
+						</p:column>
+						<p:column headerText="Remetente">
+							<h:outputText value="#{item.usuario.name}" />
+						</p:column>
+						<p:column headerText="Título">
 
-						
+							<p:commandLink id="btnVerMEnsagem" value="#{item.titulo}"
+							  process="@this" update=":#{p:component('frmDlgMensagem')}" action="#{solicitacaoBean.exibirMensagem(item)}"	oncomplete="PF('dlgVerMensagem').show();"> 
 							
-						</p:dataTable>
-							<p:dialog id="iddlgVerMensagem" widgetVar="dlgVerMensagem" modal="true" closable="true" closeOnEscape="true">
-								<p:fieldset legend="Mensagem">
-								<p:panelGrid columns="1">
-								<br/>
-								<h3>Autor: <h:outputText value="#{solicitacaoBean.mensagem.usuario.name}"/></h3>
-								<br/>
-								<br/>
-								<h3>Título: <h:outputText value="#{solicitacaoBean.mensagem.titulo}"/></h3>
-								<br/>
-								<br/>
-								<h4>Mensagem: <h:outputText value="#{solicitacaoBean.mensagem.conteudo}"/></h4>
-								
-								
-								
-								</p:panelGrid>
-								
-								</p:fieldset>
-			
-							</p:dialog>
+							</p:commandLink>
+						</p:column>
+
+					</p:dataTable>
+				</h:panelGrid>
+
+			</h:form>
+
+		</p:fieldset>
+		<p:fieldset legend="Hisórico"
+			rendered="#{userMB.user.admin or userMB.user.clif}">
+			<h:form id="frmHistorico">
+				<h:panelGrid id="pnlHistorico" lang="grid" columns="1">
+
+
+					<p:dataTable id="tblhistorico"
+						emptyMessage="Nenhum registro encontrado."
+						value="#{solicitacaoBean.solicitacao.historico}" var="item"
+						style="margin-bottom:20px">
+
+						<p:column headerText="Data">
+							<h:outputText value="#{item.data}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputText>
+						</p:column>
+						<p:column headerText="Descrição">
+							<h:outputText value="#{item.descricao}" />
+						</p:column>
+						<p:column headerText="Usuário">
+							<h:outputText value="#{item.usuario.name}" />
+						</p:column>
+
+					</p:dataTable>
+
+
+				</h:panelGrid>
+			</h:form>
+
+		</p:fieldset>
+
+		<h:form id="frmDlgMensagem">
+			<p:dialog id="iddlgVerMensagem" modal="true" appendTo="@(body)" closable="true" width="600" height="350" header="Mensagem" dynamic="true" widgetVar="dlgVerMensagem">
+				<p:fieldset legend="Mensagem">
+					<p:panelGrid columns="2" columnClasses="label,value" layout="grid">
+						
+
+							<p:outputLabel value="Autor:"/>		
+						
+							<h:outputText value="#{solicitacaoBean.mensagem.usuario.name}" />
+						
+						
+						<p:outputLabel value="Título:"/>		
+							
+							<h:outputText value="#{solicitacaoBean.mensagem.titulo}" />
+						
+						
+						<p:outputLabel value="Data:"/>	
+							
+							<h:outputText value="#{solicitacaoBean.mensagem.data}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputText>
+						
+					
+
+						<p:outputLabel value="Mensagem:"/>	
+							
+							<h:outputText value="#{solicitacaoBean.mensagem.conteudo}" />
+						
+
 
 					</p:panelGrid>
 				</h:form>
@@ -287,11 +408,61 @@
 			
 			
 			</p:fieldset>
-			
 
 
-		
-	
+					</p:panelGrid>
+
+				</p:fieldset>
+
+			</p:dialog>
+		</h:form>
+		<h:form id="frmDlgSolicitacaoServico">
+			<p:dialog id="idDlgSolicitacaoServico" widgetVar="dlgSolicitacaoServico"
+				modal="true" closable="true" closeOnEscape="true" dynamic="true">
+				<p:fieldset legend="Solicitação de Serviço">
+					<p:panelGrid columns="1">
+						<p:outputLabel value="Data:" for="idDataSolicitacao"/>
+						<h:inputText value="#{solicitacaoBean.solicitacaoServico.dataSolicitacao}">
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:inputText>
+						<p:outputLabel value="OS:" for="idOS"/>
+						<p:inputText id="idOS" value="#{solicitacaoBean.solicitacaoServico.OS}"/>
+						<p:outputLabel value="Data de inicio da os:" for="dtIniSolicitacao"/>
+						<p:calendar id="dtIniSolicitacao"
+						value="#{solicitacaoBean.solicitacaoServico.dataInicioOS}"
+						
+						pattern="dd/MM/yyyy" />
+						<p:outputLabel value="Data de inicio da os:" for="dtTerSolicitacao"/>
+						<p:calendar id="dtTerSolicitacao"
+						value="#{solicitacaoBean.solicitacaoServico.dataTerminoOS}"
+						
+						pattern="dd/MM/yyyy" />
+						<p:outputLabel value="Serviço:" for="idServico"/>
+						<p:inputText id="idServico" value="#{solicitacaoBean.solicitacaoServico.servico.nome}"/>
+					</p:panelGrid>
+					<p:toolbar>
+						<f:facet name="left">
+							<p:commandButton value="Editar" ajax="true" update="@all"
+								icon="#{bundle.iconSalvar}" id="btEditarSolicitacaoServico"
+								action="#{solicitacaoBean.editarSolicitacaoServico}" process="@form">
+
+
+							</p:commandButton>
+
+
+							<p:spacer width="20" />
+							<p:commandButton value="Fechar" update="@form" icon="fa fa-undo"
+								styleClass="orange-btn" id="btLimparMensagem">
+								<p:resetInput target="#{p:component('frmSolicitacaoServico')}" />
+							</p:commandButton>
+						</f:facet>
+					</p:toolbar>
+
+				</p:fieldset>
+
+			</p:dialog>
+		</h:form>
+
 
 	</div>
 

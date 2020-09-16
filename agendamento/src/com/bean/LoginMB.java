@@ -10,6 +10,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
 
 import com.entidade.UserComissariaUsuarios;
 import com.entidade.UserImportadorUsuarios;
@@ -166,6 +167,9 @@ public class LoginMB extends AbstractMB implements Serializable {
 				}
 
 				getUserLoginRN().alterar(user, TipoLoginEnum.LOGIN);
+				FacesContext context= FacesContext.getCurrentInstance();
+				HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+				request.getSession().setAttribute("user", user);
 
 				redirecionarPaginas(PAGINA_PRINCIPAL);
 			} else {

@@ -41,6 +41,24 @@ public class ServicoBean extends AbstractMB implements IGenericBean {
 		controlarFormCadastrar= false;
 		controlarFormEditar = false;
 		setWhereSQL(null);
+		initOutrosServicos();
+		
+	}
+	public void initOutrosServicos() {
+		try {
+			ServicoRN rn = new ServicoRN();
+			
+			if(!rn.verificarOutroServico()) {
+				Servico s = new Servico();
+				s.setNome("Outros");
+				s.setDescricao("Outros ServiÃ§os");
+				s.setUnMedidaJanela("O".charAt(0));
+				rn.incluir(s);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}		
 		
 	}
 	public LazyDataModel<Servico> getlazyModel() {
@@ -75,7 +93,7 @@ public class ServicoBean extends AbstractMB implements IGenericBean {
 		try {
 			getServicoRN().incluir(entidadeServico);
 
-			JSFMessageUtil.adicionarMensagemSucesso("Serviço Cadastrado com sucesso.");
+			JSFMessageUtil.adicionarMensagemSucesso("Serviï¿½o Cadastrado com sucesso.");
 			setControlarFormCadastrar(false);
 			setControlarFormEditar(false);
 			setControlarFormListar(true);
@@ -84,7 +102,7 @@ public class ServicoBean extends AbstractMB implements IGenericBean {
 		}catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
-			JSFMessageUtil.adicionarMensagemErro("Não foi possível adicionar o serviço");
+			JSFMessageUtil.adicionarMensagemErro("Nï¿½o foi possï¿½vel adicionar o serviï¿½o");
 		
 		}
 	}
@@ -94,11 +112,11 @@ public class ServicoBean extends AbstractMB implements IGenericBean {
 			setControlarFormCadastrar(false);
 			setControlarFormEditar(false);
 			setControlarFormListar(true);
-			JSFMessageUtil.adicionarMensagemSucesso("Serviço Editado com sucesso.");
+			JSFMessageUtil.adicionarMensagemSucesso("Serviï¿½o Editado com sucesso.");
 			
 		}catch (Exception e) {
 			e.printStackTrace();
-			JSFMessageUtil.adicionarMensagemErro("Não foi possível editar o serviço");
+			JSFMessageUtil.adicionarMensagemErro("Nï¿½o foi possï¿½vel editar o serviï¿½o");
 		}
 		
 	}
